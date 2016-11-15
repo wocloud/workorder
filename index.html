@@ -11,6 +11,9 @@
   <link rel="stylesheet" href="css/simple-line-icons.css" type="text/css" />
   <link rel="stylesheet" href="css/font.css" type="text/css" />
   <link rel="stylesheet" href="css/app.css" type="text/css" />
+  <link rel="stylesheet" href="modules/grid_test/css/ui-grid.min.css"/>
+  <link rel="stylesheet" href="modules/workOrder/css/workOrder.css">
+  <link rel="stylesheet" href="css/ng-dialog/ngDialog.min.css">
 </head>
 <body ng-controller="AppCtrl">
   <div class="app" id="app" ng-class="{'app-header-fixed':app.settings.headerFixed, 'app-aside-fixed':app.settings.asideFixed, 'app-aside-folded':app.settings.asideFolded, 'app-aside-dock':app.settings.asideDock, 'container':app.settings.container}" ui-view></div>
@@ -60,7 +63,10 @@
   <script src="js/directives/ui-shift.js"></script>
   <script src="js/directives/ui-toggleclass.js"></script>
   <script src="js/directives/ui-validate.js"></script>
+  <script src="js/directives/fake-backend.js"></script>
   <script src="js/controllers/bootstrap.js"></script>
+  <script src="modules/grid_test/js/ui-grid.min.js"></script>
+  <script src="js/directives/ngDialog.min.js"></script>
   <!-- Lazy loading -->
 </body>
 </html>

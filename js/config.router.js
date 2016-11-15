@@ -13,8 +13,8 @@ angular.module('app')
     ]
   )
   .config(
-    [          '$stateProvider', '$urlRouterProvider',
-      function ($stateProvider,   $urlRouterProvider) {
+    [          '$stateProvider', '$urlRouterProvider','$httpProvider', 'fbInterceptor','$resourceProvider',
+      function ($stateProvider,   $urlRouterProvider, $httpProvider, fbInterceptor, $resourceProvider) {
           
           $urlRouterProvider
               .otherwise('/app/dashboard-v1');
@@ -24,6 +24,92 @@ angular.module('app')
                   url: '/app',
                   templateUrl: 'tpl/app.html'
               })
+              /************************工单配置开始*************************/
+              .state('app.workOrderAttrs', {
+                  url: '/workOrderAttrs',
+                  templateUrl: 'modules/workOrder/attrs.html',
+                  resolve: {
+                      deps: ['$ocLazyLoad',
+                          function( $ocLazyLoad ){
+                              return $ocLazyLoad.load(['modules/workOrder/js/attributes.js']);
+                          }]
+                  }
+              })
+              .state('app.workOrderAttrCreateOrUpdate', {
+                  url: '/workOrderAttrCreateOrUpdate?id',
+                  templateUrl: 'modules/workOrder/attr.create.html',
+                  resolve: {
+                      deps: ['$ocLazyLoad',
+                          function( $ocLazyLoad ){
+                              return $ocLazyLoad.load(['modules/workOrder/js/attributes.js']);
+                          }]
+                  }
+              })
+              //.state('app.workOrderAttrUpdate', {
+              //    url: '/workOrderAttrUpdate?id',
+              //    templateUrl: 'modules/workOrder/attr.update.html',
+              //    resolve: {
+              //        deps: ['$ocLazyLoad',
+              //            function( $ocLazyLoad ){
+              //                return $ocLazyLoad.load(['modules/workOrder/js/attributes.js']);
+              //            }]
+              //    }
+              //})
+              .state('app.workOrderAttrLinked', {
+                  url: '/workOrderAttrLinked?key',
+                  templateUrl: 'modules/workOrder/attr.linked.html',
+                  resolve: {
+                      deps: ['$ocLazyLoad',
+                          function( $ocLazyLoad ){
+                              return $ocLazyLoad.load(['modules/workOrder/js/attributes.js']);
+                          }]
+                  }
+              })
+              .state('app.workOrderFlows', {
+                  url: '/workOrderFlows',
+                  templateUrl: 'modules/workOrder/flows.html',
+                  resolve: {
+                      deps: ['$ocLazyLoad',
+                          function( $ocLazyLoad ){
+                              return $ocLazyLoad.load(['modules/workOrder/js/flows.js']);
+                          }]
+                  }
+              })
+              //.state('app.workOrderFlowDetail', {
+              //    url: '/workOrderFlowDetail?modelId',
+              //    templateUrl: 'modules/workOrder/flow.detail.html',
+              //    resolve: {
+              //        deps: ['$ocLazyLoad',
+              //            function( $ocLazyLoad ){
+              //                return $ocLazyLoad.load(['modules/workOrder/js/flows.js']);
+              //            }]
+              //    }
+              //})
+              .state('app.modeler', {
+                  url: '/modeler?modelId',
+                  templateUrl: 'modules/modeler/modeler.html'
+              })
+              .state('app.myWorkOrder', {
+                  url: '/myWorkOrder',
+                  templateUrl: 'modules/workOrder/myWorkOrder.html',
+                  resolve: {
+                      deps: ['$ocLazyLoad',
+                          function( $ocLazyLoad ){
+                              return $ocLazyLoad.load(['modules/workOrder/js/myWorkOrder.js']);
+                          }]
+                  }
+              })
+              .state('app.workOrderCreate', {
+                  url: '/workOrderCreate',
+                  templateUrl: 'modules/workOrder/workOrder.create.html',
+                  resolve: {
+                      deps: ['$ocLazyLoad',
+                          function( $ocLazyLoad ){
+                              return $ocLazyLoad.load(['modules/workOrder/js/myWorkOrder.js']);
+                          }]
+                  }
+              })
+              /***********************工单配置结束**************************/
               .state('app.dashboard-v1', {
                   url: '/dashboard-v1',
                   templateUrl: 'tpl/app_dashboard_v1.html',
@@ -529,6 +615,8 @@ angular.module('app')
                     url: '/playlist/{fold}',
                     templateUrl: 'tpl/music.playlist.html'
                 })
+          $httpProvider.interceptors.push(fbInterceptor);
+          $resourceProvider.defaults.stripTrailingSlashes = true;
       }
     ]
   );

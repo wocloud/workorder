@@ -1,0 +1,47 @@
+<div class="bg-light lter b-b wrapper-md" >
+    <h1 class="m-n font-thin h3">我的工单</h1>
+</div>
+<!-- create new workOrder -->
+<div class="panel panel-default" ng-controller="WorkOrderCreateViewCtrl">
+    <div class="panel-heading">
+        新建工单
+    </div>
+    <div class="panel-body">
+        <form class="form-horizontal" name="workOrderCreateForm" ng-submit="saveItem()">
+            <div class="form-group" ng-repeat="item in properties" ng-show="item.isVisible">
+                <label class="col-sm-2 control-label">{{item.propertyName}}</label>
+                <div class="col-sm-10">
+                    <div ng-if="item.propertyType=='text'">
+                        <input type="text" class="form-control"
+                               ng-model="properties[$index]['propertyDefaultValue']">
+                    </div>
+                    <!--<div ng-if="item.propertyType=='text'">-->
+                    <!--<input type="text" class="form-control"-->
+                    <!--ng-model="workOrder[properties[$index]['propertyKey']]"-->
+                    <!--ng-value="item.propertyDefaultValue">-->
+                    <!--</div>-->
+                    <!--<div ng-if="item.propertyType=='textArea'">-->
+                    <!--<textarea ui-jq="wysiwyg" class="form-control" style="overflow:scroll;height:200px;max-height:200px"-->
+                    <!--ng-model="workOrder.propertyKey"-->
+                    <!--placeholder="item.propertyDefaultValue"></textarea>-->
+                    <!--</div>-->
+                    <!--<div ng-if="item.propertyType=='select'">-->
+                    <!--<select ui-jq="chosen" class="form-control" ng-model="workOrder.item.propertyKey" ng-init="item.optionList='0'">-->
+                    <!--<option ng-repeat="option in item.optionList"-->
+                    <!--value="option.optionValue"-->
+                    <!--ng-class="{'selected' : item.propertyDefaultValue==option.optionValue, '': item.propertyDefaultValue!=option.optionValue}">-->
+                    <!--{{option.optionName}}</option>-->
+                    <!--</select>-->
+                    <!--</div>-->
+                </div>
+            </div>
+            <div class="line line-dashed b-b line-lg pull-in"></div>
+            <div class="form-group">
+                <div class="col-sm-4 col-sm-offset-2">
+                    <button type="button" class="btn btn-default" ng-click="backToMain()">取消</button>
+                    <button type="submit" class="btn btn-primary" ng-disabled="workOrderCreateForm.$invalid">保存</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

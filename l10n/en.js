@@ -17,6 +17,7 @@
   "nav" : {
     "HEADER" : "Navigation",
     "DASHBOARD" : "Dashboard",
+    "WORKORDER" : "工单",
     "CALENDAR" : "Calendar",
     "EMAIL" : "Email",
     "WIDGETS" : "Widgets",
