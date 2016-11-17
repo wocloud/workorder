@@ -20,7 +20,7 @@ $(function(){
 
         this.baseEnum = function() {
             return {
-                propertyType : [ 'link', 'array', 'string', 'datetime', 'boolean']
+                propertyType : [ 'text', 'textarea', 'datetime', 'select']
             };
         };
 
@@ -123,8 +123,8 @@ $(function(){
      * workOrder attributes controller
      */
     app.controller('WorkOrderAttrsViewCtrl', AttrViewCtrl);
-    AttrViewCtrl.$inject = ['$scope', '$modal', '$location', '$log', '$cacheFactory', 'workOrderAttr.RES', 'ngDialog'];
-    function AttrViewCtrl($scope, $modal, $location, $log, $cacheFactory, workOrderAttrRES, ngDialog) {
+    AttrViewCtrl.$inject = ['$scope', '$modal', '$location', '$log', '$cacheFactory', 'workOrderAttr.RES', 'toaster'];
+    function AttrViewCtrl($scope, $modal, $location, $log, $cacheFactory, workOrderAttrRES, toaster) {
 
         renderAttrTable($scope, $log, workOrderAttrRES);
 
@@ -135,21 +135,23 @@ $(function(){
 
         //edit attr
         $scope.updateItem = function() {
-            //if($scope.selectedRows.length==0){
-            //    $log.error("no selected");
-            //}
+            if($scope.selectedRows.length==0){
+                toaster.pop('info', "提示", "请选择要操作的条目!");
+                return;
+            }
             var id = $scope.selectedRows[0].id;
             $location.url("/app/workOrderAttrCreateOrUpdate?id="+id);
         };
 
         //delete an attribute
         $scope.deleteItem = function() {
-            //if($scope.selectedRows.length==0){
-            //    $log.error("no selected");
-            //}
+            if($scope.selectedRows.length==0){
+                toaster.pop('info', "提示", "请选择要操作的条目!");
+                return;
+            }
             var modalInstance = $modal.open({
                 backdrop: false,
-                templateUrl: 'modules/workOrder/attr.delete.html',
+                templateUrl: 'deleteTemplate',
                 controller: 'WorkOrderAttrDeleteViewCtrl',
                 resolve: {
                     params: function () {
@@ -162,7 +164,6 @@ $(function(){
             }, function () {
                 $log.info('Modal dismissed at: ' + new Date());
             });
-            //ngDialog.open({ template: 'deleteTemplate' });
         };
 
         //return to the main page
@@ -174,23 +175,36 @@ $(function(){
     /**
      * workOrder attributes create controller
      */
-    app.controller('WorkOrderAttrCreateViewCtrl', AttrCreateViewCtrl);
-    AttrCreateViewCtrl.$inject = ['$scope', '$location', '$stateParams', '$log', '$cacheFactory', 'workOrderAttr.RES'];
-    function AttrCreateViewCtrl($scope, $location, $stateParams, $log, $cacheFactory, workOrderAttrRES){
+    app.controller('WorkOrderAttrCreateOrUpdateViewCtrl', AttrCreateOrUpdateViewCtrl);
+    AttrCreateOrUpdateViewCtrl.$inject = ['$scope', '$location', '$stateParams', '$log', '$cacheFactory', 'workOrderAttr.RES'];
+    function AttrCreateOrUpdateViewCtrl($scope, $location, $stateParams, $log, $cacheFactory, workOrderAttrRES){
         var id = $stateParams.id;
+
+        $scope.PropertyType = workOrderAttrRES.baseEnum().propertyType;
+
+        if ($scope.attr == undefined || $scope.attr == null){
+            $scope.attr = {};
+        }
 
         $scope.createOrUpdate = 'C';
         if(id!=undefined && id!=null && id!=''){
             $scope.createOrUpdate = 'U';
             workOrderAttrRES.getById(id).then(function(result){
                 $scope.attr = result;
+                $scope.optionProperties = result.propertyOptions;
             }, function(e){
                 alert(e);
             });
         }
+
+        if ($scope.attr.propertyType == undefined || $scope.attr.propertyType == null) {
+            $scope.attr.propertyType = $scope.PropertyType[0];
+        }
+
         //create new attr
         $scope.saveItem = function (isValid) {
             if (!isValid) return;
+            //$scope.attr.propertyOptions = $scope.option;
             $log.info($scope.attr);
             if($scope.createOrUpdate=="C"){
                 $log.info("create");
@@ -214,6 +228,16 @@ $(function(){
         $scope.$watch("attr.propertyType", function(newValue, oldValue){
             $scope.f = newValue;
         });
+
+        //click handler function
+        var valueIndex = 2, nameIndex = 2;
+        $scope.addOptionValue = function (index) {
+            $scope.optionProperties.splice(index + 1, 0, {optionValue: 'value ' + valueIndex++, optionName: 'name' + nameIndex++});
+        };
+
+        $scope.removeOptionValue = function (index) {
+            $scope.optionProperties.splice(index, 1);
+        };
     }
 
     /**
@@ -223,16 +247,19 @@ $(function(){
     AttrDeleteViewCtrl.$inject = ['$scope', '$log', '$modalInstance', 'params', 'workOrderAttr.RES'];
     function AttrDeleteViewCtrl($scope, $log, $modalInstance, params, workOrderAttrRES) {
         var keys = [];
+
+        $scope.items = params;
         angular.forEach(params, function(data,index,array){
             keys.push(data.propertyKey);
         });
 
+        console.log($scope.items);
+
         //remove attr
-        $scope.removeItem = function (isValid) {
-            //if (!isValid) return;
-            workOrderAttrRES.remove(keys[0]).then(function (result) {
+        $scope.removeItem = function () {
+            workOrderAttrRES.remove(keys).then(function (result) {
                 $log.info(result);
-                $modalInstance.close();
+                $modalInstance.close($scope.items);
             });
         };
 
@@ -246,8 +273,8 @@ $(function(){
      * attr linked controller
      */
     app.controller('WorkOrderAttrLinkedViewCtrl', AttrLinkedViewCtrl);
-    AttrLinkedViewCtrl.$inject = ['$scope', '$location', '$stateParams', '$log', 'workOrderAttr.RES'];
-    function AttrLinkedViewCtrl($scope, $location, $stateParams, $log, workOrderAttrRES){
+    AttrLinkedViewCtrl.$inject = ['$scope', '$stateParams', '$log', 'workOrderAttr.RES'];
+    function AttrLinkedViewCtrl($scope, $stateParams, $log, workOrderAttrRES){
         var key = $stateParams.key;
         renderAttrLinkedView(key, $scope, $log, workOrderAttrRES);
     }
@@ -273,17 +300,17 @@ $(function(){
                 {
                     field: "propertyType",
                     displayName: '格式',
-                    cellTemplate:'<div class="ui-grid-cell-contents ng-binding ng-scope">{{row.entity.propertyType | propertyTypeFilter}}</div>'
+                    cellTemplate:'<div class="ui-grid-cell-contents">{{row.entity.propertyType | propertyTypeFilter}}</div>'
                 },
                 {
                     field: "belonged",
                     displayName: '所属流程',
-                    cellTemplate:'<div class="ui-grid-cell-contents ng-binding ng-scope"><a class="text-info" ui-sref="app.workOrderAttrLinked({key:row.entity.propertyKey})">{{row.entity.belonged}}</a></div>'
+                    cellTemplate:'<div class="ui-grid-cell-contents"><a class="text-info" ui-sref="app.workOrderAttrLinked({key:row.entity.propertyKey})">{{row.entity.belonged}}</a></div>'
                 },
                 {
                     field: "createDate",
                     displayName: '创建时间',
-                    cellTemplate:'<div class="ui-grid-cell-contents ng-binding ng-scope">{{row.entity.createDate | date:"yyyy-MM-dd HH:mm:ss"}}</div>'
+                    cellTemplate:'<div class="ui-grid-cell-contents">{{row.entity.createDate | date:"yyyy-MM-dd HH:mm:ss"}}</div>'
                 }],
             paginationCurrentPage: 1, //当前页码
             paginationPageSize: 5, //每页显示个数
@@ -313,6 +340,13 @@ $(function(){
                 $scope.gridApi.selection.on.rowSelectionChanged($scope, function (row, event) {
                     if (row && row.isSelected) {
                         $scope.selectedRows.push(row.entity);
+                    }
+                    if(row && !row.isSelected){
+                        angular.forEach($scope.selectedRows, function(data, index, rows){
+                           if(data.propertyKey == row.entity.propertyKey) {
+                               $scope.selectedRows.splice(index, 1);
+                           }
+                        });
                     }
                 });
             }
@@ -345,17 +379,6 @@ $(function(){
         }
     }
 
-    function createOrUpdateAttrView(key, $scope, $log, workOrderAttrRES){
-
-        //create new attr
-        $scope.saveItem = function () {
-            $log.info($scope.attr);
-            workOrderAttrRES.create($scope.attr).then(function(result){
-                $log.info(result);
-            });
-        };
-    }
-
     function renderAttrLinkedView(key, $scope, $log, workOrderAttrRES) {
         //i18nService.setCurrentLang("zh-cn");
 
@@ -373,7 +396,7 @@ $(function(){
                 {
                     field: "createDate",
                     displayName: '创建时间',
-                    cellTemplate:'<div class="ui-grid-cell-contents ng-binding ng-scope">{{row.entity.createDate | date:"yyyy-MM-dd HH:mm:ss"}}</div>'
+                    cellTemplate:'<div class="ui-grid-cell-contents">{{row.entity.createDate | date:"yyyy-MM-dd HH:mm:ss"}}</div>'
                 }],
             paginationCurrentPage: 1, //当前页码
             paginationPageSize: 5, //每页显示个数

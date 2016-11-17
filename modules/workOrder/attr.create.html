@@ -1,5 +1,5 @@
 <!-- create new attribute -->
-<div class="panel panel-default" ng-controller="WorkOrderAttrCreateViewCtrl">
+<div class="panel panel-default" ng-controller="WorkOrderAttrCreateOrUpdateViewCtrl">
     <div class="panel-heading" ng-show="createOrUpdate=='C'">
         新建自定义属性
     </div>
@@ -11,11 +11,8 @@
             <div class="form-group">
                 <label class="col-sm-2 control-label">格式</label>
                 <div class="col-sm-7">
-                    <select name="propertyType" class="form-control" ng-model="attr.propertyType" required ng-focus>
-                        <option value="select">Select</option>
-                        <option value="text">Text</option>
-                        <option value="datetime">Datetime</option>
-                        <option value="textarea">Textarea</option>
+                    <select name="propertyType" class="form-control" ng-model="attr.propertyType" required ng-focus
+                            ng-options="p|propertyTypeFilter for p in PropertyType track by p">
                     </select>
                 </div>
                 <span class="tip">*</span>
@@ -31,25 +28,18 @@
                 <span class="tip" ng-show='attrForm.propertyName.$error.ensureUnique'>该名称已被占用,请重新填写</span>
             </div>
             <div class="form-group">
-                <div class="col-sm-7" ng-show="f=='select'">
+                <div ng-show="f=='select'">
                     <label class="col-sm-2 control-label">文本格式</label>
-                    <select class="form-control" ng-model="attr.propertyOptions" required>
-
-                    </select>
-                </div>
-                <div class="col-sm-7" ng-show="f=='text'">
-                    <!--<label class="col-sm-2 control-label">文本格式</label>-->
-                    <!--<input type="checkbox" checked="checked" ng-model="attr.propertyOptions">-->
-                </div>
-                <div class="col-sm-7" ng-show="f=='datetime'">
-                    <!--<label class="col-sm-2 control-label">文本格式</label>-->
-                    <!--<input type="text" class="form-control" ng-model="attr.propertyOptions">-->
-                </div>
-                <div class="col-sm-7" ng-show="f=='textarea'">
-                    <!--<label class="col-sm-2 control-label">文本格式</label>-->
-                    <!--<textarea ui-jq="wysiwyg" class="form-control" ng-model="attr.propertyOptions"-->
-                              <!--style="overflow:scroll;height:100px;max-height:200px">-->
-                    <!--</textarea>-->
+                    <div class="col-sm-7" >
+                        <div ng-repeat="option in optionProperties track by option.optionValue" style="margin: 0 0 10px 0px;">
+                            <input type="text" class="form-control pull-left" ng-model="option.optionValue" value="option.optionValue"
+                                   required ng-maxlength="32" ng-focus style="width: 45%;"/>
+                            <input type="text" class="form-control pull-left" ng-model="option.optionName" value="option.optionName"
+                                   required ng-maxlength="32" ng-focus style="width: 45%;"/>
+                            <i class="glyphicon glyphicon-minus" ng-click="removeOptionValue($index)" style="margin: 10px auto;"></i>
+                            <i ng-if="$index == (optionProperties.length - 1)" class="glyphicon glyphicon-plus" ng-click="addOptionValue($index)" style="margin: 10px auto;"></i>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="form-group">

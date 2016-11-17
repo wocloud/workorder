@@ -45,16 +45,6 @@ angular.module('app')
                           }]
                   }
               })
-              //.state('app.workOrderAttrUpdate', {
-              //    url: '/workOrderAttrUpdate?id',
-              //    templateUrl: 'modules/workOrder/attr.update.html',
-              //    resolve: {
-              //        deps: ['$ocLazyLoad',
-              //            function( $ocLazyLoad ){
-              //                return $ocLazyLoad.load(['modules/workOrder/js/attributes.js']);
-              //            }]
-              //    }
-              //})
               .state('app.workOrderAttrLinked', {
                   url: '/workOrderAttrLinked?key',
                   templateUrl: 'modules/workOrder/attr.linked.html',
@@ -85,10 +75,6 @@ angular.module('app')
               //            }]
               //    }
               //})
-              .state('app.modeler', {
-                  url: '/modeler?modelId',
-                  templateUrl: 'modules/modeler/modeler.html'
-              })
               .state('app.myWorkOrder', {
                   url: '/myWorkOrder',
                   templateUrl: 'modules/workOrder/myWorkOrder.html',
