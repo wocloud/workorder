@@ -20,11 +20,11 @@
     <div class="modal-header">
         <h4 class="modal-title">删除自定义属性</h4>
         <div class="modal-body">
-            <p>你确定要删除这{{items.length}}项吗?</p>
+            <p>你确定要删除 {{items[0].propertyName}} 吗?</p>
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-default" ng-click="cancel()">取消</button>
-            <button type="submit" class="btn btn-primary">保存</button>
+            <button type="submit" class="btn btn-primary" ng-click="removeItem()">保存</button>
         </div>
     </div>
 </script>

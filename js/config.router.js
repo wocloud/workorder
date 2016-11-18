@@ -36,7 +36,7 @@ angular.module('app')
                   }
               })
               .state('app.workOrderAttrCreateOrUpdate', {
-                  url: '/workOrderAttrCreateOrUpdate?id',
+                  url: '/workOrderAttrCreateOrUpdate?key',
                   templateUrl: 'modules/workOrder/attr.create.html',
                   resolve: {
                       deps: ['$ocLazyLoad',

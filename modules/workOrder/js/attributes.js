@@ -10,24 +10,24 @@ $(function(){
     ServiceWorkOrderAttrRES.$inject = ['$q', '$resource', 'fakeMapping'];
     function ServiceWorkOrderAttrRES($q, $resource, fakeMapping) {
 
-        this.CMD = {
-            ListAttrs   : 'listWorkOrderAttrs',
-            CreateAttr  : 'createWorkOrderAttr',
-            GetAttr     : 'getWorkOrderAttr',
-            LinkedFlows : 'listLinkedFlow',
-            IsNameUnique: 'isNameUnique'
-        };
-
         this.baseEnum = function() {
             return {
                 propertyType : [ 'text', 'textarea', 'datetime', 'select']
             };
         };
 
-        var api_workOrderAttr_list = '/unifacc?action=:cmd',
-            res_workOrderAttr_list = $resource(api_workOrderAttr_list,{cmd : '@cmd'});
+        var api_workOrder = '/wocloud-workorder-restapi/workorderProperty/';
 
-        fakeMapping.scheme(api_workOrderAttr_list, {
+        this.CMD = {
+            ListAttrs           : api_workOrder + 'selectWorkorderPropertiesByCondition',
+            CreateOrUpdateAttr  : api_workOrder + 'saveWorkorderProperty',
+            DeleteAttr          : api_workOrder + 'removeWorkorderProperty',
+            GetAttr             : api_workOrder + 'selectWorkorderPropertiesByCondition',
+            LinkedFlows : 'listLinkedFlow',
+            IsNameUnique: 'isNameUnique'
+        };
+
+        fakeMapping.scheme(api_workOrder, {
             '@cmd:listWorkOrderAttrs'   : 'modules/workOrder/json/attr.list.json',
             '@cmd:createWorkOrderAttr'  : 'modules/workOrder/json/attr.save.json',
             '@cmd:getWorkOrderAttr'     : 'modules/workOrder/json/attr.info.json',
@@ -35,11 +35,11 @@ $(function(){
             '@cmd:isNameUnique'         : 'modules/workOrder/json/isNameUnique'
         });
 
-        this.list = function (attrId,cmd) {
+        this.list = function (parameters) {
             var task = $q.defer();
-            if(!cmd) cmd = this.CMD.ListAttrs;
-            var params = attrId == undefined ? {cmd: cmd} : {cmd: cmd,attrId: attrId};
-            res_workOrderAttr_list.get(params, function (response) {
+            var cmd = this.CMD.ListAttrs;
+            var params = parameters == undefined ? {} : parameters;
+            $resource(cmd).save(params, function (response) {
                 task.resolve(response.toJSON().data);
             }, function(response){
                 task.reject("调用失败,未获取属性列表信息!");
@@ -47,23 +47,11 @@ $(function(){
             return task.promise;
         };
 
-        this.getById = function (id,cmd) {
-            var task = $q.defer();
-            if(!cmd) cmd = this.CMD.GetAttr;
-            var params = id == undefined ? {cmd: cmd} : {cmd: cmd, id: id};
-            res_workOrderAttr_list.get(params, function (response) {
-                task.resolve(response.toJSON().data);
-            }, function(response){
-                task.reject("调用失败,未查找到指定的属性信息!");
-            });
-            return task.promise;
-        };
-
         this.isNameUnique = function(name){
             var task = $q.defer();
-            if(!cmd) cmd = this.CMD.IsNameUnique;
-            var params = name == undefined ? {cmd: cmd} : {cmd: cmd,propertyName: name};
-            res_workOrderAttr_list.get(params, function (response) {
+            var cmd = this.CMD.IsNameUnique;
+            var params = name == undefined ? {} : {propertyName: name};
+            $resource(cmd).save(params, function (response) {
                 task.resolve(response.toJSON().data);
             }, function(response){
                 task.reject("调用失败,未查找到属性名称是否唯一信息!");
@@ -73,16 +61,22 @@ $(function(){
 
         this.create = function(params){
             var task = $q.defer();
-            res_workOrderAttr_list.save(params,function(response){
+            var cmd = this.CMD.CreateOrUpdateAttr;
+            $resource(cmd).save(params,function(response){
                 task.resolve(response.toJSON());
+            }, function(response){
+                task.reject("调用失败,属性信息更新失败!");
             });
             return task.promise;
         };
 
-        this.remove = function(key){
+        this.removeById = function(id){
             var task = $q.defer();
-            res_workOrderAttr_list.delete({key:key},function(response){
+            var cmd = this.CMD.DeleteAttr;
+            $resource(cmd).save({id:id},function(response){
                 task.resolve(response.toJSON());
+            }, function(response){
+                task.reject("调用失败,属性信息删除失败!");
             });
             return task.promise;
         };
@@ -90,14 +84,13 @@ $(function(){
         this.listLinkedFlow = function(key) {
             var task = $q.defer();
             var cmd = this.CMD.LinkedFlows;
-            var params = key == undefined ? {cmd: cmd} : {cmd: cmd,key: key};
-            res_workOrderAttr_list.get(params, function (response) {
+            var params = key == undefined ? {} : {key: key};
+            $resource(cmd).save(params, function (response) {
                 task.resolve(response.toJSON().data);
             });
             return task.promise;
         };
     }
-
 
     /**
      * attr status filter
@@ -126,7 +119,7 @@ $(function(){
     AttrViewCtrl.$inject = ['$scope', '$modal', '$location', '$log', '$cacheFactory', 'workOrderAttr.RES', 'toaster'];
     function AttrViewCtrl($scope, $modal, $location, $log, $cacheFactory, workOrderAttrRES, toaster) {
 
-        renderAttrTable($scope, $log, workOrderAttrRES);
+        var render = renderAttrTable($scope, $log, workOrderAttrRES);
 
         //create new attr
         $scope.createItem = function () {
@@ -139,14 +132,22 @@ $(function(){
                 toaster.pop('info', "提示", "请选择要操作的条目!");
                 return;
             }
-            var id = $scope.selectedRows[0].id;
-            $location.url("/app/workOrderAttrCreateOrUpdate?id="+id);
+            if($scope.selectedRows.length>1){
+                toaster.pop('info', "提示", "只能选择一条操作的条目!");
+                return;
+            }
+            var key = $scope.selectedRows[0].propertyKey;
+            $location.url("/app/workOrderAttrCreateOrUpdate?key="+key);
         };
 
         //delete an attribute
         $scope.deleteItem = function() {
             if($scope.selectedRows.length==0){
                 toaster.pop('info', "提示", "请选择要操作的条目!");
+                return;
+            }
+            if($scope.selectedRows.length>1){
+                toaster.pop('info', "提示", "只能选择一条操作的条目!");
                 return;
             }
             var modalInstance = $modal.open({
@@ -159,7 +160,12 @@ $(function(){
                     }
                 }
             });
-            modalInstance.result.then(function (selectedItem) {
+            modalInstance.result.then(function (result) {
+                if(result.code=="0"){
+                    toaster.pop('info', "提示", "自定义属性删除成功!");
+                } else {
+                    toaster.pop('error', "提示", "自定义属性删除失败!");
+                }
                 $scope.loadData();
             }, function () {
                 $log.info('Modal dismissed at: ' + new Date());
@@ -178,7 +184,7 @@ $(function(){
     app.controller('WorkOrderAttrCreateOrUpdateViewCtrl', AttrCreateOrUpdateViewCtrl);
     AttrCreateOrUpdateViewCtrl.$inject = ['$scope', '$location', '$stateParams', '$log', '$cacheFactory', 'workOrderAttr.RES'];
     function AttrCreateOrUpdateViewCtrl($scope, $location, $stateParams, $log, $cacheFactory, workOrderAttrRES){
-        var id = $stateParams.id;
+        var key = $stateParams.key;
 
         $scope.PropertyType = workOrderAttrRES.baseEnum().propertyType;
 
@@ -187,14 +193,20 @@ $(function(){
         }
 
         $scope.createOrUpdate = 'C';
-        if(id!=undefined && id!=null && id!=''){
+        if(key!=undefined && key!=null && key!=''){
             $scope.createOrUpdate = 'U';
-            workOrderAttrRES.getById(id).then(function(result){
-                $scope.attr = result;
-                $scope.optionProperties = result.propertyOptions;
+            workOrderAttrRES.list({"propertyKey":key}).then(function(result){
+                $scope.attr = result.content[0];
+                if($scope.attr.propertyOptions!=""){
+                    $scope.optionProperties = JSON.parse($scope.attr.propertyOptions);
+                }
             }, function(e){
                 alert(e);
             });
+        }
+
+        if($scope.optionProperties=="" || $scope.optionProperties == undefined){
+            $scope.optionProperties = [{'optionValue': 'value 1', 'optionName': 'name 1'}];
         }
 
         if ($scope.attr.propertyType == undefined || $scope.attr.propertyType == null) {
@@ -204,18 +216,20 @@ $(function(){
         //create new attr
         $scope.saveItem = function (isValid) {
             if (!isValid) return;
-            //$scope.attr.propertyOptions = $scope.option;
-            $log.info($scope.attr);
+            $scope.attr.propertyOptions = JSON.stringify($scope.optionProperties);
             if($scope.createOrUpdate=="C"){
-                $log.info("create");
-                //workOrderAttrRES.create($scope.attr).then(function(result){
-                //    $log.info(result);
-                //});
+                workOrderAttrRES.create($scope.attr).then(function(result){
+                    if(result.code==0){
+                        $scope.backToMain();
+                    }
+                });
             } else if($scope.createOrUpdate=="U"){
                 $log.info("update");
-                //workOrderAttrRES.update($scope.attr).then(function(result){
-                //    $log.info(result);
-                //});
+                workOrderAttrRES.create($scope.attr).then(function(result){
+                    if(result.code==0){
+                        $scope.backToMain();
+                    }
+                });
             }
         };
 
@@ -244,22 +258,19 @@ $(function(){
      * workOrder attr delete controller
      */
     app.controller('WorkOrderAttrDeleteViewCtrl', AttrDeleteViewCtrl);
-    AttrDeleteViewCtrl.$inject = ['$scope', '$log', '$modalInstance', 'params', 'workOrderAttr.RES'];
-    function AttrDeleteViewCtrl($scope, $log, $modalInstance, params, workOrderAttrRES) {
-        var keys = [];
+    AttrDeleteViewCtrl.$inject = ['$scope', '$log', '$modalInstance', 'params', 'workOrderAttr.RES', 'toaster'];
+    function AttrDeleteViewCtrl($scope, $log, $modalInstance, params, workOrderAttrRES, toaster) {
+        var ids = [];
 
         $scope.items = params;
         angular.forEach(params, function(data,index,array){
-            keys.push(data.propertyKey);
+            ids.push(data.id);
         });
-
-        console.log($scope.items);
 
         //remove attr
         $scope.removeItem = function () {
-            workOrderAttrRES.remove(keys).then(function (result) {
-                $log.info(result);
-                $modalInstance.close($scope.items);
+            workOrderAttrRES.removeById(ids[0]).then(function (result) {
+                $modalInstance.close(result);
             });
         };
 
@@ -306,21 +317,15 @@ $(function(){
                     field: "belonged",
                     displayName: '所属流程',
                     cellTemplate:'<div class="ui-grid-cell-contents"><a class="text-info" ui-sref="app.workOrderAttrLinked({key:row.entity.propertyKey})">{{row.entity.belonged}}</a></div>'
-                },
-                {
-                    field: "createDate",
-                    displayName: '创建时间',
-                    cellTemplate:'<div class="ui-grid-cell-contents">{{row.entity.createDate | date:"yyyy-MM-dd HH:mm:ss"}}</div>'
+                //},
+                //{
+                //    field: "createDate",
+                //    displayName: '创建时间',
+                //    cellTemplate:'<div class="ui-grid-cell-contents">{{row.entity.createDate | date:"yyyy-MM-dd HH:mm:ss"}}</div>'
                 }],
             paginationCurrentPage: 1, //当前页码
-            paginationPageSize: 5, //每页显示个数
+            paginationPageSize: 10, //每页显示个数
             paginationPageSizes: [5,10,20,50],//默认[250, 500, 1000]
-            isRowSelectable: function (row) { //GridRow
-                index+=1;//下标加1
-                if(index==1){
-                    row.grid.api.selection.selectRow(row.entity);
-                }
-            },
             useExternalPagination: true, //是否使用客户端分页,默认false
             onRegisterApi: function (gridApi) {
                 $scope.gridApi = gridApi;
@@ -328,11 +333,11 @@ $(function(){
                 gridApi.pagination.on.paginationChanged($scope, function (newPage, pageSize) {
                     var params = {};
                     params.page=newPage;
-                    params.pageSize=pageSize;
+                    params.size=pageSize;
                     if (getPage) {
-                        workOrderAttrRES.list().then(function (result) {
+                        workOrderAttrRES.list(params).then(function (result) {
                             attrs=result.content;
-                            getPage(params.page,params.pageSize, result.totalElements);
+                            getPage(newPage, pageSize, result.totalElements);
                         });
                     }
                 });
@@ -353,22 +358,26 @@ $(function(){
         };
         var attrs=[];
         var params={
-            page: $scope.attrGridOptions.paginationCurrentPage,
-            pageSize: $scope.attrGridOptions.paginationPageSize
+            "page"   : $scope.attrGridOptions.paginationCurrentPage,
+            "size"  : $scope.attrGridOptions.paginationPageSize
         };
         var getPage = function (curPage, pageSize,totalSize) {
-            index=0;//下标置为0
+            $scope.attrGridOptions.paginationCurrentPage = curPage;
+            $scope.attrGridOptions.paginationPageSize = pageSize;
             $scope.attrGridOptions.totalItems = totalSize;
             $scope.attrGridOptions.data = attrs;
         };
-        var loadData = function(){
-            workOrderAttrRES.list().then(function (result) {
+        $scope.loadData = function(){
+            $scope.selectedRows = [];
+            workOrderAttrRES.list(params).then(function (result) {
                 attrs = result.content;  //每次返回结果都是最新的
-                getPage(1,params.pageSize, result.totalElements);
+                getPage(1, params.size, result.totalElements);
+            }, function(){
+                attrs = [];
             });
         };
         //the list of attrs
-        loadData();
+        $scope.loadData();
 
         //search function end
         $scope.params = {grid: {}, fun: {}};
@@ -376,7 +385,7 @@ $(function(){
         // callback function
         $scope.callFn = function(item){
             $scope.rowItem = item;
-        }
+        };
     }
 
     function renderAttrLinkedView(key, $scope, $log, workOrderAttrRES) {

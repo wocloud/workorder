@@ -9,6 +9,14 @@
     <div class="panel-body">
         <form class="form-horizontal form-validation" name="attrForm" novalidate ng-submit="saveItem(attrForm.$valid)">
             <div class="form-group">
+                <label class="col-sm-2 control-label">编码</label>
+                <div class="col-sm-7">
+                    <input type="text" name="propertyKey" class="form-control" ng-model="attr.propertyKey" required ng-maxlength="256" ng-focus>
+                </div>
+                <span class="tip">*</span>
+                <span class="tip" ng-show='attrForm.propertyKey.$error.required'>必填项</span>
+            </div>
+            <div class="form-group">
                 <label class="col-sm-2 control-label">格式</label>
                 <div class="col-sm-7">
                     <select name="propertyType" class="form-control" ng-model="attr.propertyType" required ng-focus
@@ -21,7 +29,7 @@
             <div class="form-group">
                 <label class="col-sm-2 control-label">名称</label>
                 <div class="col-sm-7">
-                    <input type="text" name="propertyName" class="form-control" ng-model="attr.propertyName" ensureUnique required ng-maxlength="256" ng-focus>
+                    <input type="text" name="propertyName" class="form-control" ng-model="attr.propertyName" required ng-maxlength="256" ng-focus>
                 </div>
                 <span class="tip">*</span>
                 <span class="tip" ng-show='attrForm.propertyName.$error.required'>必填项,且字符长度限制在256以内</span>
@@ -45,10 +53,10 @@
             <div class="form-group">
                 <label class="col-sm-2 control-label">默认值</label>
                 <div class="col-sm-7">
-                    <input type="text" name="propertyDefaultValue" class="form-control" ng-model="attr.propertyDefaultValue" required ng-focus>
+                    <input type="text" name="propertyDefaultValue" class="form-control" ng-model="attr.propertyDefaultValue">
                 </div>
-                <span class="tip">*</span>
-                <span class="tip" ng-show='attrForm.propertyDefaultValue.$error.required'>必填项</span>
+                <!--<span class="tip">*</span>-->
+                <!--<span class="tip" ng-show='attrForm.propertyDefaultValue.$error.required'>必填项</span>-->
             </div>
             <div class="line line-dashed b-b line-lg pull-in"></div>
             <div class="form-group">
