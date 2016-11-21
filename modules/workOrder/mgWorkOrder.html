@@ -1,13 +1,10 @@
-<div class="bg-light lter b-b wrapper-md" >
-    <h1 class="m-n font-thin h3">我的工单</h1>
-</div>
-<!-- create new workOrder -->
-<div class="panel panel-default" >
-    <div class="panel-heading">
-        新建工单
-    </div>
-    <div class="panel-body">
-        <form  class="file-brief file-brief-show form-validation" name="createWorkOrder" ng-submit="saveItem()">
+<form  class="file-brief file-brief-show form-validation" name="createWorkOrder" >
+    <div class="panel panel-default"  style="width:100%">
+        <div class="bg-light lter b-b wrapper-md" >
+            <h1 class="m-n font-thin h3"> <span>咨询#16</span></h1>
+        </div>
+        <div class="panel-body" style="top:10px;width: 95%;height: 100%;border:1px solid #000;top:10px">
+            <p><span style="position: relative;top:-25px;">基本详情</span></p>
             <div class="form-group" ng-repeat="items in properties" ng-show="items.isVisible|dit">
                 <div ng-if="items.propertyType=='select'" class="col-sm-6 m-t-xs m-b-xs no-padder " >
                     <div class="form-group">
@@ -69,13 +66,23 @@
                     </div>
                 </div>
             </div>
-            <div class="line line-dashed b-b line-lg pull-in"></div>
-            <div class="form-group">
-                <div class="col-sm-12 col-sm-offset-2" style="margin-left: 45%;">
-                    <button type="button" class="btn btn-default" ng-click="backToMain()">取消</button>
-                    <button type="submit" class="btn btn-primary" ng-disabled="createWorkOrder.$invalid">保存</button>
-                </div>
+        </div>
+        <div class="panel-body" style="margin-top: 25px;;width: 95%;height: 100%;border:1px solid #000;top:10px">
+            <span style="position: relative;top:-25px;">留言记录</span>
+            <textarea style="width:100%;margin-top: -10px;height: 90px"></textarea>
+        </div>
+        <div class="panel-body" style="margin-top: 25px;;width: 95%;height: 100%;border:1px solid #000;top:10px">
+            <span style="position: relative;top:-25px;">处理意见</span>
+            <textarea style="width:100%;margin-top: -10px;height: 90px"></textarea>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-12 col-sm-offset-2" style="margin-left: 40%;">
+                <button type="button" class="btn btn-default" ng-disabled="createWorkOrder.$invalid" ng-click="backToMain()">返回</button>
+                <button type="button" class="btn btn-primary" ng-disabled="createWorkOrder.$invalid" ng-click="saveToMain()">保存</button>
+                <button type="button" class="btn btn-primary" ng-disabled="createWorkOrder.$invalid" ng-click="passToMain()">通过</button>
+                <button type="button" class="btn btn-primary" ng-disabled="createWorkOrder.$invalid" ng-click="rejectToMain()">驳回</button>
             </div>
-        </form>
+        </div>
     </div>
 </div>
+</form>

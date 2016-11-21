@@ -216,6 +216,7 @@ $(function(){
         //create new attr
         $scope.saveItem = function (isValid) {
             if (!isValid) return;
+            $scope.attrForm.$invalid = false;
             $scope.attr.propertyOptions = JSON.stringify($scope.optionProperties);
             if($scope.createOrUpdate=="C"){
                 workOrderAttrRES.create($scope.attr).then(function(result){

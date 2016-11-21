@@ -77,21 +77,94 @@ angular.module('app')
               //})
               .state('app.myWorkOrder', {
                   url: '/myWorkOrder',
+                  controller: 'MyWorkOrderCtrl',
                   templateUrl: 'modules/workOrder/myWorkOrder.html',
                   resolve: {
                       deps: ['$ocLazyLoad',
                           function( $ocLazyLoad ){
-                              return $ocLazyLoad.load(['modules/workOrder/js/myWorkOrder.js']);
+                              return $ocLazyLoad.load([
+                                  'modules/workOrder/js/workOrderRES.js',
+                                  'modules/workOrder/js/myWorkOrder.js']);
                           }]
                   }
               })
               .state('app.workOrderCreate', {
                   url: '/workOrderCreate',
+                  controller:'WorkOrderCreateCtrl',
                   templateUrl: 'modules/workOrder/workOrder.create.html',
                   resolve: {
                       deps: ['$ocLazyLoad',
                           function( $ocLazyLoad ){
-                              return $ocLazyLoad.load(['modules/workOrder/js/myWorkOrder.js']);
+                              return $ocLazyLoad.load([
+                                  'modules/workOrder/js/workOrderRES.js',
+                                  'modules/workOrder/js/myWorkOrder.js']);
+                          }]
+                  }
+              })
+
+              .state('app.lkworkOrder', {
+                  url: '/lkworkOrder',
+                  controller:'LKworkOrder',
+                  templateUrl: 'modules/workOrder/lkWorkOrder.html',
+                  resolve: {
+                      deps: ['$ocLazyLoad',
+                          function( $ocLazyLoad ){
+                              return $ocLazyLoad.load([
+                                  'modules/workOrder/js/workOrderRES.js',
+                                  'modules/workOrder/js/lkworkOrder.js']);
+                          }]
+                  }
+              })
+              .state('app.mgworkOrder', {
+                  url: '/mgworkOrder',
+                  controller:'MGworkOrder',
+                  templateUrl: 'modules/workOrder/mgWorkOrder.html',
+                  resolve: {
+                      deps: ['$ocLazyLoad',
+                          function( $ocLazyLoad ){
+                              return $ocLazyLoad.load([
+                                  'modules/workOrder/js/workOrderRES.js',
+                                  'modules/workOrder/js/mgWorkOrder.js']);
+                          }]
+                  }
+              })
+              .state('app.workOrderInfo', {
+                  url: '/workOrderInfo',
+                  controller:'WorkOrderInfo',
+                  templateUrl: 'modules/workOrder/workOrderInfo.html',
+                  resolve: {
+                      deps: ['$ocLazyLoad',
+                          function( $ocLazyLoad ){
+                              return $ocLazyLoad.load([
+                                  'modules/workOrder/js/workOrderRES.js',
+                                  'modules/workOrder/js/workOrderInfo.js']);
+                          }]
+                  }
+              })
+              .state('app.unworkOrder', {
+                  url: '/unworkOrder',
+                  controller:'UNworkOrder',
+                  templateUrl: 'modules/workOrder/unWorkOrder.html',
+                  resolve: {
+                      deps: ['$ocLazyLoad',
+                          function( $ocLazyLoad ){
+                              return $ocLazyLoad.load([
+                                  'modules/workOrder/js/workOrderRES.js',
+                                  'modules/workOrder/js/unworkOrder.js'
+                              ]);
+                          }]
+                  }
+              })
+              .state('app.disworkOrder', {
+                  url: '/disworkOrder',
+                  controller:'DisworkOrder',
+                  templateUrl: 'modules/workOrder/disWorkOrder.html',
+                  resolve: {
+                      deps: ['$ocLazyLoad',
+                          function( $ocLazyLoad ){
+                              return $ocLazyLoad.load([
+                                  'modules/workOrder/js/workOrderRES.js',
+                                  'modules/workOrder/js/disworkOrder.js']);
                           }]
                   }
               })
