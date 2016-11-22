@@ -44,7 +44,7 @@
                                    required ng-maxlength="32" ng-focus style="width: 45%;"/>
                             <input type="text" class="form-control pull-left" ng-model="option.optionName" value="option.optionName"
                                    required ng-maxlength="32" ng-focus style="width: 45%;"/>
-                            <i class="glyphicon glyphicon-minus" ng-click="removeOptionValue($index)" style="margin: 10px auto;"></i>
+                            <i ng-show="optionProperties.length > 1" class="glyphicon glyphicon-minus" ng-click="removeOptionValue($index)" style="margin: 10px auto;"></i>
                             <i ng-if="$index == (optionProperties.length - 1)" class="glyphicon glyphicon-plus" ng-click="addOptionValue($index)" style="margin: 10px auto;"></i>
                         </div>
                     </div>
