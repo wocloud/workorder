@@ -1,14 +1,17 @@
 <div class="bg-light lter b-b wrapper-md" >
     <h1 class="m-n font-thin h3">未处理工单</h1>
 </div>
-<div class="pane">
+<div class="wrapper-md">
 
     <!--- workOrders -->
     <div class="panel panel-default">
+        <div class="panel-heading">
+            工单列表
+        </div>
         <div class="row no-padder m-n">
             <div class="row no-padder m-n">
                 <div class="col-sm-12 m-t-xs m-b-xs no-padder " >
-                    <my-work-order-sreach style="height: 100%;" propertiesevent="propertiesevent" status="sreachStatus" falg="true" allproperties="allproperties" properties="properties" pr-click="sreach()" pr-check="check({$event:$event,items:items})"></my-work-order-sreach>
+                    <my-work-order-sreach style="height: 100%;" search="search" flag="yel"  propertiesevent="propertiesevent"  allproperties="allproperties" properties="properties" pr-click="sreach()" pr-check="check({$event:$event,items:items})"></my-work-order-sreach>
                     <!--<div >
                         <span>资源池</span>
                         <select class="input-large" ng-model="search_business.poolId" name="resourcePool">
@@ -16,11 +19,12 @@
                     </div>-->
                 </div>
             </div>
-            <!--<div>
-                <button class="btn m-b-xs btn-sm btn-primary btn-addon" ng-click="createItem()"><i class="fa fa-plus"></i>新建工单</button>
-            </div>-->
-            <div ui-grid="myGridOptions" style="width: 100%; height: 100%;"
-                 ui-grid-edit ui-grid-pagination ui-grid-selection ui-grid-resize-columns ui-grid-auto-resize>
+            <div>
+                <button class="btn m-b-xs btn-sm btn-primary btn-addon" ng-disabled="disposeflag" ng-click="disposeItem()"><i class="fa fa-plus"></i>处理工单</button>
+                <button class="btn m-b-xs btn-sm btn-primary btn-addon" ng-disabled="singflag" ng-click="signItem()"><i class="fa fa-plus"></i>签收工单</button>
+            </div>
+            <div ui-grid="myGridOptions" style="width: 100%; height: 100%;" ui-grid-edit
+                 ui-grid-pagination ui-grid-selection ui-grid-exporter ui-grid-resize-columns ui-grid-auto-resize>
             </div>
         </div>
     </div>

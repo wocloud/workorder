@@ -8,14 +8,14 @@ angular.module('app')
     [          '$rootScope', '$state', '$stateParams',
       function ($rootScope,   $state,   $stateParams) {
           $rootScope.$state = $state;
-          $rootScope.$stateParams = $stateParams;        
+          $rootScope.$stateParams = $stateParams;
       }
     ]
   )
   .config(
     [          '$stateProvider', '$urlRouterProvider','$httpProvider', 'fbInterceptor','$resourceProvider',
       function ($stateProvider,   $urlRouterProvider, $httpProvider, fbInterceptor, $resourceProvider) {
-          
+
           $urlRouterProvider
               .otherwise('/app/dashboard-v1');
           $stateProvider
@@ -65,16 +65,10 @@ angular.module('app')
                           }]
                   }
               })
-              //.state('app.workOrderFlowDetail', {
-              //    url: '/workOrderFlowDetail?modelId',
-              //    templateUrl: 'modules/workOrder/flow.detail.html',
-              //    resolve: {
-              //        deps: ['$ocLazyLoad',
-              //            function( $ocLazyLoad ){
-              //                return $ocLazyLoad.load(['modules/workOrder/js/flows.js']);
-              //            }]
-              //    }
-              //})
+              .state('app.modeler', {
+                  url: '/modeler?modelId',
+                  templateUrl: 'modules/modeler/modeler.html'
+              })
               .state('app.myWorkOrder', {
                   url: '/myWorkOrder',
                   controller: 'MyWorkOrderCtrl',
@@ -117,6 +111,7 @@ angular.module('app')
               })
               .state('app.mgworkOrder', {
                   url: '/mgworkOrder',
+                  params:{id:null},
                   controller:'MGworkOrder',
                   templateUrl: 'modules/workOrder/mgWorkOrder.html',
                   resolve: {
@@ -130,6 +125,7 @@ angular.module('app')
               })
               .state('app.workOrderInfo', {
                   url: '/workOrderInfo',
+                  params:{id:null},
                   controller:'WorkOrderInfo',
                   templateUrl: 'modules/workOrder/workOrderInfo.html',
                   resolve: {
@@ -208,7 +204,7 @@ angular.module('app')
               .state('app.ui.widgets', {
                   url: '/widgets',
                   templateUrl: 'tpl/ui_widgets.html'
-              })          
+              })
               .state('app.ui.bootstrap', {
                   url: '/bootstrap',
                   templateUrl: 'tpl/ui_bootstrap.html'
@@ -275,7 +271,7 @@ angular.module('app')
                             'js/app/map/ui-map.js',
                             'js/app/map/map.js'] ).then(
                               function(){
-                                return loadGoogleMaps(); 
+                                return loadGoogleMaps();
                               }
                             );
                       }]
@@ -623,9 +619,9 @@ angular.module('app')
                               {
                                   name: 'angular-skycons',
                                   files: ['js/app/weather/skycons.js',
-                                          'vendor/libs/moment.min.js', 
+                                          'vendor/libs/moment.min.js',
                                           'js/app/weather/angular-skycons.js',
-                                          'js/app/weather/ctrl.js' ] 
+                                          'js/app/weather/ctrl.js' ]
                               }
                           );
                       }]
@@ -639,12 +635,12 @@ angular.module('app')
                       deps: ['$ocLazyLoad',
                         function( $ocLazyLoad ){
                           return $ocLazyLoad.load([
-                            'com.2fdevs.videogular', 
-                            'com.2fdevs.videogular.plugins.controls', 
+                            'com.2fdevs.videogular',
+                            'com.2fdevs.videogular.plugins.controls',
                             'com.2fdevs.videogular.plugins.overlayplay',
                             'com.2fdevs.videogular.plugins.poster',
                             'com.2fdevs.videogular.plugins.buffering',
-                            'js/app/music/ctrl.js', 
+                            'js/app/music/ctrl.js',
                             'js/app/music/theme.css'
                           ]);
                       }]

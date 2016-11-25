@@ -1,22 +1,22 @@
-<form  class="file-brief file-brief-show form-validation" name="createWorkOrder" >
+<form  class="file-brief file-brief-show form-validation" name="disposeWorkOrder" >
     <div class="panel panel-default"  style="width:100%">
         <div class="bg-light lter b-b wrapper-md" >
-            <h1 class="m-n font-thin h3"> <span>咨询#16</span></h1>
+            <h1 class="m-n font-thin h3"> <span>咨询#{{workorder.id}}</span></h1>
         </div>
         <div class="panel-body" style="top:10px;width: 95%;height: 100%;border:1px solid #000;top:10px">
             <p><span style="position: relative;top:-25px;">基本详情</span></p>
-            <div class="form-group" ng-repeat="items in properties" ng-show="items.isVisible|dit">
+            <div class="form-group" ng-repeat="items in workorder.properties" ng-show="items.isVisible|dit">
                 <div ng-if="items.propertyType=='select'" class="col-sm-6 m-t-xs m-b-xs no-padder " >
                     <div class="form-group">
                         <label class="col-md-offset-1 col-sm-offset-1 col-md-2 col-sm-2 control-label" style="margin-left:3%;text-align: right;line-height: 37px;">{{items.propertyName}}</label>
-                        <div class="col-md-6 col-sm-6 no-padder-sm" ng-disabled="items.readOnly|dit" style="width:80%;">
-                            <select class="form-control"  name="{{items.propertyKey}}" ng-model="items.createValue" ng-required="items.isRequired|dit" style="width:70%;display:inline;margin-top: 0px">
-                                <option  value="" ng-if="items.propertyDefaultValue==''" >-请选择-</option>
+                        <div class="col-md-6 col-sm-6 no-padder-sm"  style="width:80%;">
+                            <select class="form-control" ng-disabled="items.readOnly|dit" name="{{items.propertyKey}}" ng-model="items.propertyValue" ng-required="items.isRequired|dit" style="width:70%;display:inline;margin-top: 0px">
+                                <option  value="" ng-if="items.propertyValue==''" >-请选择-</option>
                                 <option ng-repeat="item in items.optionList" value="{{item.optionValue}}">{{item.optionName}}</option>
                             </select>
                             <div ng-if="items.isRequired|dit" style="display:inline;color:red;">
                                 <span  class="no-null" style="margin-left:2%;">*</span>
-                                <div ng-messages="createWorkOrder[items.propertyKey].$error" ng-if="createWorkOrder[items.propertyKey].$touched" style="display:inline">
+                                <div ng-messages="disposeWorkOrder[items.propertyKey].$error" ng-if="disposeWorkOrder[items.propertyKey].$touched" style="display:inline">
                                     <div ng-message="required" style="display:inline">必填项不能为空</div>
                                 </div>
                             </div>
@@ -26,11 +26,11 @@
                 <div ng-if="items.propertyType=='text'" class="col-sm-6 m-t-xs m-b-xs no-padder ">
                     <div class="form-group">
                         <label class="col-md-offset-1 col-sm-offset-1 col-md-2 col-sm-2 control-label" style="margin-left:3%;text-align:right;line-height: 37px;">{{items.propertyName}}</label>
-                        <div class="col-md-6 col-sm-6 no-padder-sm" ng-disabled="items.readOnly|dit" style="width:80%;">
-                            <input class="form-control" type="text"  name="{{items.propertyKey}}" ng-model="items.createValue" style="width:70%;display:inline;margin-top: 0px" value="{{items.propertyDefaultValue}}" ng-required="items.isRequired|dit"/>
+                        <div class="col-md-6 col-sm-6 no-padder-sm"  style="width:80%;">
+                            <input class="form-control" type="text"  ng-disabled="items.readOnly|dit" name="{{items.propertyKey}}" ng-model="items.propertyValue" style="width:70%;display:inline;margin-top: 0px" value="{{items.propertyDefaultValue}}" ng-required="items.isRequired|dit"/>
                             <div ng-if="items.isRequired|dit" style="display:inline;color:red;">
                                 <span class="no-null" style="margin-left: 2%;">*</span>
-                                <div ng-messages="createWorkOrder[items.propertyKey].$error" ng-if="createWorkOrder[items.propertyKey].$touched" style="display:inline;">
+                                <div ng-messages="disposeWorkOrder[items.propertyKey].$error" ng-if="disposeWorkOrder[items.propertyKey].$touched" style="display:inline;">
                                     <div ng-message="required" style="display:inline;">必填项不能为空</div>
                                 </div>
                             </div>
@@ -40,11 +40,11 @@
                 <div ng-if="items.propertyType=='textArea'" class="col-sm-12 m-t-xs m-b-xs no-padder ">
                     <div class="form-group">
                         <label class="col-md-offset-1 col-sm-offset-1 col-md-1 col-sm-2 control-label" style="margin-left:1.333333%;text-align:right;line-height: 37px;">{{items.propertyName}}</label>
-                        <div class="col-md-6 col-sm-6 no-padder-sm" ng-disabled="items.readOnly|dit" style="width:90%;">
-                            <textarea class="form-control" name="{{items.propertyKey}}" ng-model="items.createValue" ng-required="items.isRequired|dit" style="width:87.2%;display:inline;margin-left: 2px;margin-top: 0px">{{items.propertyDefaultValue}}</textarea>
+                        <div class="col-md-6 col-sm-6 no-padder-sm"  style="width:90%;">
+                            <textarea class="form-control"  ng-disabled="items.readOnly|dit" name="{{items.propertyKey}}" ng-model="items.propertyValue" ng-required="items.isRequired|dit" style="width:87.2%;display:inline;margin-left: 2px;margin-top: 0px">{{items.propertyDefaultValue}}</textarea>
                             <div ng-if="items.isRequired|dit" style="display:inline;color:red;">
                                 <span class="no-null" style="margin-left: 1%;">*</span>
-                                <div ng-messages="createWorkOrder[items.propertyKey].$error" ng-if="createWorkOrder[items.propertyKey].$touched" style="display:inline;">
+                                <div ng-messages="disposeWorkOrder[items.propertyKey].$error" ng-if="disposeWorkOrder[items.propertyKey].$touched" style="display:inline;">
                                     <div ng-message="required" style="display:inline;">必填项不能为空</div>
                                 </div>
                             </div>
@@ -54,11 +54,11 @@
                 <div ng-if="items.propertyType=='dateTime'" class="col-sm-6 m-t-xs m-b-xs no-padder ">
                     <div class="form-group">
                         <label class="col-md-offset-1 col-sm-offset-1 col-md-2 col-sm-2 control-label" style="margin-left:3%;text-align:right;line-height: 37px;">{{items.propertyName}}</label>
-                        <div class="col-md-6 col-sm-6 no-padder-sm" ng-disabled="items.readOnly|dit" style="width:80%;">
-                            <input  class="form-control laydate-icon" name="{{items.propertyKey}}" def-laydate  type="text"  ng-model="items.createValue"  style="width:70%;display:inline;margin-top: 0px" ng-required="items.isRequired|dit" />
+                        <div class="col-md-6 col-sm-6 no-padder-sm"  style="width:80%;">
+                            <input  class="form-control laydate-icon" ng-disabled="items.readOnly|dit" name="{{items.propertyKey}}" def-laydate  type="text"  ng-model="items.propertyValue"  style="width:70%;display:inline;margin-top: 0px" ng-required="items.isRequired|dit" />
                             <div ng-if="items.isRequired|dit" style="display:inline;color:red;">
                                 <span class="no-null" style="margin-left: 2%;">*</span>
-                                <div ng-messages="createWorkOrder[items.propertyKey].$error" ng-if="createWorkOrder[items.propertyKey].$touched" style="display:inline;">
+                                <div ng-messages="disposeWorkOrder[items.propertyKey].$error" ng-if="disposeWorkOrder[items.propertyKey].$touched" style="display:inline;">
                                     <div ng-message="required" style="display:inline;">必填项不能为空</div>
                                 </div>
                             </div>
@@ -67,20 +67,18 @@
                 </div>
             </div>
         </div>
-        <div class="panel-body" style="margin-top: 25px;;width: 95%;height: 100%;border:1px solid #000;top:10px">
+        <!--<div class="panel-body" style="margin-top: 25px;;width: 95%;height: 100%;border:1px solid #000;top:10px">
             <span style="position: relative;top:-25px;">留言记录</span>
-            <textarea style="width:100%;margin-top: -10px;height: 90px"></textarea>
-        </div>
+            <textarea style="width:100%;margin-top: -10px;height: 90px" ng-model="workorder.liuyan"></textarea>
+        </div>-->
         <div class="panel-body" style="margin-top: 25px;;width: 95%;height: 100%;border:1px solid #000;top:10px">
             <span style="position: relative;top:-25px;">处理意见</span>
-            <textarea style="width:100%;margin-top: -10px;height: 90px"></textarea>
+            <textarea style="width:100%;margin-top: -10px;height: 90px" ng-model="workorder.remark"></textarea>
         </div>
         <div class="form-group">
             <div class="col-sm-12 col-sm-offset-2" style="margin-left: 40%;">
-                <button type="button" class="btn btn-default" ng-disabled="createWorkOrder.$invalid" ng-click="backToMain()">返回</button>
-                <button type="button" class="btn btn-primary" ng-disabled="createWorkOrder.$invalid" ng-click="saveToMain()">保存</button>
-                <button type="button" class="btn btn-primary" ng-disabled="createWorkOrder.$invalid" ng-click="passToMain()">通过</button>
-                <button type="button" class="btn btn-primary" ng-disabled="createWorkOrder.$invalid" ng-click="rejectToMain()">驳回</button>
+                <button type="button" class="btn btn-default" ng-disabled="disposeWorkOrder.$invalid" ng-click="backToMain()">返回</button>
+                <button type="button" class="btn btn-primary" ng-disabled="disposeWorkOrder.$invalid" ng-click="disposeToMain()">提交</button>
             </div>
         </div>
     </div>

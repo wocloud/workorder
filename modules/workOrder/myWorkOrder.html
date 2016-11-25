@@ -8,14 +8,15 @@
         <div class="row no-padder m-n">
             <div class="row no-padder m-n">
                 <div class="col-sm-12 m-t-xs m-b-xs no-padder " >
-                    <my-work-order-sreach style="height: 100%;" status="sreachStatus" falg="false" propertiesevent="propertiesevent" allproperties="allproperties" properties="properties" pr-click="sreach()" pr-check="check({$event:$event,items:items})"></my-work-order-sreach>
+                    <my-work-order-sreach style="height: 100%;" search-params="searchParams" search="search" flag="yel" propertiesevent="propertiesevent" allproperties="allproperties"  addproperties="{{allproperties}}" properties="properties" pr-click="sreach()"  have-cms="addCms()" haveproperties="haveproperties" pr-check="check({$event:$event,items:items})"></my-work-order-sreach>
                 </div>
             </div>
             <div>
                 <button class="btn m-b-xs btn-sm btn-primary btn-addon" ng-click="createItem()"><i class="fa fa-plus"></i>新建工单</button>
+                <button class="btn m-b-xs btn-sm btn-primary btn-addon"  ng-click="putItem()"><i class="fa fa-plus"></i>提交工单</button>
             </div>
-           <div ui-grid="myGridOptions" style="width: 100%; height: 100%;"
-                 ui-grid-edit ui-grid-pagination ui-grid-selection ui-grid-resize-columns ui-grid-auto-resize>
+            <div ui-grid="myGridOptions" style="width: 100%; height: 100%;" ui-grid-edit
+                 ui-grid-pagination ui-grid-selection ui-grid-exporter ui-grid-resize-columns ui-grid-auto-resize>
             </div>
         </div>
     </div>

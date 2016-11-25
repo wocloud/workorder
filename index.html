@@ -14,6 +14,10 @@
   <link rel="stylesheet" href="vendor/modules/angularjs-toaster/toaster.css" type="text/css" />
   <link rel="stylesheet" href="modules/grid_test/css/ui-grid.min.css"/>
   <link rel="stylesheet" href="modules/workOrder/css/workOrder.css">
+  <link rel="stylesheet" href="css/ng-dialog/ngDialog.min.css">
+  <link rel="stylesheet" href="css/ng-dialog/myth/ngDialog-theme-default.css">
+  <link rel="stylesheet" href="css/ng-dialog/myth/ngDialog-theme-plain.css">
+  <link rel="stylesheet" href="css/alert.css">
 </head>
 <body ng-controller="AppCtrl">
   <div class="app" id="app" ng-class="{'app-header-fixed':app.settings.headerFixed, 'app-aside-fixed':app.settings.asideFixed, 'app-aside-folded':app.settings.asideFolded, 'app-aside-dock':app.settings.asideDock, 'container':app.settings.container}" ui-view></div>
@@ -44,6 +48,7 @@
   <script src="vendor/angular/angular-translate/loader-static-files.js"></script>
   <script src="vendor/angular/angular-translate/storage-cookie.js"></script>
   <script src="vendor/angular/angular-translate/storage-local.js"></script>
+  <script src="vendor/angular/angular-dialog/angular-dialog.js"></script>
 
   <!-- App -->
   <script src="js/app.js"></script>
@@ -67,10 +72,13 @@
   <script src="js/directives/ui-validate.js"></script>
   <script src="js/directives/fake-backend.js"></script>
   <script src="js/controllers/bootstrap.js"></script>
+  <script src="js/alert.js"></script>
   <script src="modules/grid_test/js/ui-grid.min.js"></script>
   <script src="vendor/modules/angularjs-toaster/toaster.js"></script>
-  <script src="vendor/jquery/laydate/laydate.js"></script>
+  <script src="js/directives/skyform-validate.js"></script>
+  <script src="js/directives/ngDialog.min.js"></script>
   <script src="js/directives/ui-laydate.js"></script>
+  <script src="vendor/jquery/laydate/laydate.js"></script>
   <!-- Lazy loading -->
 </body>
 </html>

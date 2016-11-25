@@ -16,6 +16,7 @@ angular.module('app', [
     'ui.validate',
     'oc.lazyLoad',
     'ui-laydate',
+    'sky-validate',
     'pascalprecht.translate',
     'FakeHttpBackend',
     'ui.grid',
@@ -24,5 +25,6 @@ angular.module('app', [
     'ui.grid.pagination',
     'ui.grid.resizeColumns',
     'ui.grid.autoResize',
+    'ngDialog',
     'toaster'
 ]);

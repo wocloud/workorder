@@ -1,7 +1,6 @@
 app.controller('LKworkOrder', LKworkOrder);
 LKworkOrder.$inject = ['$scope', '$location', '$log', '$cacheFactory', 'MyWorkOrder.RES','$state'];
 function LKworkOrder($scope, $location, $log, $cacheFactory, myWorkOrderRES,$state) {
-    $scope.sreachStatus="all"
     var index = 0;//默认选中行，下标置为0
     $scope.myGridOptions = {
         columnDefs: [
@@ -84,41 +83,21 @@ function LKworkOrder($scope, $location, $log, $cacheFactory, myWorkOrderRES,$sta
             });
         }
     };
-    var workOrders = [];
-    var params = {
-        page: $scope.myGridOptions.paginationCurrentPage,
-        pageSize: $scope.myGridOptions.paginationPageSize
-    };
-    var getPage = function (curPage, pageSize, totalSize) {
+    var getPage = function (curPage, pageSize, totalSize,workOrders) {
         index = 0;//下标置为0
         $scope.myGridOptions.totalItems = totalSize;
         $scope.myGridOptions.data = workOrders;
     };
-    function data(){
-        var params = {};
-        if($scope.properties>0) {
-            for (var i = 0; i < $scope.properties.length; i++) {
-                var key = $scope.properties[i].propertyKey;
-                var value = $scope.properties[i].sreachValue;
-                var str = "{" + key + ":" + "value" + "}";
-                var param = eval('(' + str + ')');
-                for (var r in param) {
-                    eval("params." + r + "=param." + r);
-                }
-            }
-        }
-        params.sreachStatus=$scope.sreachStatus;
-
-        return params;
-    }
     $scope.sreach = function (page,pageSize) {
-        var params=data();
+        var params={};
+        params.status=$scope.status;
+        params.properties=JSON.stringify($scope.properties);
         params.page=page!=undefined?page:1;
         params.pageSize=pageSize!=undefined?pageSize:10;
         console.log(params);
-        myWorkOrderRES.list(params).then(function (result) {
-            workOrders = result.content;  //每次返回结果都是最新的
-            getPage(params.page, params.pageSize, result.totalElements);
+        myWorkOrderRES.list_work(params).then(function (result) {
+            var workOrders = result.data.content;  //每次返回结果都是最新的
+            getPage(params.page, params.pageSize, result.totalElements,workOrders);
         });
     };
     $scope.check = function (event) {
@@ -139,18 +118,17 @@ function LKworkOrder($scope, $location, $log, $cacheFactory, myWorkOrderRES,$sta
     $scope.callFn = function (item) {
         $scope.rowItem = item;
     }
-    var params = {"page": 1, "size": 10};
     $scope.propertieslist = [];
-    myWorkOrderRES.list_attr(params).then(function (result) {
-        var a = result.data.content;
+    myWorkOrderRES.list_attr().then(function (result) {
+        var a = result.data;
         for (var i = 0; i < a.length; i++) {
             if (a[i].propertyType == "select") {
                 a[i].propertyOptions = jQuery.parseJSON(a[i].propertyOptions);
             }
-            a[i].sreachValue = a[i].propertyDefaultValue;
+            a[i].propertyValue = a[i].propertyDefaultValue;
         }
         var arr = [];
-        if (result.data.totalElements >= 3) {
+        if (a.length >= 3) {
             for (var i = 0; i < 3; i++) {
                 arr.push(a[i]);
             }
