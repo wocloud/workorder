@@ -41,6 +41,8 @@
     };
     WorkOrderInfo.$inject = ['$scope', '$location', '$log', '$cacheFactory', 'MyWorkOrder.RES', '$state','$stateParams'];
     function WorkOrderInfo($scope, $location, $log, $cacheFactory, myWorkOrderRES, $state,$stateParams) {
+        $scope.imageSrc = "";
+
         var params={
             linkId:$stateParams.id
         };
@@ -63,6 +65,11 @@
         $scope.folder2 = function(){
             $scope.isShow2=!$scope.isShow2;
             if(!$scope.isShow2){
+                myWorkOrderRES.getProcessPicture($stateParams.id).then(function (result) {
+                    if(result.data!=undefined && result.data!="") {
+                        $scope.imageSrc = "data:image/png;base64," + result.data;
+                    }
+                });
             }
         };
     };

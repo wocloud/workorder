@@ -254,4 +254,16 @@ function ServiceMyWorkOrderRES($q, $resource, fakeMapping) {
         });
         return task.promise;
     };
+
+    //获取工单实例当前环节流程图
+    this.getProcessPicture = function(workorderId){
+        var api_link_workOrderAndFlow = '/wocloud-workorder-restapi/instanceService/getProcessPicture';
+        var task = $q.defer();
+        $resource(api_link_workOrderAndFlow).save({"id": workorderId}, function(response){
+            task.resolve(response.toJSON());
+        }, function(response){
+            task.reject(response);
+        });
+        return task.promise;
+    };
 }
