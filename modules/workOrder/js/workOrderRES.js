@@ -99,6 +99,17 @@ function ServiceMyWorkOrderRES($q, $resource, fakeMapping) {
     fakeMapping.scheme(api_listWorkOrder_list, {
         '':'modules/workOrder/json/list_work_order.json'
     });
+    //查询未处理工单
+    var api_listunWorkOrder_list = '/wocloud-workorder-restapi/instanceService/selectPendingInstanceListByCondition',
+        res_listunWorkOrder_list = $resource(api_listunWorkOrder_list,{},{post:{
+            method : 'POST',
+            headers : {
+                'Content-Type' : 'application/json;charset=UTF-8'
+            }
+        }});
+    fakeMapping.scheme(api_listunWorkOrder_list, {
+        '':'modules/workOrder/json/list_work_order.json'
+    });
     //根据linkId查询工单
     var api_listWorkOrderById_list = '/wocloud-workorder-restapi/workorder/selectWorkorderInfo',
         res_listWorkOrderById_list = $resource(api_listWorkOrderById_list,{},{post:{
@@ -180,7 +191,14 @@ function ServiceMyWorkOrderRES($q, $resource, fakeMapping) {
             task.resolve(response.toJSON());
         });
         return task.promise;
-    }
+    };
+    this.list_unwork=function(params){
+        var task = $q.defer();
+        res_listunWorkOrder_list.post(params, function (response) {
+            task.resolve(response.toJSON());
+        });
+        return task.promise;
+    };
     this.list_attr=function(params){
         var task = $q.defer();
         res_workOrder_attr_list.post(params, function (response) {
@@ -207,6 +225,32 @@ function ServiceMyWorkOrderRES($q, $resource, fakeMapping) {
         var task = $q.defer();
         res_submitWorkOrder_list.post(params,function(response){
             task.resolve(response.toJSON());
+        });
+        return task.promise;
+    };
+
+    //获取流程列表
+    this.listWorkFlows = function(params){
+        var api_workflow_list = '/wocloud-workorder-restapi/workflow/listProcessDefinition';
+        var task = $q.defer();
+        var parameters = params==undefined ? {} : params;
+        $resource(api_workflow_list).save(parameters, function(response){
+            task.resolve(response.toJSON());
+        }, function(response){
+            task.reject(response);
+        });
+        return task.promise;
+    };
+
+    //获取流程列表
+    this.linkWorkOrderAndFlow = function(params){
+        var api_link_workOrderAndFlow = '/wocloud-workorder-restapi/workorderTypeProcess/bindWorkorderTypeAndProcess';
+        var task = $q.defer();
+        var parameters = params==undefined ? {} : params;
+        $resource(api_link_workOrderAndFlow).save(parameters, function(response){
+            task.resolve(response.toJSON());
+        }, function(response){
+            task.reject(response);
         });
         return task.promise;
     };

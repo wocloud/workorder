@@ -1,53 +1,108 @@
 app.controller('DisworkOrder', DisworkOrder);
+app.filter('dit', dit);
+function dit (){
+    return function(input){
+        if ( input == 1) {
+            return  true;
+        } else if(input == 0) {
+            return false;
+        }
+    };
+};
+app.filter('priorityStatus', priorityStatus);
+function priorityStatus (){
+    return function(input){
+        if ( input == 0) {
+            return  "低";
+        } else if(input == 1) {
+            return "中";
+        }
+        else if(input == 2) {
+            return "高";
+        }
+    };
+};
+app.filter('productTypeStatus', productTypeStatus);
+function productTypeStatus (){
+    return function(input){
+        if ( input == 1001) {
+            return  "云主机";
+        } else if(input == 1002) {
+            return "云存储";
+        }
+        else {
+            return "其他";
+        }
+    };
+};
+app.filter('performerStatus', performerStatus);
+function performerStatus (){
+    return function(input){
+        if ( input == 1) {
+            return  "受理中";
+        } else if(input == 2) {
+            return "已受理";
+        }
+        else {
+            return "未受理";
+        }
+    };
+};
 DisworkOrder.$inject = ['$scope', '$location', '$log', '$cacheFactory', 'MyWorkOrder.RES','$state'];
 function DisworkOrder($scope, $location, $log, $cacheFactory, myWorkOrderRES,$state) {
-    $scope.sreachStatus="dis"
+    $scope.search={};
+    $scope.yel=false;
     var index = 0;//默认选中行，下标置为0
     $scope.myGridOptions = {
         columnDefs: [
             {
                 field: 'id',
                 displayName: 'ID',
-                cellTemplate: '<div class="ui-grid-cell-contents ng-binding ng-scope"><a class="text-info" ui-sref="app.workOrderInfo({id:row.entity.id})">{{row.entity.id}}</a></div>'
             },
             {
-                field: "name",
+                field: "workorderType",
                 displayName: '工单类型'
+
             },
             {
-                field: "mark",
-                displayName: '主题',
-                cellTemplate: '<div class="ui-grid-cell-contents ng-binding ng-scope"><a class="text-info" ui-sref="app.workOrderInfo({id:row.entity.id})">{{row.entity.id}}</a></div>'
+                field: "title",
+                displayName: '主题'
             },
             {
-                field: "name",
-                displayName: '优先级'
+                field: "priority",
+                displayName: '优先级',
+                cellTemplate: '<div class="ui-grid-cell-contents ng-binding ng-scope">{{row.entity.priority|priorityStatus}}</div>'
             },
             {
-                field: "mark",
-                displayName: '问题分类'
+                field: "productType",
+                displayName: '问题分类',
+                cellTemplate: '<div class="ui-grid-cell-contents ng-binding ng-scope">{{row.entity.productType|productTypeStatus}}</div>'
             },
             {
-                field: "mark",
-                displayName: '当前环节',
-                cellTemplate: '<div class="ui-grid-cell-contents ng-binding ng-scope"><a class="text-info" ui-sref="app.workOrderInfo({id:row.entity.id})">{{row.entity.id}}</a></div>'
+                field: "linkName",
+                displayName: '当前环节'
             },
             {
-                field: "name",
+                field: "performerName",
                 displayName: '受理人'
             },
             {
-                field: "mark",
-                displayName: '受理状态'
+                field: "status",
+                displayName: '受理状态',
+                cellTemplate: '<div class="ui-grid-cell-contents ng-binding ng-scope">{{row.entity.status|performerStatus}}</div>'
             },
             {
-                field: "mark",
+                field: "contactName",
+                displayName: '联系人'
+            },
+
+            {
+                field: "ownerName",
                 displayName: '创建人'
             },
             {
-                field: "createDate",
-                displayName: '创建时间',
-                cellTemplate: '<div class="ui-grid-cell-contents ng-binding ng-scope">{{row.entity.createDate | date:"yyyy-MM-dd HH:mm:ss"}}</div>'
+                field: "createTime",
+                displayName: '创建时间'
             }],
         paginationCurrentPage: 1, //当前页码
         paginationPageSize: 5, //每页显示个数
@@ -84,41 +139,28 @@ function DisworkOrder($scope, $location, $log, $cacheFactory, myWorkOrderRES,$st
             });
         }
     };
-    var workOrders = [];
-    var params = {
-        page: $scope.myGridOptions.paginationCurrentPage,
-        pageSize: $scope.myGridOptions.paginationPageSize
-    };
-    var getPage = function (curPage, pageSize, totalSize) {
+    var getPage = function (curPage, pageSize, totalSize,workOrders) {
         index = 0;//下标置为0
         $scope.myGridOptions.totalItems = totalSize;
         $scope.myGridOptions.data = workOrders;
     };
-    function data(){
-        var params = {};
-        if($scope.properties!=undefined&&$scope.properties.length>0) {
-            for (var i = 0; i < $scope.properties.length; i++) {
-                var key = $scope.properties[i].propertyKey;
-                var value = $scope.properties[i].sreachValue;
-                var str = "{" + key + ":" + "value" + "}";
-                var param = eval('(' + str + ')');
-                for (var r in param) {
-                    eval("params." + r + "=param." + r);
-                }
-            }
-        }
-        params.sreachStatus=$scope.sreachStatus;
-
-        return params;
-    }
     $scope.sreach = function (page,pageSize) {
-        var params=data();
-        params.page=page!=undefined?page:1;
-        params.pageSize=pageSize!=undefined?pageSize:10;
-        console.log(params);
-        myWorkOrderRES.list(params).then(function (result) {
-            workOrders = result.content;  //每次返回结果都是最新的
-            getPage(params.page, params.pageSize, result.totalElements);
+        if($scope.search.startTime==""){
+            delete $scope.search.startTime;
+        }
+        if($scope.search.endTime==""){
+            delete $scope.search.endTime;
+        }
+        $scope.search.status=2;
+        $scope.search.instanceLinkPropertyList=$scope.properties;
+        $scope.search.page=page!=undefined?page:1;
+        /*$scope.search.performerId=$scope.$root.user.userId;*/
+        $scope.search.size=pageSize!=undefined?pageSize:10;
+        console.log($scope.search);
+        $scope.$root.unWorkCount=3;
+        myWorkOrderRES.list_work(JSON.stringify($scope.search)).then(function (result) {
+            var workOrders = result.data.content;  //每次返回结果都是最新的
+            getPage($scope.search.page, $scope.search.pageSize, result.data.totalElements,workOrders);
         });
     };
     $scope.check = function (event) {
@@ -132,42 +174,36 @@ function DisworkOrder($scope, $location, $log, $cacheFactory, myWorkOrderRES,$st
         }
         return false;
     };
-
+    $scope.searchParams={};
+    myWorkOrderRES.list_typeCode().then(function (result) {
+        $scope.searchParams.workOrderTypeList= result.data;  //每次返回结果都是最新的
+    });
+    myWorkOrderRES.list_priority().then(function (result) {
+        $scope.searchParams.priorityList= result.data;
+    });
+    myWorkOrderRES.list_ProductType().then(function (result) {
+        $scope.searchParams.productTypeList= result.data;  //每次返回结果都是最新的
+    });
     //the list of flows
     $scope.sreach();
     // callback function
     $scope.callFn = function (item) {
         $scope.rowItem = item;
     }
-    var params = {"page": 1, "size": 10};
     $scope.propertieslist = [];
-    myWorkOrderRES.list_attr(params).then(function (result) {
-        var a = result.data.content;
+    myWorkOrderRES.list_attr().then(function (result) {
+        var a = result.data;
         for (var i = 0; i < a.length; i++) {
             if (a[i].propertyType == "select") {
                 a[i].propertyOptions = jQuery.parseJSON(a[i].propertyOptions);
             }
-            a[i].sreachValue = a[i].propertyDefaultValue;
+            a[i].propertyValue = a[i].propertyDefaultValue;
         }
         var arr = [];
-        if (result.data.totalElements >= 3) {
-            for (var i = 0; i < 3; i++) {
-                arr.push(a[i]);
-            }
-        } else {
-            arr = a;
-        }
         $scope.properties = arr;
         $scope.allproperties = a;
-        $scope.propertiesevent = a[0];
     });
-    $scope.$watch('propertiesevent', function (r, t, y) {
-        if (r != undefined) {
-            if ($scope.properties.indexOf(r) == -1) {
-                $scope.properties.push(r);
-            }
-        }
-    });
+
 
     $scope.createItem = function () {
         $state.go("app.workOrderCreate");

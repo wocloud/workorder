@@ -9,6 +9,55 @@ function status (){
         }
     };
 };
+app.filter('dit', dit);
+function dit (){
+    return function(input){
+        if ( input == 1) {
+            return  true;
+        } else if(input == 0) {
+            return false;
+        }
+    };
+};
+app.filter('priorityStatus', priorityStatus);
+function priorityStatus (){
+    return function(input){
+        if ( input == 0) {
+            return  "低";
+        } else if(input == 1) {
+            return "中";
+        }
+        else if(input == 2) {
+            return "高";
+        }
+    };
+};
+app.filter('productTypeStatus', productTypeStatus);
+function productTypeStatus (){
+    return function(input){
+        if ( input == 1001) {
+            return  "云主机";
+        } else if(input == 1002) {
+            return "云存储";
+        }
+        else {
+            return "其他";
+        }
+    };
+};
+app.filter('performerStatus', performerStatus);
+function performerStatus (){
+    return function(input){
+        if ( input == 1) {
+            return  "受理中";
+        } else if(input == 2) {
+            return "已受理";
+        }
+        else {
+            return "未受理";
+        }
+    };
+};
 UNworkOrder.$inject = ['$scope', '$location', '$log', '$cacheFactory', 'MyWorkOrder.RES','$state'];
 function UNworkOrder($scope, $location, $log, $cacheFactory, myWorkOrderRES,$state) {
     $scope.search={};
@@ -23,6 +72,7 @@ function UNworkOrder($scope, $location, $log, $cacheFactory, myWorkOrderRES,$sta
             {
                 field: "workorderType",
                 displayName: '工单类型'
+
             },
             {
                 field: "title",
@@ -30,26 +80,34 @@ function UNworkOrder($scope, $location, $log, $cacheFactory, myWorkOrderRES,$sta
             },
             {
                 field: "priority",
-                displayName: '优先级'
+                displayName: '优先级',
+                cellTemplate: '<div class="ui-grid-cell-contents ng-binding ng-scope">{{row.entity.priority|priorityStatus}}</div>'
             },
             {
                 field: "productType",
-                displayName: '产品分类'
+                displayName: '问题分类',
+                cellTemplate: '<div class="ui-grid-cell-contents ng-binding ng-scope">{{row.entity.productType|productTypeStatus}}</div>'
             },
             {
                 field: "linkName",
                 displayName: '当前环节'
             },
             {
-                field: "performerId",
+                field: "performerName",
                 displayName: '受理人'
             },
             {
                 field: "status",
-                displayName: '受理状态'
+                displayName: '受理状态',
+                cellTemplate: '<div class="ui-grid-cell-contents ng-binding ng-scope">{{row.entity.status|performerStatus}}</div>'
             },
             {
                 field: "contactName",
+                displayName: '联系人'
+            },
+
+            {
+                field: "ownerName",
                 displayName: '创建人'
             },
             {
@@ -97,19 +155,32 @@ function UNworkOrder($scope, $location, $log, $cacheFactory, myWorkOrderRES,$sta
             $scope.gridApi.selection.on.rowSelectionChanged($scope, function (row, event) {
                 if (row && row.isSelected) {
                     $scope.selectedRows = row.entity;
-                    $scope.initBtn($scope.selectedRows.sign);
+                    $scope.initBtn($scope.selectedRows.status);
                 }
             });
         }
     };
+    $scope.searchParams={};
+    myWorkOrderRES.list_typeCode().then(function (result) {
+        $scope.searchParams.workOrderTypeList= result.data;  //每次返回结果都是最新的
+    });
+    myWorkOrderRES.list_priority().then(function (result) {
+        $scope.searchParams.priorityList= result.data;
+    });
+    myWorkOrderRES.list_ProductType().then(function (result) {
+        $scope.searchParams.productTypeList= result.data;  //每次返回结果都是最新的
+    });
     $scope.initBtn=function(sign){
         if(sign==0){
             $scope.singflag=false;
             $scope.disposeflag=true;
         }
-        else{
+        else if(sign==1){
             $scope.singflag=true;
             $scope.disposeflag=false;
+        }else{
+            $scope.singflag=true;
+            $scope.disposeflag=true;
         }
     };
     var getPage = function (curPage, pageSize, totalSize,workOrders) {
@@ -143,11 +214,11 @@ function UNworkOrder($scope, $location, $log, $cacheFactory, myWorkOrderRES,$sta
         }
         $scope.search.instanceLinkPropertyList=$scope.properties;
         $scope.search.page=page!=undefined?page:1;
-        /*$scope.search.performerId=$scope.$root.user.userId;*/
+        $scope.search.performerId=1;
         $scope.search.size=pageSize!=undefined?pageSize:10;
         console.log($scope.search);
         $scope.$root.unWorkCount=3;
-        myWorkOrderRES.list_work(JSON.stringify($scope.search)).then(function (result) {
+        myWorkOrderRES.list_unwork(JSON.stringify($scope.search)).then(function (result) {
             var workOrders = result.data.content;  //每次返回结果都是最新的
             getPage($scope.search.page, $scope.search.pageSize, result.data.totalElements,workOrders);
         });
@@ -180,23 +251,8 @@ function UNworkOrder($scope, $location, $log, $cacheFactory, myWorkOrderRES,$sta
             a[i].propertyValue = a[i].propertyDefaultValue;
         }
         var arr = [];
-        if (a.length >= 3) {
-            for (var i = 0; i < 3; i++) {
-                arr.push(a[i]);
-            }
-        } else {
-            arr = a;
-        }
         $scope.properties = arr;
         $scope.allproperties = a;
-        $scope.propertiesevent = a[0];
-    });
-    $scope.$watch('propertiesevent', function (r, t, y) {
-        if (r != undefined) {
-            if ($scope.properties.indexOf(r) == -1) {
-                $scope.properties.push(r);
-            }
-        }
     });
 
     $scope.disposeItem = function () {

@@ -8,56 +8,63 @@
             <div  class="col-sm-6 m-t-xs m-b-xs no-padder ">
                 <div class="form-group">
                     <label class="col-md-offset-1 col-sm-offset-1 col-md-2 col-sm-2 control-label" style="margin-left:3%;text-align:right;line-height: 37px;">主题</label>
-                    <div class="col-md-6 col-sm-6 no-padder-sm"  style="width:80%;">{{workOrder.titel}}
+                    <div class="col-md-6 col-sm-6 no-padder-sm"  style="width:80%;margin-top: 8px;">{{workOrder.title}}
                     </div>
                 </div>
             </div>
             <div  class="col-sm-6 m-t-xs m-b-xs no-padder ">
                 <div class="form-group">
                     <label class="col-md-offset-1 col-sm-offset-1 col-md-2 col-sm-2 control-label" style="margin-left:3%;text-align:right;line-height: 37px;">优先级</label>
-                    <div class="col-md-6 col-sm-6 no-padder-sm"  style="width:80%;margin-top: 5px;">{{workOrder.priority}}
+                    <div class="col-md-6 col-sm-6 no-padder-sm"  style="width:80%;margin-top: 8px;">{{workOrder.priority|priorityStatus}}
+                    </div>
+                </div>
+            </div>
+            <div  class="col-sm-6 m-t-xs m-b-xs no-padder ">
+                <div class="form-group">
+                    <label class="col-md-offset-1 col-sm-offset-1 col-md-2 col-sm-2 control-label" style="margin-left:3%;text-align:right;line-height: 37px;">问题分类</label>
+                    <div class="col-md-6 col-sm-6 no-padder-sm"  style="width:80%;margin-top: 8px;">{{workOrder.productType|productTypeStatus}}
                     </div>
                 </div>
             </div>
             <div  class="col-sm-6 m-t-xs m-b-xs no-padder ">
                 <div class="form-group">
                     <label class="col-md-offset-1 col-sm-offset-1 col-md-2 col-sm-2 control-label" style="margin-left:3%;text-align:right;line-height: 37px;">受理状态</label>
-                    <div class="col-md-6 col-sm-6 no-padder-sm"  style="width:80%;margin-top: 5px;">{{workOrder.status}}
+                    <div class="col-md-6 col-sm-6 no-padder-sm"  style="width:80%;margin-top: 8px;">{{workOrder.status|performerStatus}}
                     </div>
                 </div>
             </div>
             <div  class="col-sm-6 m-t-xs m-b-xs no-padder ">
                 <div class="form-group">
                     <label class="col-md-offset-1 col-sm-offset-1 col-md-2 col-sm-2 control-label" style="margin-left:3%;text-align:right;line-height: 37px;">受理人</label>
-                    <div class="col-md-6 col-sm-6 no-padder-sm"  style="width:80%;margin-top: 5px;">{{workOrder.performerId}}
+                    <div class="col-md-6 col-sm-6 no-padder-sm"  style="width:80%;margin-top: 8px;">{{workOrder.performerName}}
                     </div>
                 </div>
             </div>
             <div  class="col-sm-6 m-t-xs m-b-xs no-padder ">
                 <div class="form-group">
-                    <label class="col-md-offset-1 col-sm-offset-1 col-md-2 col-sm-2 control-label" style="margin-left:3%;text-align:right;line-height: 37px;">产品分类</label>
-                    <div class="col-md-6 col-sm-6 no-padder-sm"  style="width:80%;margin-top: 5px;">{{workOrder.productType}}
+                    <label class="col-md-offset-1 col-sm-offset-1 col-md-2 col-sm-2 control-label" style="margin-left:3%;text-align:right;line-height: 37px;">创建人</label>
+                    <div class="col-md-6 col-sm-6 no-padder-sm"  style="width:80%;margin-top: 8px;">{{workOrder.ownerName}}
                     </div>
                 </div>
             </div>
             <div  class="col-sm-6 m-t-xs m-b-xs no-padder ">
                 <div class="form-group">
                     <label class="col-md-offset-1 col-sm-offset-1 col-md-2 col-sm-2 control-label" style="margin-left:3%;text-align:right;line-height: 37px;">当前环节</label>
-                    <div class="col-md-6 col-sm-6 no-padder-sm"  style="width:80%;margin-top: 5px;">{{workOrder.linkName}}
+                    <div class="col-md-6 col-sm-6 no-padder-sm"  style="width:80%;margin-top: 8px;">{{workOrder.linkName}}
                     </div>
                 </div>
             </div>
             <div  class="col-sm-6 m-t-xs m-b-xs no-padder ">
                 <div class="form-group">
                     <label class="col-md-offset-1 col-sm-offset-1 col-md-2 col-sm-2 control-label" style="margin-left:3%;text-align:right;line-height: 37px;">联系人</label>
-                    <div class="col-md-6 col-sm-6 no-padder-sm"  style="width:80%;margin-top: 5px;">{{workOrder.contactName}}
+                    <div class="col-md-6 col-sm-6 no-padder-sm"  style="width:80%;margin-top: 8px;">{{workOrder.contactName}}
                     </div>
                 </div>
             </div>
             <div  class="col-sm-6 m-t-xs m-b-xs no-padder ">
                 <div class="form-group">
                     <label class="col-md-offset-1 col-sm-offset-1 col-md-2 col-sm-2 control-label" style="margin-left:3%;text-align:right;line-height: 37px;">联系电话</label>
-                    <div class="col-md-6 col-sm-6 no-padder-sm"  style="width:80%;margin-top: 5px;">{{workOrder.contactPhone}}
+                    <div class="col-md-6 col-sm-6 no-padder-sm"  style="width:80%;margin-top: 8px;">{{workOrder.contactPhone}}
                     </div>
                 </div>
             </div>
@@ -65,12 +72,12 @@
         <div style="position: relative;left: 70px;width: 952px;height: 1px;">
             <img class="img" src="modules/workOrder/css/u1417.png">
         </div>
-        <div style="margin-top: 20px;margin-left: 10px;">
+        <div class="col-sm-12 m-t-xs m-b-xs no-padder "style="margin-top: 20px;margin-left: 10px;">
             <span>描述</span>
-        </div>
-        <div style="margin-left: 40px;">
-            <span>云主机怎么添加安全组
+            <div style="margin-left: 40px;">
+            <span>{{workOrder.description}}
             </span>
+            </div>
         </div>
     </div>
     <div>

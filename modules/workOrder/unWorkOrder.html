@@ -10,14 +10,12 @@
         </div>
         <div class="row no-padder m-n">
             <div class="row no-padder m-n">
-                <div class="col-sm-12 m-t-xs m-b-xs no-padder " >
-                    <my-work-order-sreach style="height: 100%;" search="search" flag="yel"  propertiesevent="propertiesevent"  allproperties="allproperties" properties="properties" pr-click="sreach()" pr-check="check({$event:$event,items:items})"></my-work-order-sreach>
-                    <!--<div >
-                        <span>资源池</span>
-                        <select class="input-large" ng-model="search_business.poolId" name="resourcePool">
-                        </select>
-                    </div>-->
-                </div>
+                <sreach-button>
+                    <div class="col-sm-12 m-t-xs m-b-xs no-padder " >
+                        <my-work-order-sreach style="height: 100%;" search-params="searchParams" search="search" flag="yel"  propertiesevent="propertiesevent"  allproperties="allproperties" properties="properties" pr-click="sreach()" pr-check="check({$event:$event,items:items})"></my-work-order-sreach>
+                    </div>
+                </sreach-button>
+
             </div>
             <div>
                 <button class="btn m-b-xs btn-sm btn-primary btn-addon" ng-disabled="disposeflag" ng-click="disposeItem()"><i class="fa fa-plus"></i>处理工单</button>

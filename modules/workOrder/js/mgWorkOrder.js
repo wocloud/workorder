@@ -12,6 +12,7 @@
     app.controller('MGworkOrder', MGworkOrder);
     MGworkOrder.$inject = ['$scope', '$location', '$log', '$cacheFactory', 'MyWorkOrder.RES', '$state','$stateParams'];
     function MGworkOrder($scope, $location, $log, $cacheFactory, myWorkOrderRES, $state,$stateParams) {
+        console.log($stateParams.id);
         var params={
             linkId:$stateParams.id
         };

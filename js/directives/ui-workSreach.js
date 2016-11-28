@@ -16,7 +16,7 @@ at.directive("myWorkOrderSreach", function () {
             flag:"=",
             searchParams:"="
         },
-        template:
+        template:''+
         '<div class="col-md-6 col-sm-6 no-padder-sm" >' +
                 '<div class="form-group" style="margin-bottom:40px;" ng-if="flag">'+
                     '<label class="col-md-offset-1 col-sm-offset-1 col-md-3 col-sm-2 control-label">' +
@@ -112,13 +112,13 @@ at.directive("myWorkOrderSreach", function () {
                         '</div>'+
                     '</div>' +
                 '</div>'+
-            '<button ng-click="prClick()" style="position: absolute;bottom:0;right:0;">查询</button>' +
+            '<button ng-click="prClick()" style="position: absolute;bottom:10px;right:0;">查询</button>' +
         '</div>' +
         '<div class="col-md-6 col-sm-6 no-padder-sm" style="height: 100%">' +
             '<div style="float:right">' +
                 '<span>增加过滤器:</span>' +
                 '<select  ng-model="propertiesevent" ng-options="item.propertyName for item in allproperties"> '+
-                '<option value="">--请选择过滤条件--</option></select>'+
+                '<option value="">--请选择自定义属性--</option></select>'+
             '</div>' +
             /*'<div  style=" overflow :auto; width:20%; height:160px;float:left;background: #F6F8F8;">' +
             '<span  ng-repeat=" item in cmsproperties track by $index" ><a ng-click="addCms($event,item)">{{item.propertyName}}</a> <br ></span>'+
@@ -129,7 +129,14 @@ at.directive("myWorkOrderSreach", function () {
             '</div>'+
             '<button ng-click="haveCms()" style="position: absolute;bottom:0;">添加列</button>'+*/
         '</div>',
-        link: function (scope, element, attr) {
+        link: function (scope, element, attr){
+            scope.$watch('propertiesevent', function (r, t, y) {
+                if (r != undefined) {
+                    if (scope.properties.indexOf(r) == -1) {
+                        scope.properties.push(r);
+                    }
+                }
+            });
             /*scope.haveproperties=[];
             scope.addCms=function($event,item){
                 console.log(item);
