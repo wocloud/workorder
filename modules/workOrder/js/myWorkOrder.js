@@ -485,8 +485,7 @@
             columnDefs: [
                 {
                     field: 'id',
-                    displayName: 'ID',
-                    title : 'id'
+                    displayName: 'ID'
                 },
                 {
                     field: "key",
@@ -535,7 +534,7 @@
                 "workorderTypeId"       : workorderTypeId,
                 "processDeploymentKey"  : selectItem.key,
                 "processDeploymentId"   : selectItem.id
-            }
+            };
             myWorkOrderRES.linkWorkOrderAndFlow(params).then(function (result) {
                 $modalInstance.close(result);
             });
