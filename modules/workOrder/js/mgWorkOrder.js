@@ -63,8 +63,7 @@
             var properties={};
             properties.id=$scope.mgworkorder.linkId;
             properties.remark=$scope.mgworkorder.remark;
-            properties.instanceLinkPropertyList=$scope.mgworkorder.instanceLinkPropertyList;
-            properties.properties=JSON.stringify(properties.properties);
+            properties.instanceLinkPropertyList=JSON.stringify($scope.mgworkorder.instanceLinkPropertyList);
             $log.info(properties);
             myWorkOrderRES.dispose(properties).then(function (result) {
                 ngDialog.open({ template: 'modules/workOrder/test.html',//模式对话框内容为test.html
