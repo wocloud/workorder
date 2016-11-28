@@ -9,6 +9,7 @@ angular.module('app', [
     'ngTouch',
     'ngStorage',
     'ui-sreach',
+    'sreach-button',
     'ui.router',
     'ui.bootstrap',
     'ui.load',

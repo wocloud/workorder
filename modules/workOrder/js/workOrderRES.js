@@ -228,30 +228,4 @@ function ServiceMyWorkOrderRES($q, $resource, fakeMapping) {
         });
         return task.promise;
     };
-
-    //获取流程列表
-    this.listWorkFlows = function(params){
-        var api_workflow_list = '/wocloud-workorder-restapi/workflow/listProcessDefinition';
-        var task = $q.defer();
-        var parameters = params==undefined ? {} : params;
-        $resource(api_workflow_list).save(parameters, function(response){
-            task.resolve(response.toJSON());
-        }, function(response){
-            task.reject(response);
-        });
-        return task.promise;
-    };
-
-    //获取流程列表
-    this.linkWorkOrderAndFlow = function(params){
-        var api_link_workOrderAndFlow = '/wocloud-workorder-restapi/workorderTypeProcess/bindWorkorderTypeAndProcess';
-        var task = $q.defer();
-        var parameters = params==undefined ? {} : params;
-        $resource(api_link_workOrderAndFlow).save(parameters, function(response){
-            task.resolve(response.toJSON());
-        }, function(response){
-            task.reject(response);
-        });
-        return task.promise;
-    };
 }
