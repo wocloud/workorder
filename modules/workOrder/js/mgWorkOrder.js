@@ -61,10 +61,10 @@
         $scope.disposeToMain = function () {
             console.log($scope.mgworkorder);
             var properties={};
-            $.extend(properties,$scope.mgworkorder);
-            properties.properties=JSON.stringify(properties.properties);
+            properties.id=$scope.mgworkorder.linkId;
+            properties.remark=$scope.mgworkorder.remark;
+            properties.instanceLinkPropertyList=JSON.stringify($scope.mgworkorder.instanceLinkPropertyList);
             $log.info(properties);
-            debugger;
             myWorkOrderRES.dispose(properties).then(function (result) {
                 ngDialog.open({ template: 'modules/workOrder/test.html',//模式对话框内容为test.html
                     className:'ngdialog-theme-default ngdialog-theme-dadao',
@@ -73,13 +73,16 @@
                         if(result.code==0){
                             $scope.titel="成功";
                             $scope.content="处理成功";
-                            $state.go("app.unworkOrder");
                         }else{
                             $scope.titel="失败";
                             $scope.content="处理失败";
                         }
                         $scope.ok = function(){
                             $scope.closeThisDialog(); //关闭弹窗
+                            $state.go("app.unworkOrder");
+                        };
+                        $scope.close=function(){
+                            $scope.closeThisDialog();
                         }
                     }
                 });

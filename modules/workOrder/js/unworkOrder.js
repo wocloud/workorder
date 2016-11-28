@@ -280,6 +280,9 @@ function UNworkOrder($scope,ngDialog, $location, $log, $cacheFactory, myWorkOrde
                     $scope.ok = function(){
                         $scope.closeThisDialog(); //关闭弹窗
                         $scope.sreach();
+                    };
+                    $scope.close=function(){
+                        $scope.closeThisDialog();
                     }
                 }
             });
