@@ -59,11 +59,12 @@
             $scope.mgworkorder=result.data[0];
         });
         $scope.disposeToMain = function () {
-            console.log($scope.workorder);
+            console.log($scope.mgworkorder);
             var properties={};
-            $.extend(properties,$scope.workorder);
+            $.extend(properties,$scope.mgworkorder);
             properties.properties=JSON.stringify(properties.properties);
             $log.info(properties);
+            debugger;
             myWorkOrderRES.dispose(properties).then(function (result) {
                 ngDialog.open({ template: 'modules/workOrder/test.html',//模式对话框内容为test.html
                     className:'ngdialog-theme-default ngdialog-theme-dadao',
