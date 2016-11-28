@@ -85,8 +85,8 @@
      * myWorkOrder list controller defined
      */
     app.controller('MyWorkOrderCtrl', MyWorkOrderViewCtrl);
-    MyWorkOrderViewCtrl.$inject = ['$scope', 'ngDialog','$location', '$log', '$cacheFactory', 'MyWorkOrder.RES','$state', '$modal'];
-    function MyWorkOrderViewCtrl($scope, ngDialog,$location, $log, $cacheFactory, myWorkOrderRES,$state, $modal) {
+    MyWorkOrderViewCtrl.$inject = ['$scope', 'ngDialog','$location', '$log', '$cacheFactory', 'MyWorkOrder.RES','$state', '$modal', 'toaster'];
+    function MyWorkOrderViewCtrl($scope, ngDialog,$location, $log, $cacheFactory, myWorkOrderRES,$state, $modal, toaster) {
         $scope.submitBtn=true;
         $scope.search={};
         $scope.yel=true;
@@ -333,25 +333,47 @@
 
         };
 
-        $scope.linkFlow = function () {
+        $scope.bindWithProcess = function () {
             var modalInstance = $modal.open({
                 backdrop: false,
-                templateUrl: 'linkFlowTemplate',
-                controller: 'LinkFlowViewCtrl',
+                templateUrl: 'bindWithProcessTemplate',
+                controller: 'bindWithProcessViewCtrl',
                 resolve: {
                     params: function () {
-                        console.log($scope.selectedRows);
                         return $scope.selectedRows;
                     }
                 }
             });
             modalInstance.result.then(function (result) {
+                $scope.sreach();
                 if(result.code=="0"){
-                    toaster.pop('info', "提示", "工单关联流程成功!");
+                    toaster.pop('info', "提示", "工单绑定流程成功!");
                 } else {
-                    toaster.pop('error', "提示", "工单关联流程失败!");
+                    toaster.pop('error', "提示", "工单绑定流程失败!");
                 }
-                $scope.loadData();
+            }, function () {
+                $log.info('Modal dismissed at: ' + new Date());
+            });
+        };
+
+        $scope.unbindWithProcess = function () {
+            var modalInstance = $modal.open({
+                backdrop: false,
+                templateUrl: 'unbindWithProcessTemplate',
+                controller: 'unbindWithProcessViewCtrl',
+                resolve: {
+                    params: function () {
+                        return $scope.selectedRows;
+                    }
+                }
+            });
+            modalInstance.result.then(function (result) {
+                $scope.sreach();
+                if(result.code=="0"){
+                    toaster.pop('info', "提示", "工单解绑流程成功!");
+                } else {
+                    toaster.pop('error', "提示", "工单解绑流程失败!");
+                }
             }, function () {
                 $log.info('Modal dismissed at: ' + new Date());
             });
@@ -472,11 +494,11 @@
         };
 
     /**
-     * workOrder link flow controller
+     * workOrder bind With Process controller
      */
-    app.controller('LinkFlowViewCtrl', LinkFlowViewCtrl);
-    LinkFlowViewCtrl.$inject = ['$scope', '$modalInstance', 'params', 'MyWorkOrder.RES'];
-    function LinkFlowViewCtrl($scope, $modalInstance, params, myWorkOrderRES) {
+    app.controller('bindWithProcessViewCtrl', BindWithProcessViewCtrl);
+    BindWithProcessViewCtrl.$inject = ['$scope', '$modalInstance', 'params', 'MyWorkOrder.RES'];
+    function BindWithProcessViewCtrl($scope, $modalInstance, params, myWorkOrderRES) {
         var workorderTypeId = params.workorderTypeId;
         $scope.myData = [];
         $scope.selectedItems = [];
@@ -527,15 +549,42 @@
             $scope.rowItem = item;
         };
 
-        //link flows
-        $scope.linkWorkOrderAndFlow = function () {
+        //bind
+        $scope.bindWorkorderTypeAndProcess = function () {
             var selectItem = $scope.selectedItems;
             var params = {
                 "workorderTypeId"       : workorderTypeId,
                 "processDeploymentKey"  : selectItem.key,
                 "processDeploymentId"   : selectItem.id
             };
-            myWorkOrderRES.linkWorkOrderAndFlow(params).then(function (result) {
+            myWorkOrderRES.bindWorkorderTypeAndProcess(params).then(function (result) {
+                $modalInstance.close(result);
+            });
+        };
+
+        //cancel the modal
+        $scope.cancel = function () {
+            $modalInstance.dismiss('cancel');
+        }
+    };
+
+    /**
+     * workOrder unbind With Process controller
+     */
+    app.controller('unbindWithProcessViewCtrl', UnbindWithProcessViewCtrl);
+    UnbindWithProcessViewCtrl.$inject = ['$scope', '$modalInstance', 'params', 'MyWorkOrder.RES'];
+    function UnbindWithProcessViewCtrl($scope, $modalInstance, params, myWorkOrderRES) {
+        var relationId = -1;
+
+        myWorkOrderRES.selectWorkorderTypeAndProcessByCondition({"workorderTypeId": params.workorderTypeId}).then(function (result) {
+            if(result.data && result.data.length > 0){
+                relationId = result.data[0].id;
+            }
+        });
+
+        //unbind
+        $scope.unbindWorkorderTypeAndProcess = function () {
+            myWorkOrderRES.unbindWorkorderTypeAndProcess({"id": relationId}).then(function (result) {
                 $modalInstance.close(result);
             });
         };
