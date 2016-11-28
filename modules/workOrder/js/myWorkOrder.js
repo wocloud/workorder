@@ -308,17 +308,16 @@
                             $scope.titel="失败";
                             $scope.content="提交失败";
                         }
-                        $scope.show = function(){
-                            $scope.closeThisDialog(); //关闭弹窗
-                        };
                         $scope.ok = function(){
                             $scope.closeThisDialog(); //关闭弹窗
                             $scope.sreach();
+                        };
+                        $scope.close=function(){
+                            $scope.closeThisDialog();
                         }
                     }
                 });
             });
-            $scope.sreach();
             /*var params={
                 id:$scope.selectedRows.id,
                 owernId:owern.userId
@@ -406,6 +405,10 @@
                                 id:result.data.id,
                                 ownerId:1
                             };
+                            $scope.close=function(){
+                                $scope.closeThisDialog();
+                                $state.go("app.myWorkOrder");
+                            }
                             $scope.ok = function(){
                                 $scope.closeThisDialog();
                                 myWorkOrderRES.submit($scope.paramss).then(function (result1) {
@@ -416,13 +419,18 @@
                                             if(result1.code==0){
                                                 $scope.titel="成功";
                                                 $scope.content="提交成功";
+
                                             }else{
                                                 $scope.titel="失败";
                                                 $scope.content="提交失败";
                                             }
-                                            $state.go("app.myWorkOrder");
                                             $scope.ok = function(){
                                                 $scope.closeThisDialog(); //关闭弹窗
+                                                $state.go("app.myWorkOrder");
+                                            }
+                                            $scope.close=function(){
+                                                $scope.closeThisDialog();
+                                                $state.go("app.myWorkOrder");
                                             }
                                         }
                                     });
