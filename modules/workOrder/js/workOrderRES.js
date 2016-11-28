@@ -242,45 +242,6 @@ function ServiceMyWorkOrderRES($q, $resource, fakeMapping) {
         return task.promise;
     };
 
-    //绑定工单流程
-    this.bindWorkorderTypeAndProcess = function(params){
-        var api_link_workOrderAndFlow = '/wocloud-workorder-restapi/workorderTypeProcess/bindWorkorderTypeAndProcess';
-        var task = $q.defer();
-        var parameters = params==undefined ? {} : params;
-        $resource(api_link_workOrderAndFlow).save(parameters, function(response){
-            task.resolve(response.toJSON());
-        }, function(response){
-            task.reject(response);
-        });
-        return task.promise;
-    };
-
-    //查询工单类型与流程定义绑定关系
-    this.selectWorkorderTypeAndProcessByCondition = function(params){
-        var api_link_workOrderAndFlow = '/wocloud-workorder-restapi/workorderTypeProcess/selectWorkorderTypeAndProcessByCondition';
-        var task = $q.defer();
-        var parameters = params==undefined ? {} : params;
-        $resource(api_link_workOrderAndFlow).save(parameters, function(response){
-            task.resolve(response.toJSON());
-        }, function(response){
-            task.reject(response);
-        });
-        return task.promise;
-    };
-
-    //解绑工单流程
-    this.unbindWorkorderTypeAndProcess = function(params){
-        var api_link_workOrderAndFlow = '/wocloud-workorder-restapi/workorderTypeProcess/unbindWorkorderTypeProcess';
-        var task = $q.defer();
-        var parameters = params==undefined ? {} : params;
-        $resource(api_link_workOrderAndFlow).save(parameters, function(response){
-            task.resolve(response.toJSON());
-        }, function(response){
-            task.reject(response);
-        });
-        return task.promise;
-    };
-
     //获取工单实例当前环节流程图
     this.getProcessPicture = function(workorderId){
         var api_link_workOrderAndFlow = '/wocloud-workorder-restapi/instanceService/getProcessPicture';

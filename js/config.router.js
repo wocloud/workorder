@@ -35,6 +35,16 @@ angular.module('app')
                           }]
                   }
               })
+              .state('app.workOrderTypes', {
+                  url: '/workOrderTypes',
+                  templateUrl: 'modules/workOrder/types.html',
+                  resolve: {
+                      deps: ['$ocLazyLoad',
+                          function( $ocLazyLoad ){
+                              return $ocLazyLoad.load(['modules/workOrder/js/types.js']);
+                          }]
+                  }
+              })
               .state('app.workOrderAttrCreateOrUpdate', {
                   url: '/workOrderAttrCreateOrUpdate?key',
                   templateUrl: 'modules/workOrder/attr.create.html',
