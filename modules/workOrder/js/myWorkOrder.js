@@ -151,7 +151,7 @@
                 }],
             enableCellEdit: false,
             enableFooterTotalSelected: false, // 是否显示选中的总数，默认为true, 如果显示，showGridFooter 必须为true
-            enableFullRowSelection: true, //是否点击行任意位置后选中,默认为false,当为true时，checkbox可以显示但是不可选中
+            enableFullRowSelection: false, //是否点击行任意位置后选中,默认为false,当为true时，checkbox可以显示但是不可选中
             enableRowHeaderSelection: true, //是否显示选中checkbox框 ,默认为true
             enableRowSelection: true, // 行选择是否可用，默认为true;
             enableSelectAll: true, // 选择所有checkbox是否可用，默认为true;
@@ -349,16 +349,16 @@
             });
             myWorkOrderRES.list_typeCode().then(function (result) {
                 $scope.typeCodeList = result.data;  //每次返回结果都是最新的
-                $scope.createValue.typeCode=result.data[0].typeCode;
+                $scope.workorderType=result.data[0];
             });
             myWorkOrderRES.list_ProductType().then(function (result) {
                 $scope.productTypeList = result.data;  //每次返回结果都是最新的
                 $scope.createValue.productType=result.data[0].productType;
             });
-            $scope.$watch('createValue.typeCode', function (r, t, y) {
+            $scope.$watch('workorderType', function (r, t, y) {
                 if (r != undefined) {
                     var params={
-                        codeType:r
+                        codeType: r.typeCode
                     };
                     myWorkOrderRES.list_create_attr(params).then(function(result){
                         for(var i=0;i<result.data.length;i++){
@@ -379,6 +379,7 @@
                             $scope.properties[i].propertyValue = (new Date()).getTime();
                         }
                     }
+                    $scope.createValue.typeId=$scope.workorderType.id;
                     $scope.createValue.properties=JSON.stringify($scope.properties);
                     $scope.createValue.ownerId=1/*owner.userId*/;
                     $scope.createValue.contactId=1/*owner.userId*/;
