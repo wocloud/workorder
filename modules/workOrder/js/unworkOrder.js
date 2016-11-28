@@ -116,7 +116,7 @@ function UNworkOrder($scope,ngDialog, $location, $log, $cacheFactory, myWorkOrde
             }],
         enableCellEdit: false,
         enableFooterTotalSelected: false, // 是否显示选中的总数，默认为true, 如果显示，showGridFooter 必须为true
-        enableFullRowSelection: true, //是否点击行任意位置后选中,默认为false,当为true时，checkbox可以显示但是不可选中
+        enableFullRowSelection: false, //是否点击行任意位置后选中,默认为false,当为true时，checkbox可以显示但是不可选中
         enableRowHeaderSelection: true, //是否显示选中checkbox框 ,默认为true
         enableRowSelection: true, // 行选择是否可用，默认为true;
         enableSelectAll: true, // 选择所有checkbox是否可用，默认为true;

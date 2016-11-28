@@ -95,11 +95,21 @@ function LKworkOrder($scope, $location, $log, $cacheFactory, myWorkOrderRES,$sta
                 field: "createTime",
                 displayName: '创建时间'
             }],
+        enableCellEdit: false,
+        enableFooterTotalSelected: false, // 是否显示选中的总数，默认为true, 如果显示，showGridFooter 必须为true
+        enableFullRowSelection: false, //是否点击行任意位置后选中,默认为false,当为true时，checkbox可以显示但是不可选中
+        enableRowHeaderSelection: true, //是否显示选中checkbox框 ,默认为true
+        enableRowSelection: true, // 行选择是否可用，默认为true;
+        enableSelectAll: true, // 选择所有checkbox是否可用，默认为true;
+        enableSelectionBatchEvent: true, //默认true
+        modifierKeysToMultiSelect: true,//默认false,为true时只能 按ctrl或shift键进行多选, multiSelect 必须为true;
+        multiSelect: true,// 是否可以选择多个,默认为true;
+        noUnselect: false,//默认false,选中后是否可以取消选中
         paginationCurrentPage: 1, //当前页码
-        paginationPageSize: 5, //每页显示个数
+        paginationPageSize: 10, //每页显示个数
         enableHorizontalScrollbar: 0, //grid水平滚动条是否显示, 0-不显示  1-显示
         enableVerticalScrollbar: 0, //grid垂直滚动条是否显示, 0-不显示  1-显示
-        paginationPageSizes: [5, 10, 20, 50],//默认[250, 500, 1000]
+        paginationPageSizes: [ 10],//默认[250, 500, 1000]
         isRowSelectable: function (row) { //GridRow
             index += 1;//下标加1
             if (index == 1) {
