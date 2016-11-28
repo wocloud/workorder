@@ -41,7 +41,7 @@ function performerStatus (){
 LKworkOrder.$inject = ['$scope', '$location', '$log', '$cacheFactory', 'MyWorkOrder.RES','$state'];
 function LKworkOrder($scope, $location, $log, $cacheFactory, myWorkOrderRES,$state) {
     $scope.search={};
-    $scope.yel=true;
+    $scope.yel=false;
     var index = 0;//默认选中行，下标置为0
     $scope.myGridOptions = {
         columnDefs: [

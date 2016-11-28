@@ -1,7 +1,7 @@
 <form  class="file-brief file-brief-show form-validation" name="disposeWorkOrder" >
     <div class="panel panel-default"  style="width:100%">
         <div class="bg-light lter b-b wrapper-md" >
-            <h1 class="m-n font-thin h3"> <span>{{mgworkorder.workorderType}}#{{mgworkorder.linkId}}</span></h1>
+            <h1 class="m-n font-thin h3"> <span>咨询#{{workorder.id}}</span></h1>
         </div>
         <div class="panel-body" style="top:10px;width: 95%;height: 100%;border:1px solid #000;top:10px">
             <p><span style="position: relative;top:-25px;">基本详情</span></p>
@@ -9,68 +9,68 @@
                 <div  class="col-sm-6 m-t-xs m-b-xs no-padder ">
                     <div class="form-group">
                         <label class="col-md-offset-1 col-sm-offset-1 col-md-2 col-sm-2 control-label" style="margin-left:3%;text-align:right;line-height: 37px;">主题</label>
-                        <div class="col-md-6 col-sm-6 no-padder-sm"  style="width:80%;margin-top: 8px;">{{mgworkorder.title}}
+                        <div class="col-md-6 col-sm-6 no-padder-sm"  style="width:80%;">{{workOrder.titel}}
                         </div>
                     </div>
                 </div>
                 <div  class="col-sm-6 m-t-xs m-b-xs no-padder ">
                     <div class="form-group">
                         <label class="col-md-offset-1 col-sm-offset-1 col-md-2 col-sm-2 control-label" style="margin-left:3%;text-align:right;line-height: 37px;">优先级</label>
-                        <div class="col-md-6 col-sm-6 no-padder-sm"  style="width:80%;margin-top: 8px;">{{mgworkorder.priority|priorityStatus}}
+                        <div class="col-md-6 col-sm-6 no-padder-sm"  style="width:80%;margin-top: 5px;">{{workOrder.priority|priorityStatus}}
                         </div>
                     </div>
                 </div>
                 <div  class="col-sm-6 m-t-xs m-b-xs no-padder ">
                     <div class="form-group">
                         <label class="col-md-offset-1 col-sm-offset-1 col-md-2 col-sm-2 control-label" style="margin-left:3%;text-align:right;line-height: 37px;">问题分类</label>
-                        <div class="col-md-6 col-sm-6 no-padder-sm"  style="width:80%;margin-top: 8px;">{{mgworkorder.productType|productTypeStatus}}
+                        <div class="col-md-6 col-sm-6 no-padder-sm"  style="width:80%;margin-top: 5px;">{{workOrder.productType|productTypeStatus}}
                         </div>
                     </div>
                 </div>
                 <div  class="col-sm-6 m-t-xs m-b-xs no-padder ">
                     <div class="form-group">
                         <label class="col-md-offset-1 col-sm-offset-1 col-md-2 col-sm-2 control-label" style="margin-left:3%;text-align:right;line-height: 37px;">受理状态</label>
-                        <div class="col-md-6 col-sm-6 no-padder-sm"  style="width:80%;margin-top: 8px;">{{mgworkorder.status|performerStatus}}
+                        <div class="col-md-6 col-sm-6 no-padder-sm"  style="width:80%;margin-top: 5px;">{{workOrder.status|performerStatus}}
                         </div>
                     </div>
                 </div>
                 <div  class="col-sm-6 m-t-xs m-b-xs no-padder ">
                     <div class="form-group">
                         <label class="col-md-offset-1 col-sm-offset-1 col-md-2 col-sm-2 control-label" style="margin-left:3%;text-align:right;line-height: 37px;">受理人</label>
-                        <div class="col-md-6 col-sm-6 no-padder-sm"  style="width:80%;margin-top: 8px;">{{mgworkorder.performerName}}
+                        <div class="col-md-6 col-sm-6 no-padder-sm"  style="width:80%;margin-top: 5px;">{{workOrder.performerId}}
                         </div>
                     </div>
                 </div>
                 <div  class="col-sm-6 m-t-xs m-b-xs no-padder ">
                     <div class="form-group">
                         <label class="col-md-offset-1 col-sm-offset-1 col-md-2 col-sm-2 control-label" style="margin-left:3%;text-align:right;line-height: 37px;">创建人</label>
-                        <div class="col-md-6 col-sm-6 no-padder-sm"  style="width:80%;margin-top: 8px;">{{mgworkorder.ownerName}}
+                        <div class="col-md-6 col-sm-6 no-padder-sm"  style="width:80%;margin-top: 5px;">{{workOrder.ownerId}}
                         </div>
                     </div>
                 </div>
                 <div  class="col-sm-6 m-t-xs m-b-xs no-padder ">
                     <div class="form-group">
                         <label class="col-md-offset-1 col-sm-offset-1 col-md-2 col-sm-2 control-label" style="margin-left:3%;text-align:right;line-height: 37px;">当前环节</label>
-                        <div class="col-md-6 col-sm-6 no-padder-sm"  style="width:80%;margin-top:8px;">{{mgworkorder.linkName}}
+                        <div class="col-md-6 col-sm-6 no-padder-sm"  style="width:80%;margin-top: 5px;">{{workOrder.linkName}}
                         </div>
                     </div>
                 </div>
                 <div  class="col-sm-6 m-t-xs m-b-xs no-padder ">
                     <div class="form-group">
                         <label class="col-md-offset-1 col-sm-offset-1 col-md-2 col-sm-2 control-label" style="margin-left:3%;text-align:right;line-height: 37px;">联系人</label>
-                        <div class="col-md-6 col-sm-6 no-padder-sm"  style="width:80%;margin-top: 8px;">{{mgworkorder.contactName}}
+                        <div class="col-md-6 col-sm-6 no-padder-sm"  style="width:80%;margin-top: 5px;">{{workOrder.contactName}}
                         </div>
                     </div>
                 </div>
                 <div  class="col-sm-6 m-t-xs m-b-xs no-padder ">
                     <div class="form-group">
                         <label class="col-md-offset-1 col-sm-offset-1 col-md-2 col-sm-2 control-label" style="margin-left:3%;text-align:right;line-height: 37px;">联系电话</label>
-                        <div class="col-md-6 col-sm-6 no-padder-sm"  style="width:80%;margin-top: 8px;">{{mgworkorder.contactPhone}}
+                        <div class="col-md-6 col-sm-6 no-padder-sm"  style="width:80%;margin-top: 5px;">{{workOrder.contactPhone}}
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="form-group" ng-repeat="items in mgworkorder.instanceLinkPropertyList" ng-show="items.isVisible|dit">
+            <div class="form-group" ng-repeat="items in workorder.properties" ng-show="items.isVisible|dit">
                 <div ng-if="items.propertyType=='select'" class="col-sm-6 m-t-xs m-b-xs no-padder " >
                     <div class="form-group">
                         <label class="col-md-offset-1 col-sm-offset-1 col-md-2 col-sm-2 control-label" style="margin-left:3%;text-align: right;line-height: 37px;">{{items.propertyName}}</label>
@@ -138,7 +138,7 @@
         </div>-->
         <div class="panel-body" style="margin-top: 25px;;width: 95%;height: 100%;border:1px solid #000;top:10px">
             <span style="position: relative;top:-25px;">处理意见</span>
-            <textarea style="width:100%;margin-top: -10px;height: 90px" ng-model="mgworkorder.remark"></textarea>
+            <textarea style="width:100%;margin-top: -10px;height: 90px" ng-model="workorder.remark"></textarea>
         </div>
         <div class="form-group">
             <div class="col-sm-12 col-sm-offset-2" style="margin-left: 40%;">

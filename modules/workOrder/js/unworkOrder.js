@@ -58,8 +58,8 @@ function performerStatus (){
         }
     };
 };
-UNworkOrder.$inject = ['$scope','ngDialog', '$location', '$log', '$cacheFactory', 'MyWorkOrder.RES','$state'];
-function UNworkOrder($scope,ngDialog, $location, $log, $cacheFactory, myWorkOrderRES,$state) {
+UNworkOrder.$inject = ['$scope', '$location', '$log', '$cacheFactory', 'MyWorkOrder.RES','$state'];
+function UNworkOrder($scope, $location, $log, $cacheFactory, myWorkOrderRES,$state) {
     $scope.search={};
     $scope.yel=false;
     var index = 0;//默认选中行，下标置为0
@@ -261,28 +261,18 @@ function UNworkOrder($scope,ngDialog, $location, $log, $cacheFactory, myWorkOrde
     };
     $scope.signItem = function () {
         var params={
-            id:$scope.selectedRows.linkId,
-            performerId:1
+            id:/*$scope.selectedRows.linkId*/53,
+            performerId:$scope.$root.user.id
         }
         console.log(params);
         myWorkOrderRES.sign(params).then(function (result) {
-            ngDialog.open({ template: 'modules/workOrder/test.html',//模式对话框内容为test.html
-                className:'ngdialog-theme-default ngdialog-theme-dadao',
-                scope:$scope,
-                controller:function($scope){
-                    if(result.code==0){
-                        $scope.titel="成功";
-                        $scope.content="签收成功";
-                    }else{
-                        $scope.titel="失败";
-                        $scope.content="签收失败";
-                    }
-                    $scope.ok = function(){
-                        $scope.closeThisDialog(); //关闭弹窗
-                        $scope.sreach();
-                    }
-                }
-            });
+            if(result.code==0){
+                window.wxc.xcConfirm("签收成功", window.wxc.xcConfirm.typeEnum.success);
+                $scope.sreach();
+            }
+            else{
+                window.wxc.xcConfirm("签收失败", window.wxc.xcConfirm.typeEnum.error);
+            }
         });
     };
 };

@@ -85,8 +85,8 @@
      * myWorkOrder list controller defined
      */
     app.controller('MyWorkOrderCtrl', MyWorkOrderViewCtrl);
-    MyWorkOrderViewCtrl.$inject = ['$scope', 'ngDialog','$location', '$log', '$cacheFactory', 'MyWorkOrder.RES','$state'];
-    function MyWorkOrderViewCtrl($scope, ngDialog,$location, $log, $cacheFactory, myWorkOrderRES,$state) {
+    MyWorkOrderViewCtrl.$inject = ['$scope', 'ngDialog','$location', '$log', '$cacheFactory', 'MyWorkOrder.RES','$state', '$modal'];
+    function MyWorkOrderViewCtrl($scope, ngDialog,$location, $log, $cacheFactory, myWorkOrderRES,$state, $modal) {
         $scope.submitBtn=true;
         $scope.search={};
         $scope.yel=true;
@@ -97,7 +97,7 @@
                 {
                     field: 'id',
                     displayName: 'ID',
-                    cellTemplate: '<div class="ui-grid-cell-contents ng-binding ng-scope"><a class="text-info" ui-sref="app.workOrderInfo({id:row.entity.linkId})">{{row.entity.id}}</a></div>'
+                    cellTemplate: '<div class="ui-grid-cell-contents ng-binding ng-scope"><a class="text-info" ui-sref="app.workOrderInfo({id:row.entity.linkId})">{{row.entity.linkId}}</a></div>'
                 },
                 {
                     field: "workorderType",
@@ -312,6 +312,7 @@
                             $scope.closeThisDialog(); //关闭弹窗
                         };
                         $scope.ok = function(){
+                            $scope.content="提交成功";
                             $scope.closeThisDialog(); //关闭弹窗
                             $scope.sreach();
                         }
@@ -333,14 +334,38 @@
             });*/
 
         };
+
+        $scope.linkFlow = function () {
+            var modalInstance = $modal.open({
+                backdrop: false,
+                templateUrl: 'linkFlowTemplate',
+                controller: 'LinkFlowViewCtrl',
+                resolve: {
+                    params: function () {
+                        console.log($scope.selectedRows);
+                        return $scope.selectedRows;
+                    }
+                }
+            });
+            modalInstance.result.then(function (result) {
+                if(result.code=="0"){
+                    toaster.pop('info', "提示", "工单关联流程成功!");
+                } else {
+                    toaster.pop('error', "提示", "工单关联流程失败!");
+                }
+                $scope.loadData();
+            }, function () {
+                $log.info('Modal dismissed at: ' + new Date());
+            });
+        };
     };
 
-        /**
-         * myWorkOrder list controller defined
-         */
-        app.controller('WorkOrderCreateCtrl', CreateViewCtrl);
-        CreateViewCtrl.$inject = ['$rootScope','ngDialog','$scope', '$location', '$log', '$cacheFactory', 'MyWorkOrder.RES', '$state'];
-        function CreateViewCtrl($rootScope,ngDialog,$scope, $location, $log, $cacheFactory, myWorkOrderRES, $state) {
+    /**
+     * myWorkOrder list controller defined
+     */
+    app.controller('WorkOrderCreateCtrl', CreateViewCtrl);
+    CreateViewCtrl.$inject = ['$rootScope','ngDialog','$scope', '$location', '$log', '$cacheFactory', 'MyWorkOrder.RES', '$state'];
+    function CreateViewCtrl($rootScope,ngDialog,$scope, $location, $log, $cacheFactory, myWorkOrderRES, $state) {
             $scope.createValue={};
             var owner=$rootScope.user;
             myWorkOrderRES.list_priority().then(function (result) {
@@ -349,13 +374,13 @@
             });
             myWorkOrderRES.list_typeCode().then(function (result) {
                 $scope.typeCodeList = result.data;  //每次返回结果都是最新的
-                $scope.createValue.typeId=result.data[0].id;
+                $scope.createValue.typeCode=result.data[0].typeCode;
             });
             myWorkOrderRES.list_ProductType().then(function (result) {
                 $scope.productTypeList = result.data;  //每次返回结果都是最新的
                 $scope.createValue.productType=result.data[0].productType;
             });
-            $scope.$watch('createValue.typeId', function (r, t, y) {
+            $scope.$watch('createValue.typeCode', function (r, t, y) {
                 if (r != undefined) {
                     var params={
                         codeType:r
@@ -420,9 +445,9 @@
                                                 $scope.titel="失败";
                                                 $scope.content="提交失败";
                                             }
-                                            $state.go("app.myWorkOrder");
                                             $scope.ok = function(){
                                                 $scope.closeThisDialog(); //关闭弹窗
+                                                $state.go("app.myWorkOrder");
                                             }
                                         }
                                     });
@@ -437,5 +462,81 @@
                 history.back();
                 /*$location.url("/app/myWorkOrder");*/
             };
+        };
+
+    /**
+     * workOrder link flow controller
+     */
+    app.controller('LinkFlowViewCtrl', LinkFlowViewCtrl);
+    LinkFlowViewCtrl.$inject = ['$scope', '$modalInstance', 'params', 'MyWorkOrder.RES'];
+    function LinkFlowViewCtrl($scope, $modalInstance, params, myWorkOrderRES) {
+        var workorderTypeId = params.workorderTypeId;
+        $scope.myData = [];
+        $scope.selectedItems = [];
+        $scope.flowGridOptions = {
+            data: 'myData',
+            columnDefs: [
+                {
+                    field: 'id',
+                    displayName: 'ID',
+                    title : 'id'
+                },
+                {
+                    field: "key",
+                    displayName: 'KEY'
+                },
+                {
+                    field: "name",
+                    displayName: '名称'
+                },
+                {
+                    field: "version",
+                    displayName: '版本'
+                }],
+            onRegisterApi: function (gridApi) {
+                $scope.gridApi = gridApi;
+                //行选中事件
+                $scope.gridApi.selection.on.rowSelectionChanged($scope, function (row, event) {
+                    if (row && row.isSelected) {
+                        $scope.selectedItems = row.entity;
+                    }
+                });
+            }
+        };
+        $scope.loadData = function(){
+            myWorkOrderRES.listWorkFlows().then(function (result) {
+                $scope.myData = result.data;
+            }, function(){
+                $scope.myData = [];
+            });
+        };
+        //the list of attrs
+        $scope.loadData();
+
+        //search function end
+        $scope.params = {grid: {}, fun: {}};
+
+        // callback function
+        $scope.callFn = function(item){
+            $scope.rowItem = item;
+        };
+
+        //link flows
+        $scope.linkWorkOrderAndFlow = function () {
+            var selectItem = $scope.selectedItems;
+            var params = {
+                "workorderTypeId"       : workorderTypeId,
+                "processDeploymentKey"  : selectItem.key,
+                "processDeploymentId"   : selectItem.id
+            }
+            myWorkOrderRES.linkWorkOrderAndFlow(params).then(function (result) {
+                $modalInstance.close(result);
+            });
+        };
+
+        //cancel the modal
+        $scope.cancel = function () {
+            $modalInstance.dismiss('cancel');
         }
+    }
 })();
