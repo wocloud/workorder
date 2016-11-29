@@ -137,7 +137,7 @@ $(function(){
                 return;
             }
             var key = $scope.selectedRows[0].propertyKey;
-            $location.url("/app/workOrderAttrCreateOrUpdate?key="+key);
+            $location.url("/app/workOrderAttrCreateOrUpdate?key="+key+"&flag=true");
         };
 
         //delete an attribute
@@ -185,6 +185,7 @@ $(function(){
     AttrCreateOrUpdateViewCtrl.$inject = ['$scope', '$location', '$stateParams', '$log', '$cacheFactory', 'workOrderAttr.RES'];
     function AttrCreateOrUpdateViewCtrl($scope, $location, $stateParams, $log, $cacheFactory, workOrderAttrRES){
         var key = $stateParams.key;
+        $scope.flag = $stateParams.flag;
 
         $scope.PropertyType = workOrderAttrRES.baseEnum().propertyType;
 
@@ -303,7 +304,8 @@ $(function(){
             columnDefs: [
                 {
                     field: 'propertyKey',
-                    displayName: 'key'
+                    displayName: 'key',
+                    cellTemplate:'<div class="ui-grid-cell-contents"><a class="text-info" ui-sref="app.workOrderAttrCreateOrUpdate({key:row.entity.propertyKey})">{{row.entity.propertyKey}}</a></div>'
                 },
                 {
                     field: "propertyName",
@@ -313,11 +315,11 @@ $(function(){
                     field: "propertyType",
                     displayName: '格式',
                     cellTemplate:'<div class="ui-grid-cell-contents">{{row.entity.propertyType | propertyTypeFilter}}</div>'
-                },
-                {
-                    field: "belonged",
-                    displayName: '所属流程',
-                    cellTemplate:'<div class="ui-grid-cell-contents"><a class="text-info" ui-sref="app.workOrderAttrLinked({key:row.entity.propertyKey})">{{row.entity.belonged}}</a></div>'
+                //},
+                //{
+                //    field: "belonged",
+                //    displayName: '所属流程',
+                //    cellTemplate:'<div class="ui-grid-cell-contents"><a class="text-info" ui-sref="app.workOrderAttrLinked({key:row.entity.propertyKey})">{{row.entity.belonged}}</a></div>'
                 //},
                 //{
                 //    field: "createDate",

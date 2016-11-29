@@ -358,7 +358,7 @@
             $scope.$watch('workorderType', function (r, t, y) {
                 if (r != undefined) {
                     var params={
-                        codeType: r.typeCode
+                        typeCode: r.typeCode
                     };
                     myWorkOrderRES.list_create_attr(params).then(function(result){
                         for(var i=0;i<result.data.length;i++){
