@@ -25,11 +25,11 @@ $(function(){
 
         //绑定工单类型流程
         this.bind = function(params){
-            var cmd = '/wocloud-workorder-restapi/workorderTypeProcess/bindWorkorderTypeAndProcess';
+            var cmd = '/wocloud-workorder-restapi/workorderTypeProcess/insertOrUpdateWorkorderTypeAndProcess';
             var task = $q.defer();
             var parameters = params==undefined ? {} : params;
             $resource(cmd).save(parameters, function(response){
-                task.resolve(response.data);
+                task.resolve(response);
             }, function(response){
                 task.reject(response);
             });
@@ -55,7 +55,7 @@ $(function(){
             var task = $q.defer();
             var parameters = params==undefined ? {} : params;
             $resource(cmd).save(parameters, function(response){
-                task.resolve(response.data);
+                task.resolve(response);
             }, function(response){
                 task.reject(response);
             });
@@ -66,7 +66,7 @@ $(function(){
             var task = $q.defer();
             var cmd = '/wocloud-workorder-restapi/workorderType/saveWorkorderType';
             $resource(cmd).save(params,function(response){
-                task.resolve(response.data);
+                task.resolve(response);
             }, function(response){
                 task.reject("调用失败,属性信息更新失败!");
             });
@@ -77,7 +77,7 @@ $(function(){
             var task = $q.defer();
             var cmd = '/wocloud-workorder-restapi/workorderType/removeWorkorderType';
             $resource(cmd).save({id:id},function(response){
-                task.resolve(response.data);
+                task.resolve(response);
             }, function(response){
                 task.reject("调用失败,属性信息删除失败!");
             });
@@ -107,12 +107,11 @@ $(function(){
     /**
      * workOrder types controller
      */
-    app.controller('WorkOrderAttrsViewCtrl', AttrViewCtrl);
-    AttrViewCtrl.$inject = ['$scope', '$modal', '$location', '$log', '$cacheFactory', 'workOrderType.RES', 'toaster'];
-    function AttrViewCtrl($scope, $modal, $location, $log, $cacheFactory, workOrderTypeRES, toaster) {
+    app.controller('WorkOrderTypesViewCtrl', TypeViewCtrl);
+    TypeViewCtrl.$inject = ['$scope', '$modal', '$log', 'workOrderType.RES', 'toaster'];
+    function TypeViewCtrl($scope, $modal, $log, workOrderTypeRES, toaster) {
 
         $scope.myData = [];
-        $scope.selectedItems = [];
         $scope.myGridOptions = {
             data: 'myData',
             columnDefs: [
@@ -128,17 +127,21 @@ $(function(){
                     field: "typeCode",
                     displayName: 'Code'
                 }],
+            multiSelect: false,
             onRegisterApi: function (gridApi) {
                 $scope.gridApi = gridApi;
                 //行选中事件
                 $scope.gridApi.selection.on.rowSelectionChanged($scope, function (row, event) {
                     if (row && row.isSelected) {
-                        $scope.selectedItems.push(row.entity);
+                        $scope.selectedItem=row.entity;
+                    } else {
+                        $scope.selectedItem = undefined;
                     }
                 });
             }
         };
         $scope.loadData = function(){
+            $scope.selectedItem = undefined;
             workOrderTypeRES.list().then(function (result) {
                 $scope.myData = result;
             }, function(){
@@ -168,7 +171,7 @@ $(function(){
                     }
                 }
             });
-            modalInstance.result.then(function (result) {
+            modalInstance.result.then(function(result) {
                 $scope.loadData();
                 if(result.code=="0"){
                     toaster.pop('info', "提示", " 工单类型新建成功!");
@@ -182,12 +185,8 @@ $(function(){
 
         //edit
         $scope.updateItem = function() {
-            if($scope.selectedItems.length==0){
+            if(!$scope.selectedItem){
                 toaster.pop('info', "提示", "请选择要操作的条目!");
-                return;
-            }
-            if($scope.selectedItems.length>1){
-                toaster.pop('info', "提示", "只能选择一条操作的条目!");
                 return;
             }
             var modalInstance = $modal.open({
@@ -196,11 +195,11 @@ $(function(){
                 controller: 'WorkOrderTypeCreateOrUpdateViewCtrl',
                 resolve: {
                     params: function () {
-                        return $scope.selectedItems;
+                        return $scope.selectedItem;
                     }
                 }
             });
-            modalInstance.result.then(function (result) {
+            modalInstance.result.then(function(result) {
                 $scope.loadData();
                 if(result.code=="0"){
                     toaster.pop('info', "提示", " 工单类型编辑成功!");
@@ -220,11 +219,11 @@ $(function(){
                 controller: 'WorkOrderTypeDeleteViewCtrl',
                 resolve: {
                     params: function () {
-                        return $scope.selectedItems;
+                        return $scope.selectedItem;
                     }
                 }
             });
-            modalInstance.result.then(function (result) {
+            modalInstance.result.then(function(result) {
                 $scope.loadData();
                 if(result.code=="0"){
                     toaster.pop('info', "提示", " 工单类型删除成功!");
@@ -244,11 +243,11 @@ $(function(){
                 controller: 'bindWithProcessViewCtrl',
                 resolve: {
                     params: function () {
-                        return $scope.selectedItems;
+                        return $scope.selectedItem;
                     }
                 }
             });
-            modalInstance.result.then(function (result) {
+            modalInstance.result.then(function(result) {
                 $scope.loadData();
                 if(result.code=="0"){
                     toaster.pop('info', "提示", "工单绑定流程成功!");
@@ -268,11 +267,11 @@ $(function(){
                 controller: 'unbindWithProcessViewCtrl',
                 resolve: {
                     params: function () {
-                        return $scope.selectedItems;
+                        return $scope.selectedItem;
                     }
                 }
             });
-            modalInstance.result.then(function (result) {
+            modalInstance.result.then(function(result) {
                 $scope.loadData();
                 if(result.code=="0"){
                     toaster.pop('info', "提示", "工单解绑流程成功!");
@@ -289,9 +288,9 @@ $(function(){
      * workOrder types create controller
      */
     app.controller('WorkOrderTypeCreateOrUpdateViewCtrl', TypeCreateOrUpdateViewCtrl);
-    TypeCreateOrUpdateViewCtrl.$inject = ['$scope', '$location', 'params', '$modalInstance', '$cacheFactory', 'workOrderType.RES'];
-    function TypeCreateOrUpdateViewCtrl($scope, $location, params, $modalInstance, $cacheFactory, workOrderTypeRES){
-        var id = params[0].id;
+    TypeCreateOrUpdateViewCtrl.$inject = ['$scope', 'params', '$modalInstance', 'workOrderType.RES'];
+    function TypeCreateOrUpdateViewCtrl($scope, params, $modalInstance, workOrderTypeRES){
+        var id = params.id;
 
         if ($scope.workOrderType == undefined || $scope.workOrderType == null){
             $scope.workOrderType = {};
@@ -326,9 +325,10 @@ $(function(){
      * workOrder attr delete controller
      */
     app.controller('WorkOrderTypeDeleteViewCtrl', TypeDeleteViewCtrl);
-    TypeDeleteViewCtrl.$inject = ['$scope', '$log', '$modalInstance', 'params', 'workOrderType.RES', 'toaster'];
-    function TypeDeleteViewCtrl($scope, $log, $modalInstance, params, workOrderTypeRES, toaster) {
-        var id = params[0].id;
+    TypeDeleteViewCtrl.$inject = ['$scope', '$modalInstance', 'params', 'workOrderType.RES'];
+    function TypeDeleteViewCtrl($scope, $modalInstance, params, workOrderTypeRES) {
+        $scope.currentItem = params;
+        var id = $scope.currentItem.id;
 
         //remove
         $scope.removeItem = function () {
@@ -349,9 +349,8 @@ $(function(){
     app.controller('bindWithProcessViewCtrl', BindWithProcessViewCtrl);
     BindWithProcessViewCtrl.$inject = ['$scope', '$modalInstance', 'params', 'workOrderType.RES'];
     function BindWithProcessViewCtrl($scope, $modalInstance, params, workOrderTypeRES) {
-        var workorderTypeId = params[0].id;
+        var workorderTypeId = params.id;
         $scope.myData = [];
-        $scope.selectedItems = [];
         $scope.flowGridOptions = {
             data: 'myData',
             columnDefs: [
@@ -371,17 +370,21 @@ $(function(){
                     field: "version",
                     displayName: '版本'
                 }],
+            multiSelect: false,
             onRegisterApi: function (gridApi) {
                 $scope.gridApi = gridApi;
                 //行选中事件
                 $scope.gridApi.selection.on.rowSelectionChanged($scope, function (row, event) {
                     if (row && row.isSelected) {
-                        $scope.selectedItems = row.entity;
+                        $scope.selectedItem = row.entity;
+                    } else {
+                        $scope.selectedItem = undefined;
                     }
                 });
             }
         };
         $scope.loadData = function(){
+            $scope.selectedItem = undefined;
             workOrderTypeRES.listWorkFlows().then(function (result) {
                 $scope.myData = result;
             }, function(){
@@ -401,7 +404,7 @@ $(function(){
 
         //bind
         $scope.bindWorkorderTypeAndProcess = function () {
-            var selectItem = $scope.selectedItems;
+            var selectItem = $scope.selectedItem;
             var params = {
                 "workorderTypeId"       : workorderTypeId,
                 "processDeploymentKey"  : selectItem.key,
@@ -427,7 +430,7 @@ $(function(){
         $scope.relationId = -1;
         $scope.processDeploymentId = "";
 
-        workOrderTypeRES.queryRelation({"workorderTypeId": params[0].id}).then(function (result) {
+        workOrderTypeRES.queryRelation({"workorderTypeId": params.id}).then(function (result) {
             if(result.content && result.content.length > 0){
                 $scope.processDeploymentId = result.content[0].processDeploymentId;
                 $scope.relationId = result.content[0].id;
