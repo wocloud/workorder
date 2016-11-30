@@ -428,6 +428,9 @@
                             if (result.data[i].propertyType == "select") {
                                 result.data[i].propertyOptions = jQuery.parseJSON(result.data[i].propertyOptions);
                             }
+                            if(result.data[i].propertyDefaultValue==null){
+                                result.data[i].propertyDefaultValue='';
+                            }
                             result.data[i].propertyValue=result.data[i].propertyDefaultValue;
                         }
                         $scope.properties=result.data;
@@ -442,10 +445,10 @@
                             $scope.properties[i].propertyValue = (new Date()).getTime();
                         }
                     }
-                    $scope.createValue.typeId=$scope.workorderType.id;
                     $scope.createValue.properties=JSON.stringify($scope.properties);
-                    $scope.createValue.contactId=1/*owner.userId*/;
                 }
+                $scope.createValue.contactId=1/*owner.userId*/;
+                $scope.createValue.typeId=$scope.workorderType.id;
                 return $scope.createValue;
             }
             //create new workOrder

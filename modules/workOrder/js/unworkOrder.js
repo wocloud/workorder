@@ -61,6 +61,8 @@ function performerStatus (){
 UNworkOrder.$inject = ['$scope','ngDialog', '$location', '$log', '$cacheFactory', 'MyWorkOrder.RES','$state'];
 function UNworkOrder($scope,ngDialog, $location, $log, $cacheFactory, myWorkOrderRES,$state) {
     $scope.search={};
+    $scope.singflag=true;
+    $scope.disposeflag=true;
     $scope.yel=false;
     var index = 0;//默认选中行，下标置为0
     $scope.myGridOptions = {
