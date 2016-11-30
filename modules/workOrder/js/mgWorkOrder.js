@@ -55,8 +55,18 @@
         var params={
             linkId:$stateParams.id
         };
-        myWorkOrderRES.listById(params).then(function(result){
-            $scope.mgworkorder=result.data[0];
+        myWorkOrderRES.listById(params).then(function(result) {
+            if (result.data[0].instanceLinkPropertyList.length != 0) {
+                for (var i = 0; i < result.data[0].instanceLinkPropertyList.length; i++) {
+                    if (result.data[0].instanceLinkPropertyList[i].propertyType == "select") {
+                        result.data[0].instanceLinkPropertyList[i].propertyOptions = jQuery.parseJSON(result.data[0].instanceLinkPropertyList[i].propertyOptions);
+                        if(result.data[0].instanceLinkPropertyList[i].propertyValue==null){
+                            result.data[0].instanceLinkPropertyList[i].propertyValue="";
+                        }
+                    }
+                }
+                $scope.mgworkorder = result.data[0];
+            }
         });
         $scope.disposeToMain = function () {
             console.log($scope.mgworkorder);
@@ -75,7 +85,7 @@
                             $scope.content="处理成功";
                         }else{
                             $scope.titel="失败";
-                            $scope.content="处理失败";
+                            $scope.content="处理失败"+result.msg;
                         }
                         $scope.ok = function(){
                             $scope.closeThisDialog(); //关闭弹窗

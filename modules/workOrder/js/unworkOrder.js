@@ -262,7 +262,7 @@ function UNworkOrder($scope,ngDialog, $location, $log, $cacheFactory, myWorkOrde
     $scope.signItem = function () {
         var params={
             id:$scope.selectedRows.linkId,
-            performerId:1
+            performerId:$scope.search.performerId!=undefined?$scope.search.performerId:1
         }
         console.log(params);
         myWorkOrderRES.sign(params).then(function (result) {
@@ -275,7 +275,7 @@ function UNworkOrder($scope,ngDialog, $location, $log, $cacheFactory, myWorkOrde
                         $scope.content="签收成功";
                     }else{
                         $scope.titel="失败";
-                        $scope.content="签收失败";
+                        $scope.content="签收失败"+result.msg;
                     }
                     $scope.ok = function(){
                         $scope.closeThisDialog(); //关闭弹窗
