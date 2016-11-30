@@ -365,10 +365,6 @@ $(function(){
                 {
                     field: "name",
                     displayName: '名称'
-                },
-                {
-                    field: "version",
-                    displayName: '版本'
                 }],
             multiSelect: false,
             onRegisterApi: function (gridApi) {
@@ -387,6 +383,18 @@ $(function(){
             $scope.selectedItem = undefined;
             workOrderTypeRES.listWorkFlows().then(function (result) {
                 $scope.myData = result;
+
+                // 已有流程加上选中时间
+                workOrderTypeRES.queryRelation({"workorderTypeId": params.id}).then(function (result) {
+                    if(result.content && result.content.length > 0){
+                        angular.forEach($scope.myData, function(data, index, array){
+                            if(data.key == result.content[0].processDeploymentKey) {
+                                $scope.gridApi.selection.selectRow(data);
+                                return;
+                            }
+                        });
+                    }
+                });
             }, function(){
                 $scope.myData = [];
             });
@@ -432,8 +440,8 @@ $(function(){
 
         workOrderTypeRES.queryRelation({"workorderTypeId": params.id}).then(function (result) {
             if(result.content && result.content.length > 0){
-                $scope.processDeploymentId = result.content[0].processDeploymentId;
                 $scope.relationId = result.content[0].id;
+                $scope.processDeploymentId = result.content[0].processDeploymentId;
             }
         });
 
