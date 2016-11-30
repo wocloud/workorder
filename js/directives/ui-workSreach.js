@@ -89,15 +89,15 @@ at.directive("myWorkOrderSreach", function () {
                     '</label>' +
                         '<div class="col-md-6 col-sm-6 no-padder-sm" style="margin-bottom: 10px;">' +
                             '<div  style="width:300px">'+
-        '<input class="form-control" type="text"  ng-model="search.title"  style="height:30px;width:300px;"/>' +
+                            '<input class="form-control" type="text"  ng-model="search.title"  style="height:30px;width:300px;"/>' +
                         '</div>'+
                     '</div>' +
                 '</div>' +
 
                 '<div class="form-group" ng-repeat="items in properties" style="margin-bottom:30px;">'+
-                    '<label class="col-md-offset-1 col-sm-offset-1 col-md-3 col-sm-2 control-label">' +
+                    '<label class="col-md-offset-1 col-sm-offset-1 col-md-3 col-sm-2 control-label" style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">' +
                         '<input  type="checkbox" checked="true" ng-click="prCheck({$event:$event,items:items})"/>' +
-                        '<span ng-bind="items.propertyName"></span>:' +
+                        '<span title="{{items.propertyName}}" ng-bind="items.propertyName"></span>:' +
                     '</label>' +
                     '<div class="col-md-6 col-sm-6 no-padder-sm" style="margin-bottom:10px;">' +
                         '<select class="form-control" ng-if=items.propertyType=="select"  ng-model="items.propertyValue" ng-selected="$index==0" style="height:30px;width:300px;">' +

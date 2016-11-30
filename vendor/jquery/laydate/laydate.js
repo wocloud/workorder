@@ -147,7 +147,7 @@
         c && (a.innerHTML = c), c = null
     }, c.viewYears = function (a) {
         var b = c.query, d = "";
-        c.each(new Array(14), function (b) {
+        c.each(new Array(7), function (b) {
             d += 7 === b ? "<li " + (parseInt(h.year.value) === a ? 'class="' + h[2] + '"' : "") + ' y="' + a + '">' + a + "年</li>" : '<li y="' + (a - 7 + b) + '">' + (a - 7 + b) + "年</li>"
         }), b("#laydate_ys").innerHTML = d, c.each(b("#laydate_ys li"), function (a, b) {
             "y" === c.checkVoid(b.getAttribute("y"))[0] ? c.addClass(b, h[1]) : c.on(b, "click", function (a) {
@@ -205,7 +205,7 @@
         }), c.on(b(e.box), "click", function () {
             c.reshow()
         }), e.tabYear = function (a) {
-            0 === a ? c.ymd[0]-- : 1 === a ? c.ymd[0]++ : 2 === a ? e.YY -= 14 : e.YY += 14, 2 > a ? (c.viewDate(c.ymd[0], c.ymd[1], c.ymd[2]), c.reshow()) : c.viewYears(e.YY)
+            0 === a ? c.ymd[0]-- : 1 === a ? c.ymd[0]++ : 2 === a ? e.YY -= 7 : e.YY += 7, 2 > a ? (c.viewDate(c.ymd[0], c.ymd[1], c.ymd[2]), c.reshow()) : c.viewYears(e.YY)
         }, c.each(b("#laydate_YY .laydate_tab"), function (a, b) {
             c.on(b, "click", function (b) {
                 c.stopmp(b), e.tabYear(a)
