@@ -73,11 +73,11 @@
             <div class="form-group" ng-repeat="items in mgworkorder.instanceLinkPropertyList" ng-show="items.isVisible|dit">
                 <div ng-if="items.propertyType=='select'" class="col-sm-6 m-t-xs m-b-xs no-padder " >
                     <div class="form-group">
-                        <label class="col-md-offset-1 col-sm-offset-1 col-md-2 col-sm-2 control-label" style="margin-left:3%;text-align: right;line-height: 37px;">{{items.propertyName}}</label>
+                        <label class="col-md-offset-1 col-sm-offset-1 col-md-2 col-sm-2 control-label" title="{{items.propertyName}}" style="margin-left:3%;text-align: right;line-height: 37px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">{{items.propertyName}}</label>
                         <div class="col-md-6 col-sm-6 no-padder-sm"  style="width:80%;">
                             <select class="form-control" ng-disabled="items.readOnly|dit" name="{{items.propertyKey}}" ng-model="items.propertyValue" ng-required="items.isRequired|dit" style="width:70%;display:inline;margin-top: 0px">
                                 <option  value="" ng-if="items.propertyValue==''" >-请选择-</option>
-                                <option ng-repeat="item in items.optionList" value="{{item.optionValue}}">{{item.optionName}}</option>
+                                <option ng-repeat="item in items.propertyOptions" value="{{item.optionValue}}">{{item.optionName}}</option>
                             </select>
                             <div ng-if="items.isRequired|dit" style="display:inline;color:red;">
                                 <span  class="no-null" style="margin-left:2%;">*</span>
@@ -90,7 +90,7 @@
                 </div>
                 <div ng-if="items.propertyType=='text'" class="col-sm-6 m-t-xs m-b-xs no-padder ">
                     <div class="form-group">
-                        <label class="col-md-offset-1 col-sm-offset-1 col-md-2 col-sm-2 control-label" style="margin-left:3%;text-align:right;line-height: 37px;">{{items.propertyName}}</label>
+                        <label class="col-md-offset-1 col-sm-offset-1 col-md-2 col-sm-2 control-label" title="{{items.propertyName}}" style="margin-left:3%;text-align:right;line-height: 37px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">{{items.propertyName}}</label>
                         <div class="col-md-6 col-sm-6 no-padder-sm"  style="width:80%;">
                             <input class="form-control" type="text"  ng-disabled="items.readOnly|dit" name="{{items.propertyKey}}" ng-model="items.propertyValue" style="width:70%;display:inline;margin-top: 0px" value="{{items.propertyDefaultValue}}" ng-required="items.isRequired|dit"/>
                             <div ng-if="items.isRequired|dit" style="display:inline;color:red;">
@@ -104,7 +104,7 @@
                 </div>
                 <div ng-if="items.propertyType=='textArea'" class="col-sm-12 m-t-xs m-b-xs no-padder ">
                     <div class="form-group">
-                        <label class="col-md-offset-1 col-sm-offset-1 col-md-1 col-sm-2 control-label" style="margin-left:1.333333%;text-align:right;line-height: 37px;">{{items.propertyName}}</label>
+                        <label class="col-md-offset-1 col-sm-offset-1 col-md-1 col-sm-2 control-label" title="{{items.propertyName}}" style="margin-left:1.333333%;text-align:right;line-height: 37px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">{{items.propertyName}}</label>
                         <div class="col-md-6 col-sm-6 no-padder-sm"  style="width:90%;">
                             <textarea class="form-control"  ng-disabled="items.readOnly|dit" name="{{items.propertyKey}}" ng-model="items.propertyValue" ng-required="items.isRequired|dit" style="width:87.2%;display:inline;margin-left: 2px;margin-top: 0px">{{items.propertyDefaultValue}}</textarea>
                             <div ng-if="items.isRequired|dit" style="display:inline;color:red;">
@@ -118,7 +118,7 @@
                 </div>
                 <div ng-if="items.propertyType=='dateTime'" class="col-sm-6 m-t-xs m-b-xs no-padder ">
                     <div class="form-group">
-                        <label class="col-md-offset-1 col-sm-offset-1 col-md-2 col-sm-2 control-label" style="margin-left:3%;text-align:right;line-height: 37px;">{{items.propertyName}}</label>
+                        <label class="col-md-offset-1 col-sm-offset-1 col-md-2 col-sm-2 control-label" title="{{items.propertyName}}" style="margin-left:3%;text-align:right;line-height: 37px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">{{items.propertyName}}</label>
                         <div class="col-md-6 col-sm-6 no-padder-sm"  style="width:80%;">
                             <input  class="form-control laydate-icon" ng-disabled="items.readOnly|dit" name="{{items.propertyKey}}" def-laydate  type="text"  ng-model="items.propertyValue"  style="width:70%;display:inline;margin-top: 0px" ng-required="items.isRequired|dit" />
                             <div ng-if="items.isRequired|dit" style="display:inline;color:red;">

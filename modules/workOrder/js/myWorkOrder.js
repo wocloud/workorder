@@ -293,7 +293,7 @@
         $scope.putItem = function () {
             var para={
                 id:$scope.selectedRows.id,
-                ownerId:1
+                ownerId:$scope.search.performerId!=undefined?$scope.search.performerId:1
             };
             myWorkOrderRES.submit(para).then(function (result1) {
                 $log.info(result1);
@@ -306,7 +306,7 @@
                             $scope.content="提交成功";
                         }else{
                             $scope.titel="失败";
-                            $scope.content="提交失败";
+                            $scope.content="提交失败"+result1.msg;
                         }
                         $scope.ok = function(){
                             $scope.closeThisDialog(); //关闭弹窗
@@ -464,11 +464,11 @@
                                 $scope.content="保存成功,是否提交？";
                             }else{
                                 $scope.titel="失败";
-                                $scope.content="保存失败";
+                                $scope.content="保存失败:"+result.msg;
                             }
                             $scope.paramss={
                                 id:result.data.id,
-                                ownerId:1
+                                ownerId:result.data.ownerId
                             };
                             $scope.close=function(){
                                 $scope.closeThisDialog();
@@ -487,7 +487,7 @@
 
                                             }else{
                                                 $scope.titel="失败";
-                                                $scope.content="提交失败";
+                                                $scope.content="提交失败:"+result1.msg;
                                             }
 
                                             $scope.ok = function(){
