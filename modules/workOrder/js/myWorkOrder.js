@@ -245,7 +245,7 @@
             if($scope.search.endTime==""){
                 delete $scope.search.endTime;
             }
-            $scope.search.ownerId=1;
+            /*$scope.search.ownerId=1;*/
             $scope.search.instanceLinkPropertyList=$scope.properties;
             $scope.search.page=page!=undefined?page:1;
             $scope.search.size=pageSize!=undefined?pageSize:10;
@@ -291,9 +291,10 @@
             /*$location.url("/app/workOrderCreate");*/
         };
         $scope.putItem = function () {
+            debugger;
             var para={
                 id:$scope.selectedRows.id,
-                ownerId:$scope.search.performerId!=undefined?$scope.search.performerId:1
+                ownerId:$scope.search.ownerId!=undefined?$scope.search.ownerId:1
             };
             myWorkOrderRES.submit(para).then(function (result1) {
                 $log.info(result1);

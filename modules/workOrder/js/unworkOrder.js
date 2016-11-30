@@ -214,6 +214,8 @@ function UNworkOrder($scope,ngDialog, $location, $log, $cacheFactory, myWorkOrde
         if($scope.search.endTime==""){
             delete $scope.search.endTime;
         }
+        $scope.search.performerId=$scope.search.ownerId;
+        delete $scope.search.ownerId;
         $scope.search.instanceLinkPropertyList=$scope.properties;
         $scope.search.page=page!=undefined?page:1;
         /*$scope.search.performerId=1;*/
@@ -264,7 +266,7 @@ function UNworkOrder($scope,ngDialog, $location, $log, $cacheFactory, myWorkOrde
     $scope.signItem = function () {
         var params={
             id:$scope.selectedRows.linkId,
-            performerId:$scope.search.performerId!=undefined?$scope.search.performerId:1
+            performerId:$scope.search.ownerId!=undefined?$scope.search.ownerId:1
         }
         console.log(params);
         myWorkOrderRES.sign(params).then(function (result) {

@@ -38,7 +38,7 @@ at.directive("myWorkOrderSreach", ['ngDialog','$q','$resource',function (ngDialo
                     '</label>' +
                     '<div class="col-md-6 col-sm-6 no-padder-sm" style="margin-bottom: 10px;">' +
                         '<div  style="width:300px;display:inline;">'+
-                        '<input class="form-control" type="text" ng-disabled="true" ng-model="performerName"  style="height:30px;display:inline;width:200px;"/>' +
+                        '<input class="form-control" type="text" ng-disabled="true" ng-model="ownerName"  style="height:30px;display:inline;width:200px;"/>' +
                         '<button style="display:inline;margin-left:15px" type="button" ng-click="selectCustomer()">选择</button>'+
                         '</div>'+
                     '</div>' +
@@ -204,8 +204,8 @@ at.directive("myWorkOrderSreach", ['ngDialog','$q','$resource',function (ngDialo
                         $scope.searchCustomer();
                         $scope.confirm = function(){
                             if( $scope.customerRow){
-                                $scope.search.performerId = $scope.customerRow.id;
-                                $scope.$parent.performerName = $scope.customerRow.first;
+                                $scope.search.ownerId = $scope.customerRow.id;
+                                $scope.$parent.ownerName = $scope.customerRow.first;
                             }
                             $scope.closeThisDialog();
                         };

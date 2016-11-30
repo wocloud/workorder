@@ -162,6 +162,7 @@ function LKworkOrder($scope, $location, $log, $cacheFactory, myWorkOrderRES,$sta
         if($scope.search.endTime==""){
             delete $scope.search.endTime;
         }
+        delete $scope.search.ownerId;
         $scope.search.instanceLinkPropertyList=$scope.properties;
         $scope.search.page=page!=undefined?page:1;
         /*$scope.search.ownerId=$scope.$root.user.userId;*/
