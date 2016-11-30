@@ -214,7 +214,7 @@ function UNworkOrder($scope,ngDialog, $location, $log, $cacheFactory, myWorkOrde
         }
         $scope.search.instanceLinkPropertyList=$scope.properties;
         $scope.search.page=page!=undefined?page:1;
-        $scope.search.performerId=1;
+        /*$scope.search.performerId=1;*/
         $scope.search.size=pageSize!=undefined?pageSize:10;
         console.log($scope.search);
         $scope.$root.unWorkCount=3;

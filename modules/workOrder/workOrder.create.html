@@ -85,6 +85,24 @@
                     </div>
                 </div>
             </div>
+            <!--创建人-->
+            <div class="form-group ">
+                <div  class="col-sm-6 m-t-xs m-b-xs no-padder ">
+                    <div class="form-group">
+                        <label class="col-md-offset-1 col-sm-offset-1 col-md-2 col-sm-2 control-label" style="margin-left:3%;text-align:right;line-height: 37px;">创建人</label>
+                        <div class="col-md-6 col-sm-6 no-padder-sm"  style="width:80%;">
+                            <input class="form-control" ng-disabled="true" type="text"  name="ownerName" ng-model="createValue.ownerName" style="width:60%;display:inline;margin-top: 0px"  required/>
+                            <button type="button" ng-click="selectCustomer()">选择</button>
+                            <div  style="display:inline;color:red;">
+                                <span class="no-null" style="margin-left: 2%;">*</span>
+                                <div ng-messages="createWorkOrder.ownerName.$error" ng-if="createWorkOrder.ownerName.$touched" style="display:inline;">
+                                    <div ng-message="required" style="display:inline;">必填项不能为空</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <!--联系人-->
             <div class="form-group ">
                 <div  class="col-sm-6 m-t-xs m-b-xs no-padder ">

@@ -15,7 +15,14 @@ function ServiceMyWorkOrderRES($q, $resource, fakeMapping) {
                 'Content-Type' : 'application/json;charset=UTF-8'
             }
         }});
-
+    //获取用户
+    var api_user_list = '/wocloud-workorder-restapi/actIdUser/getActIdUserListByConditions',
+        res_user_list = $resource(api_user_list,{},{post:{
+            method : 'POST',
+            headers : {
+                'Content-Type' : 'application/json;charset=UTF-8'
+            }
+        }});
     //提交工单
     var api_submitWorkOrder_list = '/wocloud-workorder-restapi/instanceService/submitWorkorderInstance',
         res_submitWorkOrder_list = $resource(api_submitWorkOrder_list,{},{post:{
@@ -143,6 +150,13 @@ function ServiceMyWorkOrderRES($q, $resource, fakeMapping) {
     this.dispose=function(params){
         var task = $q.defer();
         res_disposeWorkOrderById_list.post(params, function (response) {
+            task.resolve(response.toJSON());
+        });
+        return task.promise;
+    };
+    this.listUser=function(params){
+        var task = $q.defer();
+        res_user_list.post(params, function (response) {
             task.resolve(response.toJSON());
         });
         return task.promise;

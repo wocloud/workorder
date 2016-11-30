@@ -355,7 +355,70 @@
                 $scope.productTypeList = result.data;  //每次返回结果都是最新的
                 $scope.createValue.productType=result.data[0].productType;
             });
-            $scope.$watch('workorderType', function (r, t, y) {
+        $scope.selectCustomer = function(){
+            ngDialog.open({
+                template:'modules/workOrder/owner.html',
+                className:'ngdialog-theme-default',
+                scope:$scope,
+                controller:function($scope){
+                    $scope.searchCustomer = function(newPage){
+                        if(newPage==undefined){
+                            $scope.customerOptions.paginationCurrentPage=1;
+                        }
+                        var param={
+                            first:$scope.first,
+                            page:newPage==undefined?1:newPage
+                        };
+                        myWorkOrderRES.listUser(param).then(function (result) {
+                            getCustomerPage(param.targetPage,result.totalRecord,result.data.content);
+
+                        });
+                    };
+                    $scope.customerOptions = {
+                        columnDefs: [{field:'id', displayName:'登录名'},{field:'first', displayName:'用户名'},{field:'pwd', displayName:'密码'}],
+                        paginationCurrentPage: 1, //当前页码
+                        paginationPageSize: 10, //每页显示个数
+                        paginationPageSizes: [10],
+                        noUnselect: false,//默认false,选中后是否可以取消选中
+                        modifierKeysToMultiSelect: true,//默认false,为true时只能 按ctrl或shift键进行多选, multiSelect 必须为true;
+                        isRowSelectable: function(row){ //GridRow
+                        },
+                        onRegisterApi: function (gridApi) {
+                            $scope.gridApi = gridApi;
+                            //分页按钮事件
+                            gridApi.pagination.on.paginationChanged($scope, function (newPage, pageSize) {
+                                if (getCustomerPage) {
+                                    $scope.searchCustomer(newPage);
+                                }
+                            });
+                            $scope.gridApi.selection.on.rowSelectionChanged($scope, function (row, event) {
+                                if (row) {
+                                    $scope.customerRow = row.entity;
+                                }
+                            });
+                        },
+                        useExternalPagination: true//是否使用分页按钮
+                    };
+                    var getCustomerPage = function (curPage,totalSize,customerlists) {
+                        $scope.customerOptions.totalItems = totalSize;
+                        $scope.customerOptions.data = customerlists;
+                    };
+                    $scope.searchCustomer();
+                    $scope.confirm = function(){
+                        if( $scope.customerRow){
+                            $scope.createValue.ownerId = $scope.customerRow.id;
+                            $scope.createValue.ownerName = $scope.customerRow.first;
+                        }
+                        $scope.closeThisDialog();
+                    };
+                    $scope.cancel = function(){
+                        $scope.closeThisDialog();
+                    };
+                }
+            });
+        };
+
+        $scope.$watch('workorderType', function (r, t, y) {
                 if (r != undefined) {
                     var params={
                         typeCode: r.typeCode
@@ -381,7 +444,6 @@
                     }
                     $scope.createValue.typeId=$scope.workorderType.id;
                     $scope.createValue.properties=JSON.stringify($scope.properties);
-                    $scope.createValue.ownerId=1/*owner.userId*/;
                     $scope.createValue.contactId=1/*owner.userId*/;
                 }
                 return $scope.createValue;
@@ -396,6 +458,7 @@
                     ngDialog.open({ template: 'modules/workOrder/test.html',//模式对话框内容为test.html
                         className:'ngdialog-theme-default ngdialog-theme-dadao',
                         controller:function($scope){
+                            $scope.yn=true;
                             if(result.code==0){
                                 $scope.titel="成功";
                                 $scope.content="保存成功,是否提交？";
@@ -426,6 +489,7 @@
                                                 $scope.titel="失败";
                                                 $scope.content="提交失败";
                                             }
+
                                             $scope.ok = function(){
                                                 $scope.closeThisDialog(); //关闭弹窗
                                                 $state.go("app.myWorkOrder");
