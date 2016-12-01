@@ -162,14 +162,11 @@ function LKworkOrder($scope, $location, $log, $cacheFactory, myWorkOrderRES,$sta
         if($scope.search.endTime==""){
             delete $scope.search.endTime;
         }
-        delete $scope.search.ownerId;
         $scope.search.instanceLinkPropertyList=$scope.properties;
         $scope.search.page=page!=undefined?page:1;
-        /*$scope.search.ownerId=$scope.$root.user.userId;*/
         $scope.search.size=pageSize!=undefined?pageSize:10;
-        console.log($scope.search);
         $scope.$root.unWorkCount=3;
-        myWorkOrderRES.list_work(JSON.stringify($scope.search)).then(function (result) {
+        myWorkOrderRES.list_work($scope.search).then(function (result) {
             var workOrders = result.data.content;  //每次返回结果都是最新的
             getPage($scope.search.page, $scope.search.pageSize, result.data.totalElements,workOrders);
         });

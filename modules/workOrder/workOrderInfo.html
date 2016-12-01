@@ -94,7 +94,11 @@
                 <i class="fa fa-caret-down" ng-show="isShow1"></i>
                 <i class="fa fa-caret-right" ng-hide="isShow1"></i>
                 <span>处理记录</span>
-                <div ng-hide="isShow1">此处是处理记录</div>
+                <ul ng-hide="isShow1">
+                    <li ng-repeat="item in records">
+                        <p>{{item.performerId}},{{item.claimTime}},{{item.status | performerStatus}},{{item.remark}}<p>
+                    </li>
+                </ul>
             </span>
         </div>
         <div>

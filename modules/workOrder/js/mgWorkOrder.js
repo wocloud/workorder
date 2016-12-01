@@ -51,25 +51,24 @@
     app.controller('MGworkOrder', MGworkOrder);
     MGworkOrder.$inject = ['$scope','ngDialog', '$location', '$log', '$cacheFactory', 'MyWorkOrder.RES', '$state','$stateParams'];
     function MGworkOrder($scope,ngDialog, $location, $log, $cacheFactory, myWorkOrderRES, $state,$stateParams) {
-        console.log($stateParams.id);
         var params={
             linkId:$stateParams.id
         };
         myWorkOrderRES.listById(params).then(function(result) {
-            if (result.data[0].instanceLinkPropertyList.length != 0) {
-                for (var i = 0; i < result.data[0].instanceLinkPropertyList.length; i++) {
-                    if (result.data[0].instanceLinkPropertyList[i].propertyType == "select") {
-                        result.data[0].instanceLinkPropertyList[i].propertyOptions = jQuery.parseJSON(result.data[0].instanceLinkPropertyList[i].propertyOptions);
-                        if(result.data[0].instanceLinkPropertyList[i].propertyValue==null){
-                            result.data[0].instanceLinkPropertyList[i].propertyValue="";
+            var linkProperties = result.data[0].instanceLinkPropertyList;
+            if (linkProperties.length != 0) {
+                for (var i = 0; i < linkProperties.length; i++) {
+                    if (linkProperties[i].propertyType == "select") {
+                        linkProperties[i].propertyOptions = jQuery.parseJSON(linkProperties[i].propertyOptions);
+                        if(linkProperties[i].propertyValue==null){
+                            linkProperties[i].propertyValue="";
                         }
                     }
                 }
-                $scope.mgworkorder = result.data[0];
             }
+            $scope.mgworkorder = result.data[0];
         });
         $scope.disposeToMain = function () {
-            console.log($scope.mgworkorder);
             var properties={};
             properties.id=$scope.mgworkorder.linkId;
             properties.remark=$scope.mgworkorder.remark;

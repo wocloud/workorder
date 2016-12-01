@@ -131,14 +131,7 @@ function DisworkOrder($scope, $location, $log, $cacheFactory, myWorkOrderRES,$st
             //分页按钮事件
             gridApi.pagination.on.paginationChanged($scope, function (newPage, pageSize) {
                 if (getPage) {
-                    $scope.sreach(newPage,pageSize)
-                    /*var params=data();
-                     params.page = newPage;
-                     params.pageSize = pageSize;
-                     myWorkOrderRES.list().then(function (result) {
-                     workOrders = result.content;
-                     getPage(params.page, params.pageSize, result.totalElements);
-                     });*/
+                    $scope.sreach(newPage,pageSize);
                 }
             });
             //行选中事件
@@ -164,11 +157,10 @@ function DisworkOrder($scope, $location, $log, $cacheFactory, myWorkOrderRES,$st
         $scope.search.status=2;
         $scope.search.instanceLinkPropertyList=$scope.properties;
         $scope.search.page=page!=undefined?page:1;
-        /*$scope.search.performerId=$scope.$root.user.userId;*/
         $scope.search.size=pageSize!=undefined?pageSize:10;
-        console.log($scope.search);
         $scope.$root.unWorkCount=3;
-        myWorkOrderRES.list_work(JSON.stringify($scope.search)).then(function (result) {
+        $scope.search.performerId = window.localStorage.getItem("currentLoginId");
+        myWorkOrderRES.list_work($scope.search).then(function (result) {
             var workOrders = result.data.content;  //每次返回结果都是最新的
             getPage($scope.search.page, $scope.search.pageSize, result.data.totalElements,workOrders);
         });
@@ -217,6 +209,5 @@ function DisworkOrder($scope, $location, $log, $cacheFactory, myWorkOrderRES,$st
 
     $scope.createItem = function () {
         $state.go("app.workOrderCreate");
-        /*$location.url("/app/workOrderCreate");*/
     };
 };

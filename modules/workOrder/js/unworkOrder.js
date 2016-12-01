@@ -214,15 +214,11 @@ function UNworkOrder($scope,ngDialog, $location, $log, $cacheFactory, myWorkOrde
         if($scope.search.endTime==""){
             delete $scope.search.endTime;
         }
-        $scope.search.performerId=$scope.search.ownerId;
-        delete $scope.search.ownerId;
         $scope.search.instanceLinkPropertyList=$scope.properties;
         $scope.search.page=page!=undefined?page:1;
-        /*$scope.search.performerId=1;*/
         $scope.search.size=pageSize!=undefined?pageSize:10;
-        console.log($scope.search);
         $scope.$root.unWorkCount=3;
-        myWorkOrderRES.list_unwork(JSON.stringify($scope.search)).then(function (result) {
+        myWorkOrderRES.list_unwork($scope.search).then(function (result) {
             var workOrders = result.data.content;  //每次返回结果都是最新的
             getPage($scope.search.page, $scope.search.pageSize, result.data.totalElements,workOrders);
         });
@@ -266,9 +262,8 @@ function UNworkOrder($scope,ngDialog, $location, $log, $cacheFactory, myWorkOrde
     $scope.signItem = function () {
         var params={
             id:$scope.selectedRows.linkId,
-            performerId:$scope.search.ownerId!=undefined?$scope.search.ownerId:1
-        }
-        console.log(params);
+            performerId:window.localStorage.getItem("currentLoginId")
+        };
         myWorkOrderRES.sign(params).then(function (result) {
             ngDialog.open({ template: 'modules/workOrder/test.html',//模式对话框内容为test.html
                 className:'ngdialog-theme-default ngdialog-theme-dadao',

@@ -56,7 +56,6 @@
             if(!cmd) cmd = this.CMD.ListFlows;
             var params = id == undefined ? {cmd: cmd} : {cmd: cmd, id: id};
             res_workOrderFlow_list.get(params, function (response) {
-                debugger;
                 task.resolve(response.toJSON().data);
             });
             return task.promise;

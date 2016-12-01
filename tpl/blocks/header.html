@@ -175,6 +175,13 @@
 
         <!-- nabar right -->
         <ul class="nav navbar-nav navbar-right">
+          <li ng-controller="CurrentUserCtrl">
+            <label><span>当前登录人</span>:</label>
+            <div style="width:200px;display:inline;">
+              <input type="text" ng-disabled="true" ng-model="loginName"/>
+              <button type="button" ng-click="selectCustomer()">选择</button>
+            </div>
+          </li>
           <li class="dropdown hidden-sm" is-open="lang.isopen" dropdown>
             <a href class="dropdown-toggle" dropdown-toggle>
               {{selectLang}} <b class="caret"></b>

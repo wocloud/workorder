@@ -207,6 +207,7 @@ function ServiceMyWorkOrderRES($q, $resource, fakeMapping) {
         return task.promise;
     };
     this.list_unwork=function(params){
+        params.performerId = window.localStorage.getItem("currentLoginId");
         var task = $q.defer();
         res_listunWorkOrder_list.post(params, function (response) {
             task.resolve(response.toJSON());
@@ -236,6 +237,7 @@ function ServiceMyWorkOrderRES($q, $resource, fakeMapping) {
         return task.promise;
     };
     this.submit = function(params){
+        params.ownerId = window.localStorage.getItem("currentLoginId");
         var task = $q.defer();
         res_submitWorkOrder_list.post(params,function(response){
             task.resolve(response.toJSON());
@@ -257,10 +259,10 @@ function ServiceMyWorkOrderRES($q, $resource, fakeMapping) {
     };
 
     //获取工单实例当前环节流程图
-    this.getProcessPicture = function(workorderId){
+    this.getProcessPicture = function(workorderInstanceId){
         var api_link_workOrderAndFlow = '/wocloud-workorder-restapi/instanceService/getProcessPicture';
         var task = $q.defer();
-        $resource(api_link_workOrderAndFlow).save({"id": workorderId}, function(response){
+        $resource(api_link_workOrderAndFlow).save({"id": workorderInstanceId}, function(response){
             task.resolve(response.toJSON());
         }, function(response){
             task.reject(response);

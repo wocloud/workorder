@@ -177,13 +177,6 @@
                 gridApi.pagination.on.paginationChanged($scope, function (newPage, pageSize) {
                     if (getPage) {
                         $scope.sreach(newPage,pageSize)
-                        /*var params=data();
-                        params.page = newPage;
-                        params.pageSize = pageSize;
-                        myWorkOrderRES.list().then(function (result) {
-                            workOrders = result.content;
-                            getPage(params.page, params.pageSize, result.totalElements);
-                        });*/
                     }
                 });
                 //行选中事件
@@ -226,9 +219,7 @@
                     };
                     $scope.myGridOptions.columnDefs.push(param);
                 }
-
             });
-
         };
         $scope.initBtn=function(code){
             if(code==0){
@@ -236,22 +227,20 @@
             }else{
                 $scope.submitBtn=true;
             }
-        }
+        };
         $scope.sreach = function (page,pageSize) {
-            //$scope.search.ownerId=$scope.$root.user.userId;
             if($scope.search.startTime==""){
                 delete $scope.search.startTime;
             }
             if($scope.search.endTime==""){
                 delete $scope.search.endTime;
             }
-            /*$scope.search.ownerId=1;*/
             $scope.search.instanceLinkPropertyList=$scope.properties;
             $scope.search.page=page!=undefined?page:1;
             $scope.search.size=pageSize!=undefined?pageSize:10;
-            console.log($scope.search);
+            $scope.search.ownerId = window.localStorage.getItem("currentLoginId");
             $scope.$root.unWorkCount=3;
-            myWorkOrderRES.list_work(JSON.stringify($scope.search)).then(function (result) {
+            myWorkOrderRES.list_work($scope.search).then(function (result) {
                 var workOrders = result.data.content;  //每次返回结果都是最新的
                 getPage($scope.search.page, $scope.search.pageSize, result.data.totalElements,workOrders);
             });
@@ -273,7 +262,7 @@
         // callback function
         $scope.callFn = function (item) {
             $scope.rowItem = item;
-        }
+        };
         myWorkOrderRES.list_attr().then(function (result) {
             var a = result.data;
             for (var i = 0; i < a.length; i++) {
@@ -288,13 +277,10 @@
 
         $scope.createItem = function () {
             $state.go("app.workOrderCreate");
-            /*$location.url("/app/workOrderCreate");*/
         };
         $scope.putItem = function () {
-            debugger;
             var para={
-                id:$scope.selectedRows.id,
-                ownerId:$scope.search.ownerId!=undefined?$scope.search.ownerId:1
+                id:$scope.selectedRows.id
             };
             myWorkOrderRES.submit(para).then(function (result1) {
                 $log.info(result1);
@@ -319,21 +305,7 @@
                     }
                 });
             });
-            /*var params={
-                id:$scope.selectedRows.id,
-                owernId:owern.userId
-            };
-            myWorkOrderRES.save(params).then(function (result1) {
-                $log.info(result1);
-                if(result1.code==0){
-                    window.wxc.xcConfirm("提交成功", window.wxc.xcConfirm.typeEnum.success);
-                }else{
-                    window.wxc.xcConfirm("提交失败", window.wxc.xcConfirm.typeEnum.success);
-                }
-            });*/
-
         };
-
     };
 
     /**
@@ -455,8 +427,6 @@
             //create new workOrder
             $scope.saveItem = function () {
                 var params=data();
-                console.log(params);
-                $log.info(params);
                 myWorkOrderRES.save(params).then(function (result) {
                     $log.info(result);
                     ngDialog.open({ template: 'modules/workOrder/test.html',//模式对话框内容为test.html

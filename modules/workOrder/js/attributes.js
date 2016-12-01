@@ -477,7 +477,7 @@ $(function(){
 /***********************
  * validate the unique
  ***********************/
-app.directive('ensureUnique', ['workOrderAttr.RES', function(workOrderAttrRES) {debugger;
+app.directive('ensureUnique', ['workOrderAttr.RES', function(workOrderAttrRES) {
         return {
             require: 'ngModel',
             link: function(scope, element, attrs, c) {
