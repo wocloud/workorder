@@ -59,8 +59,8 @@
             if (linkProperties.length != 0) {
                 for (var i = 0; i < linkProperties.length; i++) {
                     if (linkProperties[i].propertyType == "select") {
-                        linkProperties[i].propertyOptions = jQuery.parseJSON(linkProperties[i].propertyOptions);
-                        if(linkProperties[i].propertyValue==null){
+                        linkProperties[i].propertyOptions = JSON.parse(linkProperties[i].propertyOptions);
+                        if(linkProperties[i].propertyValue==null || !linkProperties[i].propertyValue){
                             linkProperties[i].propertyValue="";
                         }
                     }
@@ -73,7 +73,7 @@
             properties.id=$scope.mgworkorder.linkId;
             properties.remark=$scope.mgworkorder.remark;
             properties.instanceLinkPropertyList=JSON.stringify($scope.mgworkorder.instanceLinkPropertyList);
-            $log.info(properties);
+            $log.info($scope.mgworkorder.instanceLinkPropertyList);
             myWorkOrderRES.dispose(properties).then(function (result) {
                 ngDialog.open({ template: 'modules/workOrder/test.html',//模式对话框内容为test.html
                     className:'ngdialog-theme-default ngdialog-theme-dadao',
@@ -100,7 +100,6 @@
         //return to the main page
         $scope.backToMain = function () {
             history.back();
-            /*$location.url("/app/myWorkOrder");*/
         };
     };
 })()
