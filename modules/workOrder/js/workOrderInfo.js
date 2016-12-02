@@ -45,6 +45,7 @@
     function WorkOrderInfo($scope, $location, $log, $cacheFactory, myWorkOrderRES, $state,$stateParams) {
         $scope.imageSrc = "";
         $scope.records = [];
+        $scope.instanceLinkPropertyList = [];
         $scope.workOrderInstanceId = "";
 
         var params={
@@ -54,6 +55,27 @@
         myWorkOrderRES.listById(params).then(function (result) {
             $scope.workOrder = result.data[0];  //每次返回结果都是最新的
             $scope.workOrderInstanceId = result.data[0].id;
+            angular.forEach($scope.workOrder.instanceLinkPropertyList, function(data, index, array) {
+                var item = {
+                    'name' : data.propertyName,
+                    'value': data.propertyValue
+                };
+                if(data.propertyType=='select') {
+                    var options = JSON.parse(data.propertyOptions);
+                    var value = data.propertyValue;
+                    angular.forEach(options, function(option, i, obj){
+                       if(option.optionValue==data.propertyValue) {
+                           value = option.optionName;
+                           return;
+                       }
+                    });
+                    item = {
+                        'name'  : data.propertyName,
+                        'value' : value
+                    }
+                }
+                $scope.instanceLinkPropertyList.push(item);
+            });
             angular.forEach($scope.workOrder.instanceLinkResponseList, function(data, index, array) {
                if(data.linkType=='task') {
                    $scope.records.push(data);
