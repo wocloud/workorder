@@ -92,10 +92,11 @@ angular.module('app')
                           }]
                   }
               })
-              .state('app.workOrderCreate', {
-                  url: '/workOrderCreate',
-                  controller:'WorkOrderCreateCtrl',
+              .state('app.workOrderCreateOrUpdate', {
+                  url: '/workOrderCreateOrUpdate',
+                  controller:'WorkOrderCreateOrUpdateCtrl',
                   templateUrl: 'modules/workOrder/workOrder.create.html',
+                  params : {'id' : null},
                   resolve: {
                       deps: ['$ocLazyLoad',
                           function( $ocLazyLoad ){
@@ -105,7 +106,6 @@ angular.module('app')
                           }]
                   }
               })
-
               .state('app.lkworkOrder', {
                   url: '/lkworkOrder',
                   controller:'LKworkOrder',

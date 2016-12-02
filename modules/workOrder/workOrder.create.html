@@ -1,10 +1,9 @@
-<div class="bg-light lter b-b wrapper-md" >
-    <h1 class="m-n font-thin h3">我的工单</h1>
-</div>
-<!-- create new workOrder -->
 <div class="panel panel-default" >
-    <div class="panel-heading">
+    <div class="panel-heading" ng-hide="currentValue.ownerName">
         新建工单
+    </div>
+    <div class="panel-heading" ng-show="currentValue.ownerName">
+        编辑工单
     </div>
     <div class="panel-body">
         <form  class="file-brief file-brief-show form-validation" name="createWorkOrder" ng-submit="saveItem()">
@@ -14,9 +13,8 @@
                     <div class="form-group">
                         <label class="col-md-offset-1 col-sm-offset-1 col-md-2 col-sm-2 control-label" style="margin-left:3%;text-align:right;line-height: 37px;">分类</label>
                         <div class="col-md-6 col-sm-6 no-padder-sm"  style="width:80%;">
-                            <select class="form-control"  name="typeCode"  ng-model="workorderType" ng-options="item.typeName for item in typeCodeList" required style="width:70%;display:inline;margin-top: 0px">
-                                <!--<option  value="" ng-if="items.propertyDefaultValue==''" >-请选择-</option>-->
-                                <!--<option ng-repeat="item in typeCodeList" value="{{item.id}}">{{item.typeName}}</option>-->
+                            <select class="form-control"  name="typeCode"  ng-model="currentValue.workorderTypeId" required style="width:70%;display:inline;margin-top: 0px">
+                                <option ng-repeat="item in typeCodeList" value="{{item.id}}">{{item.typeName}}</option>
                             </select>
                             <div  style="display:inline;color:red;">
                                 <span  class="no-null" style="margin-left:2%;">*</span>
@@ -34,7 +32,7 @@
                     <div class="form-group">
                         <label class="col-md-offset-1 col-sm-offset-1 col-md-2 col-sm-2 control-label" style="margin-left:3%;text-align:right;line-height: 37px;">主题</label>
                         <div class="col-md-6 col-sm-6 no-padder-sm"  style="width:80%;">
-                            <input class="form-control" type="text"  name="title" ng-model="createValue.title" style="width:70%;display:inline;margin-top: 0px"  required/>
+                            <input class="form-control" type="text"  name="title" ng-model="currentValue.title" style="width:70%;display:inline;margin-top: 0px"  required/>
                             <div  style="display:inline;color:red;">
                                 <span class="no-null" style="margin-left: 2%;">*</span>
                                 <div ng-messages="createWorkOrder.title.$error" ng-if="createWorkOrder.title.$touched" style="display:inline;">
@@ -51,8 +49,7 @@
                     <div class="form-group">
                         <label class="col-md-offset-1 col-sm-offset-1 col-md-2 col-sm-2 control-label" style="margin-left:3%;text-align:right;line-height: 37px;">优先级</label>
                         <div class="col-md-6 col-sm-6 no-padder-sm"  style="width:80%;">
-                            <select class="form-control"  name="priority" ng-model="createValue.priority" required style="width:70%;display:inline;margin-top: 0px">
-                                <!--<option  value="" ng-if="items.propertyDefaultValue==''" >-请选择-</option>-->
+                            <select class="form-control"  name="priority" ng-model="currentValue.priority" required style="width:70%;display:inline;margin-top: 0px">
                                 <option ng-repeat="item in priorityList" value="{{item.priorityValue}}">{{item.priorityName}}</option>
                             </select>
                             <div  style="display:inline;color:red;">
@@ -71,8 +68,7 @@
                     <div class="form-group">
                         <label class="col-md-offset-1 col-sm-offset-1 col-md-2 col-sm-2 control-label" style="margin-left:3%;text-align:right;line-height: 37px;">问题分类</label>
                         <div class="col-md-6 col-sm-6 no-padder-sm"  style="width:80%;">
-                            <select class="form-control"  name="productType" ng-model="createValue.productType" required style="width:70%;display:inline;margin-top: 0px">
-                                <!--<option  value="" ng-if="items.propertyDefaultValue==''" >-请选择-</option>-->
+                            <select class="form-control"  name="productType" ng-model="currentValue.productType" required style="width:70%;display:inline;margin-top: 0px">
                                 <option ng-repeat="item in productTypeList" value="{{item.productType}}">{{item.productName}}</option>
                             </select>
                             <div  style="display:inline;color:red;">
@@ -86,12 +82,12 @@
                 </div>
             </div>
             <!--创建人-->
-            <div class="form-group ">
+            <div class="form-group" ng-hide="currentValue.ownerName">
                 <div  class="col-sm-6 m-t-xs m-b-xs no-padder ">
                     <div class="form-group">
                         <label class="col-md-offset-1 col-sm-offset-1 col-md-2 col-sm-2 control-label" style="margin-left:3%;text-align:right;line-height: 37px;">创建人</label>
                         <div class="col-md-6 col-sm-6 no-padder-sm"  style="width:80%;">
-                            <input class="form-control" ng-disabled="true" type="text"  name="ownerName" ng-model="createValue.ownerName" style="width:60%;display:inline;margin-top: 0px"  required/>
+                            <input class="form-control" ng-disabled="true" type="text"  name="ownerName" ng-model="currentValue.ownerName" style="width:60%;display:inline;margin-top: 0px"  required/>
                             <button type="button" ng-click="selectCustomer()">选择</button>
                             <div  style="display:inline;color:red;">
                                 <span class="no-null" style="margin-left: 2%;">*</span>
@@ -109,7 +105,7 @@
                     <div class="form-group">
                         <label class="col-md-offset-1 col-sm-offset-1 col-md-2 col-sm-2 control-label" style="margin-left:3%;text-align:right;line-height: 37px;">联系人</label>
                         <div class="col-md-6 col-sm-6 no-padder-sm"  style="width:80%;">
-                            <input class="form-control" type="text"  name="contactName" ng-model="createValue.contactName" style="width:70%;display:inline;margin-top: 0px"  required/>
+                            <input class="form-control" type="text"  name="contactName" ng-model="currentValue.contactName" style="width:70%;display:inline;margin-top: 0px"  required/>
                             <div  style="display:inline;color:red;">
                                 <span class="no-null" style="margin-left: 2%;">*</span>
                                 <div ng-messages="createWorkOrder.contactName.$error" ng-if="createWorkOrder.contactName.$touched" style="display:inline;">
@@ -126,7 +122,7 @@
                     <div class="form-group">
                         <label class="col-md-offset-1 col-sm-offset-1 col-md-2 col-sm-2 control-label" style="margin-left:3%;text-align:right;line-height: 37px;">联系电话</label>
                         <div class="col-md-6 col-sm-6 no-padder-sm"  style="width:80%;">
-                            <input class="form-control" type="text"  name="contactPhone" ng-model="createValue.contactPhone" style="width:70%;display:inline;margin-top: 0px"  validatephone required/>
+                            <input class="form-control" type="text"  name="contactPhone" ng-model="currentValue.contactPhone" style="width:70%;display:inline;margin-top: 0px"  validatephone required/>
                             <div  style="display:inline;color:red;">
                                 <span class="no-null" style="margin-left: 2%;">*</span>
                                 <div ng-messages="createWorkOrder.contactPhone.$error" ng-if="createWorkOrder.contactPhone.$touched" style="display:inline;">
@@ -144,7 +140,7 @@
                     <div class="form-group">
                         <label class="col-md-offset-1 col-sm-offset-1 col-md-1 col-sm-2 control-label" style="margin-left:1.333333%;text-align:right;line-height: 37px;">描述</label>
                         <div class="col-md-6 col-sm-6 no-padder-sm"  style="width:90%;">
-                            <textarea class="form-control" name="description" ng-model="createValue.description"  required style="width:87.2%;display:inline;margin-left: 2px;margin-top: 0px"></textarea>
+                            <textarea class="form-control" name="description" ng-model="currentValue.description"  required style="width:87.2%;display:inline;margin-left: 2px;margin-top: 0px"></textarea>
                             <div  style="display:inline;color:red;">
                                 <span class="no-null" style="margin-left: 1%;">*</span>
                                 <div ng-messages="createWorkOrder.description.$error" ng-if="createWorkOrder.description.$touched" style="display:inline;">
