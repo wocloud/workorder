@@ -4,8 +4,6 @@
  */
 (function(){
 
-    window.localStorage.setItem("currentLoginId", 13);
-
     /**
      * flow status filter
      * @returns {Function}
@@ -458,8 +456,6 @@
         //create new workOrder
         $scope.saveItem = function () {
             var params=data();
-            console.log(params);
-            return;
             myWorkOrderRES.save(params).then(function (result) {
                 $log.info(result);
                 ngDialog.open({ template: 'modules/workOrder/test.html',//模式对话框内容为test.html

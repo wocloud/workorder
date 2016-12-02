@@ -137,7 +137,7 @@ $(function(){
                 return;
             }
             var key = $scope.selectedRows[0].propertyKey;
-            $location.url("/app/workOrderAttrCreateOrUpdate?key="+key+"&flag=true");
+            $location.url("/app/workOrderAttrCreateOrUpdate?key="+key);
         };
 
         //delete an attribute
@@ -185,8 +185,6 @@ $(function(){
     AttrCreateOrUpdateViewCtrl.$inject = ['$scope', '$location', '$stateParams', '$log', '$cacheFactory', 'workOrderAttr.RES'];
     function AttrCreateOrUpdateViewCtrl($scope, $location, $stateParams, $log, $cacheFactory, workOrderAttrRES){
         var key = $stateParams.key;
-        $scope.flag = $stateParams.flag;
-
         $scope.PropertyType = workOrderAttrRES.baseEnum().propertyType;
 
         if ($scope.attr == undefined || $scope.attr == null){
@@ -226,7 +224,6 @@ $(function(){
                     }
                 });
             } else if($scope.createOrUpdate=="U"){
-                $log.info("update");
                 workOrderAttrRES.create($scope.attr).then(function(result){
                     if(result.code==0){
                         $scope.backToMain();
@@ -292,6 +289,31 @@ $(function(){
         renderAttrLinkedView(key, $scope, $log, workOrderAttrRES);
     }
 
+    /**
+     * workOrder attributes create controller
+     */
+    app.controller('WorkOrderAttrInfoViewCtrl', AttrInfoViewCtrl);
+    AttrInfoViewCtrl.$inject = ['$scope', '$location', '$stateParams', 'workOrderAttr.RES'];
+    function AttrInfoViewCtrl($scope, $location, $stateParams, workOrderAttrRES){
+        var key = $stateParams.key;
+        $scope.attr = {};
+        if(key!=undefined && key!=null && key!=''){
+            workOrderAttrRES.list({"propertyKey":key}).then(function(result){
+                $scope.attr = result.content[0];
+                if($scope.attr.propertyOptions!=""){
+                    $scope.optionProperties = JSON.parse($scope.attr.propertyOptions);
+                }
+            }, function(e){
+                alert(e);
+            });
+        }
+
+        //return to the main page
+        $scope.backToMain = function () {
+            $location.url("/app/workOrderAttrs");
+        };
+    }
+
     /*************************
      * render view
      ************************/
@@ -305,7 +327,7 @@ $(function(){
                 {
                     field: 'propertyKey',
                     displayName: 'key',
-                    cellTemplate:'<div class="ui-grid-cell-contents"><a class="text-info" ui-sref="app.workOrderAttrCreateOrUpdate({key:row.entity.propertyKey})">{{row.entity.propertyKey}}</a></div>'
+                    cellTemplate:'<div class="ui-grid-cell-contents"><a class="text-info" ui-sref="app.workOrderAttrInfo({key:row.entity.propertyKey})">{{row.entity.propertyKey}}</a></div>'
                 },
                 {
                     field: "propertyName",

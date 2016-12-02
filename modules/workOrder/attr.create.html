@@ -3,11 +3,8 @@
     <div class="panel-heading" ng-show="createOrUpdate=='C'">
         新建自定义属性
     </div>
-    <div class="panel-heading" ng-show="createOrUpdate=='U' && flag">
+    <div class="panel-heading" ng-show="createOrUpdate=='U'">
         编辑自定义属性
-    </div>
-    <div class="panel-heading" ng-show="createOrUpdate=='U' && !flag">
-        自定义属性详情
     </div>
     <div class="panel-body">
         <form class="form-horizontal form-validation" name="attrForm" novalidate ng-submit="saveItem(attrForm.$valid)">
@@ -74,9 +71,8 @@
             <div class="line line-dashed b-b line-lg pull-in"></div>
             <div class="form-group">
                 <div class="col-sm-4 col-sm-offset-2">
-                    <button type="button" class="btn btn-default" ng-show="createOrUpdate=='C' || flag" ng-click="backToMain()">取消</button>
-                    <button type="button" class="btn btn-primary" ng-show="createOrUpdate=='U' && !flag" ng-click="backToMain()">返回</button>
-                    <button type="submit" class="btn btn-primary" ng-show="createOrUpdate=='C' || flag" ng-disabled="attrForm.$invalid">保存</button>
+                    <button type="button" class="btn btn-default" ng-click="backToMain()">取消</button>
+                    <button type="submit" class="btn btn-primary" ng-disabled="attrForm.$invalid">保存</button>
                 </div>
             </div>
         </form>
