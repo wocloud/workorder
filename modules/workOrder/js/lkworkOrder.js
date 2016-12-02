@@ -48,7 +48,7 @@ function LKworkOrder($scope, $location, $log, $cacheFactory, myWorkOrderRES,$sta
             {
                 field: 'id',
                 displayName: 'ID',
-                cellTemplate: '<div class="ui-grid-cell-contents ng-binding ng-scope"><a class="text-info" ui-sref="app.workOrderInfo({id:row.entity.id})">{{row.entity.linkId}}</a></div>'
+                cellTemplate: '<div class="ui-grid-cell-contents ng-binding ng-scope"><a class="text-info" ui-sref="app.workOrderInfo({id:row.entity.linkId})">{{row.entity.id}}</a></div>'
             },
             {
                 field: "workorderType",

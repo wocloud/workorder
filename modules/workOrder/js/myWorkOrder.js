@@ -90,7 +90,6 @@
         $scope.submitBtn=true;
         $scope.search={};
         $scope.yel=true;
-        var owern=$scope.$root.user;
         var index = 0;//默认选中行，下标置为0
         $scope.myGridOptions = {
             columnDefs: [
@@ -239,6 +238,7 @@
             $scope.search.page=page!=undefined?page:1;
             $scope.search.size=pageSize!=undefined?pageSize:10;
             $scope.search.ownerId = window.localStorage.getItem("currentLoginId");
+            $scope.search.linkType = "start";
             $scope.$root.unWorkCount=3;
             myWorkOrderRES.list_work($scope.search).then(function (result) {
                 var workOrders = result.data.content;  //每次返回结果都是最新的

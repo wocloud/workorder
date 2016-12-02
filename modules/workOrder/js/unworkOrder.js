@@ -144,13 +144,6 @@ function UNworkOrder($scope,ngDialog, $location, $log, $cacheFactory, myWorkOrde
             gridApi.pagination.on.paginationChanged($scope, function (newPage, pageSize) {
                 if (getPage) {
                     $scope.sreach(newPage,pageSize)
-                    /*var params=data();
-                     params.page = newPage;
-                     params.pageSize = pageSize;
-                     myWorkOrderRES.list().then(function (result) {
-                     workOrders = result.content;
-                     getPage(params.page, params.pageSize, result.totalElements);
-                     });*/
                 }
             });
             //行选中事件
@@ -190,23 +183,6 @@ function UNworkOrder($scope,ngDialog, $location, $log, $cacheFactory, myWorkOrde
         $scope.myGridOptions.totalItems = totalSize;
         $scope.myGridOptions.data = workOrders;
     };
-    /*function data(){
-        var params = {};
-        if($scope.properties!=undefined&&$scope.properties.length>0) {
-            for (var i = 0; i < $scope.properties.length; i++) {
-                *//*var key = $scope.properties[i].propertyKey;
-                var value = $scope.properties[i].sreachValue;*//*
-                *//*var str = "{" + key + ":" + "value" + "}";
-                var param = eval('(' + str + ')');
-                for (var r in param) {
-                    eval("params." + r + "=param." + r);
-                }*//*
-            }
-        }
-        params.sreachStatus=$scope.sreachStatus;
-
-        return params;
-    }*/
     $scope.sreach = function (page,pageSize) {
         if($scope.search.startTime==""){
             delete $scope.search.startTime;
@@ -257,7 +233,6 @@ function UNworkOrder($scope,ngDialog, $location, $log, $cacheFactory, myWorkOrde
 
     $scope.disposeItem = function () {
         $state.go("app.mgworkOrder",{id:$scope.selectedRows.linkId});
-        /*$location.url("/app/workOrderCreate");*/
     };
     $scope.signItem = function () {
         var params={

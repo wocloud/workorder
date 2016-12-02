@@ -29,12 +29,14 @@
     app.filter('performerStatus', performerStatus);
     function performerStatus (){
         return function(input){
+            if(input==null ||input == undefined){
+                return "已受理";
+            }
             if ( input == 1) {
                 return  "受理中";
             } else if(input == 2) {
                 return "已受理";
-            }
-            else {
+            } else {
                 return "未受理";
             }
         };

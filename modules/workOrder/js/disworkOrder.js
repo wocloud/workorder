@@ -58,6 +58,7 @@ function DisworkOrder($scope, $location, $log, $cacheFactory, myWorkOrderRES,$st
             {
                 field: 'id',
                 displayName: 'ID',
+                cellTemplate: '<div class="ui-grid-cell-contents ng-binding ng-scope"><a class="text-info" ui-sref="app.workOrderInfo({id:row.entity.linkId})">{{row.entity.id}}</a></div>'
             },
             {
                 field: "workorderType",
