@@ -311,8 +311,8 @@
      * myWorkOrder list controller defined
      */
     app.controller('WorkOrderCreateOrUpdateCtrl', CreateOrUpdateViewCtrl);
-    CreateOrUpdateViewCtrl.$inject = ['$rootScope','ngDialog','$scope', '$location', '$log', '$cacheFactory', 'MyWorkOrder.RES', '$state', '$stateParams', 'toaster'];
-    function CreateOrUpdateViewCtrl($rootScope,ngDialog,$scope, $location, $log, $cacheFactory, myWorkOrderRES, $state, $stateParams, toaster) {
+    CreateOrUpdateViewCtrl.$inject = ['ngDialog','$scope', '$location', '$log', '$cacheFactory', 'MyWorkOrder.RES', '$state', '$stateParams', 'toaster'];
+    function CreateOrUpdateViewCtrl(ngDialog,$scope, $location, $log, $cacheFactory, myWorkOrderRES, $state, $stateParams, toaster) {
         var id = $stateParams.id;
         $scope.currentValue = {};
         if(!id) {

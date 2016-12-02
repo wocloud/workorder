@@ -252,7 +252,7 @@ $(function(){
                 if(result.code=="0"){
                     toaster.pop('info', "提示", "工单绑定流程成功!");
                 } else {
-                    toaster.pop('error', "提示", "工单绑定流程失败!");
+                    toaster.pop('error', "提示", result.msg);
                 }
             }, function () {
                 $log.info('Modal dismissed at: ' + new Date());
@@ -261,25 +261,42 @@ $(function(){
 
         // unbind
         $scope.unbindWithProcess = function () {
-            var modalInstance = $modal.open({
-                backdrop: false,
-                templateUrl: 'unbindWithProcessTemplate',
-                controller: 'unbindWithProcessViewCtrl',
-                resolve: {
-                    params: function () {
-                        return $scope.selectedItem;
-                    }
-                }
-            });
-            modalInstance.result.then(function(result) {
-                $scope.loadData();
-                if(result.code=="0"){
-                    toaster.pop('info', "提示", "工单解绑流程成功!");
+            $scope.relationId = -1;
+            $scope.processDeploymentId = "";
+
+            workOrderTypeRES.queryRelation({"workorderTypeId": $scope.selectedItem.id}).then(function (result) {
+                if(result.content && result.content.length > 0){
+                    $scope.relationId = result.content[0].id;
+                    $scope.processDeploymentId = result.content[0].processDeploymentId;
+
+                    var modalInstance = $modal.open({
+                        backdrop: false,
+                        templateUrl: 'unbindWithProcessTemplate',
+                        controller: 'unbindWithProcessViewCtrl',
+                        resolve: {
+                            params: function () {
+                                var params = {
+                                    "relationId" : $scope.relationId,
+                                    "processDeploymentId" : $scope.processDeploymentId
+                                };
+                                return params;
+                            }
+                        }
+                    });
+                    modalInstance.result.then(function(result) {
+                        $scope.loadData();
+                        if(result.code=="0"){
+                            toaster.pop('info', "提示", "工单解绑流程成功!");
+                        } else {
+                            toaster.pop('error', "提示", result.msg);
+                        }
+                    }, function () {
+                        $log.info('Modal dismissed at: ' + new Date());
+                    });
+
                 } else {
-                    toaster.pop('error', "提示", "工单解绑流程失败!");
+                    toaster.pop("info", "提示", "该工单还没有绑定任何流程!");
                 }
-            }, function () {
-                $log.info('Modal dismissed at: ' + new Date());
             });
         };
     }
@@ -433,21 +450,13 @@ $(function(){
      * workOrder unbind With Process controller
      */
     app.controller('unbindWithProcessViewCtrl', UnbindWithProcessViewCtrl);
-    UnbindWithProcessViewCtrl.$inject = ['$scope', '$modalInstance', 'params', 'workOrderType.RES'];
-    function UnbindWithProcessViewCtrl($scope, $modalInstance, params, workOrderTypeRES) {
-        $scope.relationId = -1;
-        $scope.processDeploymentId = "";
-
-        workOrderTypeRES.queryRelation({"workorderTypeId": params.id}).then(function (result) {
-            if(result.content && result.content.length > 0){
-                $scope.relationId = result.content[0].id;
-                $scope.processDeploymentId = result.content[0].processDeploymentId;
-            }
-        });
-
+    UnbindWithProcessViewCtrl.$inject = ['$rootScope', '$scope', '$modalInstance', 'params', 'workOrderType.RES'];
+    function UnbindWithProcessViewCtrl($rootScope, $scope, $modalInstance, params, workOrderTypeRES) {
+        $scope.relationId = params.relationId;
+        $scope.processDeploymentId = params.processDeploymentId;
         //unbind
         $scope.unbindWorkorderTypeAndProcess = function () {
-            workOrderTypeRES.unbind({"id": $scope.relationId}).then(function (result) {
+            workOrderTypeRES.unbind({"id": params.relationId}).then(function (result) {
                 $modalInstance.close(result);
             });
         };
