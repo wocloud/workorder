@@ -315,11 +315,6 @@
     function CreateOrUpdateViewCtrl(ngDialog,$scope, $location, $log, $cacheFactory, myWorkOrderRES, $state, $stateParams, toaster) {
         var id = $stateParams.id;
         $scope.currentValue = {};
-        if(!id) {
-            toaster.pop('error', "错误", "工单查询失败,请稍后再试!");
-            return;
-        }
-
         var parameters = {
             "page"      : 1,
             "size"      : 10,
