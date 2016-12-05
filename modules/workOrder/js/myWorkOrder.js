@@ -176,7 +176,7 @@
                 //分页按钮事件
                 gridApi.pagination.on.paginationChanged($scope, function (newPage, pageSize) {
                     if (getPage) {
-                        $scope.sreach(newPage,pageSize)
+                        $scope.queryByCondition(newPage,pageSize)
                     }
                 });
                 //行选中事件
@@ -288,7 +288,7 @@
                         }
                         $scope.ok = function(){
                             $scope.closeThisDialog(); //关闭弹窗
-                            $scope.sreach();
+                            $scope.queryByCondition();
                         };
                         $scope.close=function(){
                             $scope.closeThisDialog();
@@ -381,12 +381,13 @@
                 $scope.currentValue.properties=JSON.stringify($scope.properties);
             }
             $scope.currentValue.ownerId = window.localStorage.getItem("currentLoginId");
-            $scope.currentValue.contactId=window.localStorage.getItem("currentLoginId");/*owner.userId*/
+            $scope.currentValue.contactId=window.localStorage.getIcreateTimetem("currentLoginId");/*owner.userId*/
             $scope.currentValue.typeId = $scope.workorderType;
             $scope.currentValue.priority = $scope.priority;
             $scope.currentValue.productType = $scope.productType;
             delete $scope.currentValue.workorderType;
             delete $scope.currentValue.workorderTypeId;
+            delete $scope.currentValue.createTime;
             return $scope.currentValue;
         }
 
@@ -417,7 +418,6 @@
                         $scope.ok = function(){
                             $scope.closeThisDialog();
                             myWorkOrderRES.submit($scope.paramss).then(function (result1) {
-                                $log.info(result1);
                                 ngDialog.open({ template: 'modules/workOrder/test.html',//模式对话框内容为test.html
                                     className:'ngdialog-theme-default ngdialog-theme-dadao',
                                     controller:function($scope){

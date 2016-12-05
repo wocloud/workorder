@@ -1,20 +1,30 @@
-<div class="wrapper-md bg-light" ng-controller="WorkOrderAttrsViewCtrl">
-    <!-- tip pop -->
-    <toaster-container></toaster-container>
-    <!--- attributes -->
-    <div class="clearfix m-b">
-        <button class="btn m-b-xs btn-sm btn-primary btn-addon" ng-click="createItem()">
-            <i class="fa fa-plus"></i>新建属性</button>
-        <button class="btn m-b-xs btn-sm btn-primary btn-addon" ng-click="updateItem()">
-            <i class="fa fa-plus"></i>编辑属性</button>
-        <button class="btn m-b-xs btn-sm btn-primary btn-addon" ng-click="deleteItem()">
-            <i class="fa fa-remove"></i>删除属性</button>
-    </div>
-    <div class="w-auto-xs bg-light dk bg-auto b-l">
-        <div ui-grid="attrGridOptions" style="width: 100%; height: 100%;"
-             ui-grid-pagination ui-grid-selection ui-grid-resize-columns ui-grid-auto-resize>
-        </div>
-    </div>
+<div class="pane">
+	<div class="panel panel-default" ng-controller="WorkOrderAttrsViewCtrl">
+	    <!-- tip pop -->
+	    <toaster-container></toaster-container>
+	    <!--- attributes -->
+	    <div style="border: 1px solid #ccc;margin: 17px 0;padding:10px 17px;">
+		        <div class="row no-padder m-n">
+		            <div class="col-sm-6 m-t-xs m-b-xs no-padder " >
+	                    <button class="operate-btn on" ng-click="createItem()">
+	                        <i class="fa fa-plus"></i>
+	                        <span>新建属性</span>
+	                    </button>
+	                    <button class="operate-btn on" ng-click="updateItem()">
+	                        <i class="fa fa-plus"></i>
+	                        <span>编辑属性</span>
+	                    </button>
+	                    <button class="operate-btn on" ng-click="deleteItem()">
+	                        <i class="fa fa-remove"></i>
+	                        <span>删除属性</span>
+	                    </button>
+		            </div>
+		        </div>
+		        <div ui-grid="attrGridOptions" style="width: 100%; height: 400px;"
+	             ui-grid-pagination ui-grid-selection ui-grid-resize-columns ui-grid-auto-resize>
+	        	</div>
+	      </div>
+	</div>
 </div>
 <script type="text/ng-template" id="deleteTemplate">
     <div class="modal-header">
