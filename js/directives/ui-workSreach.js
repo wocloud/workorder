@@ -56,6 +56,21 @@ at.directive("myWorkOrderSreach", ['ngDialog','$q','$resource',function (ngDialo
                         '</div>'+
                     '</div>' +
                 '</div>' +
+            '<div class="form-group" style="margin-bottom:40px;">'+
+                '<label class="col-md-offset-1 col-sm-offset-1 col-md-3 col-sm-2 control-label">' +
+                    '<span>工单状态</span>:' +
+                '</label>' +
+                '<div class="col-md-6 col-sm-6 no-padder-sm" style="margin-bottom: 10px;">' +
+                    '<div  style="width:300px">'+
+                        '<select class="form-control"  ng-model="search.workorderStatus" ng-selected="$index==0" style="height:30px;width:300px;">' +
+                            '<option value="">全部</option>' +
+                            '<option value="0">已保存</option>' +
+                            '<option value="1">已提交</option>' +
+                            '<option value="2">处理完成</option>' +
+                        '</select>' +
+                    '</div>'+
+                '</div>' +
+            '</div>' +
                 '<div class="form-group" style="margin-bottom:40px;">'+
                     '<label class="col-md-offset-1 col-sm-offset-1 col-md-3 col-sm-2 control-label">' +
                         '<span>问题分类</span>:' +
