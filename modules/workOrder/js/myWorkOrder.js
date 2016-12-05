@@ -316,15 +316,21 @@
 
         myWorkOrderRES.list_typeCode().then(function (result) {
             $scope.typeCodeList = result.data;
-            $scope.workorderType=result.data[0].id;
+            if(!$scope.workorderType) {
+                $scope.workorderType=result.data[0].id;
+            }
         });
         myWorkOrderRES.list_priority().then(function (result) {
             $scope.priorityList = result.data;
-            $scope.currentValue.priority=result.data[0].priorityValue;
+            if(!$scope.priority) {
+                $scope.priority=result.data[0].priorityValue;
+            }
         });
         myWorkOrderRES.list_ProductType().then(function (result) {
             $scope.productTypeList = result.data;
-            $scope.currentValue.productType=result.data[0].productType;
+            if(!$scope.productType) {
+                $scope.productType=result.data[0].productType;
+            }
         });
 
         if($scope.id) {
@@ -338,8 +344,14 @@
                 var workOrders = result.data.content;
                 if(workOrders && workOrders.length > 0) {
                     $scope.currentValue = workOrders[0];
-                    if($scope.currentValue.workorderTypeId==undefined || $scope.currentValue.workorderTypeId==null) {
-                        $scope.workorderType.id = $scope.currentValue.workorderTypeId;
+                    if($scope.currentValue.workorderTypeId) {
+                        $scope.workorderType = $scope.currentValue.workorderTypeId;
+                    }
+                    if($scope.currentValue.priority) {
+                        $scope.priority = $scope.currentValue.priority;
+                    }
+                    if($scope.currentValue.productType) {
+                        $scope.productType = $scope.currentValue.productType;
                     }
                 } else {
                     toaster.pop('error', "错误", "工单查询失败,请稍后再试!");
@@ -379,6 +391,8 @@
             $scope.currentValue.ownerId = window.localStorage.getItem("currentLoginId");
             $scope.currentValue.contactId=window.localStorage.getItem("currentLoginId");/*owner.userId*/
             $scope.currentValue.typeId = $scope.workorderType;
+            $scope.currentValue.priority = $scope.priority;
+            $scope.currentValue.productType = $scope.productType;
             delete $scope.currentValue.workorderType;
             delete $scope.currentValue.workorderTypeId;
             return $scope.currentValue;

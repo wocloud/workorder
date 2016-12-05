@@ -146,8 +146,8 @@
             columnDefs: [
                 {
                     field: 'id',
-                    displayName: 'ID',
-                    cellTemplate:'<div class="ui-grid-cell-contents ng-binding ng-scope"><a class="text-info" ui-sref="app.modeler({modelId:row.entity.id})">{{row.entity.id}}</a></div>'
+                    displayName: 'ID'
+                    //cellTemplate:'<div class="ui-grid-cell-contents ng-binding ng-scope"><a class="text-info" ui-sref="app.modeler({modelId:row.entity.id})">{{row.entity.id}}</a></div>'
                 },
                 {
                     field: "name",
