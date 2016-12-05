@@ -58,7 +58,7 @@ function DisworkOrder($scope, $location, $log, $cacheFactory, myWorkOrderRES,$st
             {
                 field: 'id',
                 displayName: 'ID',
-                cellTemplate: '<div class="ui-grid-cell-contents ng-binding ng-scope"><a class="text-info" ui-sref="app.workOrderInfo({id:row.entity.linkId})">{{row.entity.id}}</a></div>'
+                cellTemplate: '<div class="ui-grid-cell-contents ng-binding ng-scope"><a class="text-info" ui-sref="app.workOrderInfo({id:row.entity.linkId, flag:\'processed\'})">{{row.entity.id}}</a></div>'
             },
             {
                 field: "workorderType",
@@ -155,11 +155,9 @@ function DisworkOrder($scope, $location, $log, $cacheFactory, myWorkOrderRES,$st
         if($scope.search.endTime==""){
             delete $scope.search.endTime;
         }
-        $scope.search.status=2;
         $scope.search.instanceLinkPropertyList=$scope.properties;
         $scope.search.page=page!=undefined?page:1;
         $scope.search.size=pageSize!=undefined?pageSize:10;
-        $scope.$root.unWorkCount=3;
         $scope.search.performerId = window.localStorage.getItem("currentLoginId");
         myWorkOrderRES.list_work($scope.search).then(function (result) {
             var workOrders = result.data.content;  //每次返回结果都是最新的
@@ -192,7 +190,7 @@ function DisworkOrder($scope, $location, $log, $cacheFactory, myWorkOrderRES,$st
     // callback function
     $scope.callFn = function (item) {
         $scope.rowItem = item;
-    }
+    };
     $scope.propertieslist = [];
     myWorkOrderRES.list_attr().then(function (result) {
         var a = result.data;

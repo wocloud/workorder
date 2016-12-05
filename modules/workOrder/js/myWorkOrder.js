@@ -86,8 +86,8 @@
      * myWorkOrder list controller defined
      */
     app.controller('MyWorkOrderCtrl', MyWorkOrderViewCtrl);
-    MyWorkOrderViewCtrl.$inject = ['$scope', 'ngDialog','$location', '$log', '$cacheFactory', 'MyWorkOrder.RES', '$state', '$modal'];
-    function MyWorkOrderViewCtrl($scope, ngDialog,$location, $log, $cacheFactory, myWorkOrderRES, $state, $modal) {
+    MyWorkOrderViewCtrl.$inject = ['$scope', 'ngDialog', '$log', 'MyWorkOrder.RES', '$state'];
+    function MyWorkOrderViewCtrl($scope, ngDialog, $log, myWorkOrderRES, $state) {
         $scope.status;
         $scope.search={};
         $scope.yel=true;
@@ -97,7 +97,7 @@
                 {
                     field: 'id',
                     displayName: 'ID',
-                    cellTemplate: '<div class="ui-grid-cell-contents ng-binding ng-scope"><a class="text-info" ui-sref="app.workOrderInfo({id:row.entity.linkId})">{{row.entity.id}}</a></div>'
+                    cellTemplate: '<div class="ui-grid-cell-contents ng-binding ng-scope"><a class="text-info" ui-sref="app.workOrderInfo({id:row.entity.linkId, flag:\'my\'})">{{row.entity.id}}</a></div>'
                 },
                 {
                     field: "workorderType",
@@ -232,8 +232,6 @@
             $scope.search.page=page!=undefined?page:1;
             $scope.search.size=pageSize!=undefined?pageSize:10;
             $scope.search.ownerId = window.localStorage.getItem("currentLoginId");
-            $scope.search.linkType = "start";
-            $scope.$root.unWorkCount=3;
             myWorkOrderRES.list_work($scope.search).then(function (result) {
                 var workOrders = result.data.content;  //每次返回结果都是最新的
                 getPage($scope.search.page, $scope.search.pageSize, result.data.totalElements,workOrders);
@@ -311,126 +309,63 @@
      * myWorkOrder list controller defined
      */
     app.controller('WorkOrderCreateOrUpdateCtrl', CreateOrUpdateViewCtrl);
-    CreateOrUpdateViewCtrl.$inject = ['ngDialog','$scope', '$location', '$log', '$cacheFactory', 'MyWorkOrder.RES', '$state', '$stateParams', 'toaster'];
-    function CreateOrUpdateViewCtrl(ngDialog,$scope, $location, $log, $cacheFactory, myWorkOrderRES, $state, $stateParams, toaster) {
-        var id = $stateParams.id;
+    CreateOrUpdateViewCtrl.$inject = ['ngDialog','$scope', '$log', 'MyWorkOrder.RES', '$state', '$stateParams', 'toaster'];
+    function CreateOrUpdateViewCtrl(ngDialog,$scope, $log, myWorkOrderRES, $state, $stateParams, toaster) {
+        $scope.id = $stateParams.id;
         $scope.currentValue = {};
-        var parameters = {
-            "page"      : 1,
-            "size"      : 10,
-            "ownerId"   : window.localStorage.getItem("currentLoginId"),
-            "linkType"  : "start",
-            "id"        : id
-        };
-        myWorkOrderRES.list_work(parameters).then(function (result) {
-            var workOrders = result.data.content;
-            if(workOrders && workOrders.length > 0) {
-                $scope.currentValue = workOrders[0];
-            } else {
-                toaster.pop('error', "错误", "工单查询失败,请稍后再试!");
-            }
-        });
 
-        myWorkOrderRES.list_priority().then(function (result) {
-            $scope.priorityList = result.data;  //每次返回结果都是最新的
-            if(!$scope.currentValue.priority) {
-                $scope.currentValue.priority=result.data[0].priorityValue;
-            }
-        });
         myWorkOrderRES.list_typeCode().then(function (result) {
-            $scope.typeCodeList = result.data;  //每次返回结果都是最新的
-            if(!$scope.currentValue.workorderTypeId) {
-                $scope.currentValue.workorderTypeId=result.data[0].id;
-            }
+            $scope.typeCodeList = result.data;
+            $scope.workorderType=result.data[0].id;
+        });
+        myWorkOrderRES.list_priority().then(function (result) {
+            $scope.priorityList = result.data;
+            $scope.currentValue.priority=result.data[0].priorityValue;
         });
         myWorkOrderRES.list_ProductType().then(function (result) {
-            $scope.productTypeList = result.data;  //每次返回结果都是最新的
-            if(!$scope.currentValue.productType) {
-                $scope.currentValue.productType=result.data[0].productType;
+            $scope.productTypeList = result.data;
+            $scope.currentValue.productType=result.data[0].productType;
+        });
+
+        if($scope.id) {
+            var parameters = {
+                "page"      : 1,
+                "size"      : 10,
+                "ownerId"   : window.localStorage.getItem("currentLoginId"),
+                "id"        : $scope.id
+            };
+            myWorkOrderRES.list_work(parameters).then(function (result) {
+                var workOrders = result.data.content;
+                if(workOrders && workOrders.length > 0) {
+                    $scope.currentValue = workOrders[0];
+                    if($scope.currentValue.workorderTypeId==undefined || $scope.currentValue.workorderTypeId==null) {
+                        $scope.workorderType.id = $scope.currentValue.workorderTypeId;
+                    }
+                } else {
+                    toaster.pop('error', "错误", "工单查询失败,请稍后再试!");
+                }
+            });
+        }
+
+        $scope.$watch('workorderType', function(newValue,oldValue, scope){
+            if (newValue != undefined) {
+                var params={
+                    id: newValue
+                };
+                myWorkOrderRES.list_create_attr(params).then(function(result){
+                    for(var i=0;i<result.data.length;i++){
+                        if (result.data[i].propertyType == "select") {
+                            result.data[i].propertyOptions = jQuery.parseJSON(result.data[i].propertyOptions);
+                        }
+                        if(result.data[i].propertyDefaultValue==null){
+                            result.data[i].propertyDefaultValue='';
+                        }
+                        result.data[i].propertyValue=result.data[i].propertyDefaultValue;
+                    }
+                    $scope.properties=result.data;
+                });
             }
         });
-        $scope.selectCustomer = function(){
-            ngDialog.open({
-                template:'modules/workOrder/owner.html',
-                className:'ngdialog-theme-default',
-                scope:$scope,
-                controller:function($scope){
-                    $scope.searchCustomer = function(newPage){
-                        if(newPage==undefined){
-                            $scope.customerOptions.paginationCurrentPage=1;
-                        }
-                        var param={
-                            first:$scope.first,
-                            page:newPage==undefined?1:newPage
-                        };
-                        myWorkOrderRES.listUser(param).then(function (result) {
-                            getCustomerPage(param.targetPage,result.totalRecord,result.data.content);
-
-                        });
-                    };
-                    $scope.customerOptions = {
-                        columnDefs: [{field:'id', displayName:'登录名'},{field:'first', displayName:'用户名'},{field:'pwd', displayName:'密码'}],
-                        paginationCurrentPage: 1, //当前页码
-                        paginationPageSize: 10, //每页显示个数
-                        paginationPageSizes: [10],
-                        noUnselect: false,//默认false,选中后是否可以取消选中
-                        modifierKeysToMultiSelect: true,//默认false,为true时只能 按ctrl或shift键进行多选, multiSelect 必须为true;
-                        isRowSelectable: function(row){ //GridRow
-                        },
-                        onRegisterApi: function (gridApi) {
-                            $scope.gridApi = gridApi;
-                            //分页按钮事件
-                            gridApi.pagination.on.paginationChanged($scope, function (newPage, pageSize) {
-                                if (getCustomerPage) {
-                                    $scope.searchCustomer(newPage);
-                                }
-                            });
-                            $scope.gridApi.selection.on.rowSelectionChanged($scope, function (row, event) {
-                                if (row) {
-                                    $scope.customerRow = row.entity;
-                                }
-                            });
-                        },
-                        useExternalPagination: true//是否使用分页按钮
-                    };
-                    var getCustomerPage = function (curPage,totalSize,customerlists) {
-                        $scope.customerOptions.totalItems = totalSize;
-                        $scope.customerOptions.data = customerlists;
-                    };
-                    $scope.searchCustomer();
-                    $scope.confirm = function(){
-                        if( $scope.customerRow){
-                            $scope.currentValue.ownerId = $scope.customerRow.id;
-                            $scope.currentValue.ownerName = $scope.customerRow.first;
-                        }
-                        $scope.closeThisDialog();
-                    };
-                    $scope.cancel = function(){
-                        $scope.closeThisDialog();
-                    };
-                }
-            });
-        };
-
-        $scope.$watch('workorderType', function (r, t, y) {
-                if (r != undefined) {
-                    var params={
-                        typeCode: r.typeCode
-                    };
-                    myWorkOrderRES.list_create_attr(params).then(function(result){
-                        for(var i=0;i<result.data.length;i++){
-                            if (result.data[i].propertyType == "select") {
-                                result.data[i].propertyOptions = jQuery.parseJSON(result.data[i].propertyOptions);
-                            }
-                            if(result.data[i].propertyDefaultValue==null){
-                                result.data[i].propertyDefaultValue='';
-                            }
-                            result.data[i].propertyValue=result.data[i].propertyDefaultValue;
-                        }
-                        $scope.properties=result.data;
-                    });
-                }
-            });
 
         function data(){
             if($scope.properties!=undefined&&$scope.properties.length>0) {
@@ -441,8 +376,9 @@
                 }
                 $scope.currentValue.properties=JSON.stringify($scope.properties);
             }
-            $scope.currentValue.contactId=1/*owner.userId*/;
-            $scope.currentValue.typeId = $scope.currentValue.workorderTypeId;
+            $scope.currentValue.ownerId = window.localStorage.getItem("currentLoginId");
+            $scope.currentValue.contactId=window.localStorage.getItem("currentLoginId");/*owner.userId*/
+            $scope.currentValue.typeId = $scope.workorderType;
             delete $scope.currentValue.workorderType;
             delete $scope.currentValue.workorderTypeId;
             return $scope.currentValue;

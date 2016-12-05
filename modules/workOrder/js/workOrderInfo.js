@@ -41,20 +41,71 @@
             }
         };
     };
-    WorkOrderInfo.$inject = ['$scope', '$location', '$log', '$cacheFactory', 'MyWorkOrder.RES', '$state','$stateParams'];
-    function WorkOrderInfo($scope, $location, $log, $cacheFactory, myWorkOrderRES, $state,$stateParams) {
+    WorkOrderInfo.$inject = ['$scope', 'MyWorkOrder.RES', '$stateParams'];
+    function WorkOrderInfo($scope, myWorkOrderRES, $stateParams) {
         $scope.imageSrc = "";
         $scope.records = [];
         $scope.instanceLinkPropertyList = [];
         $scope.workOrderInstanceId = "";
 
+        //查询工单详情
         var params={
             linkId:$stateParams.id
         };
+        var flag = $stateParams.flag;
+        if(flag=="my") {
+            params.ownerId = window.localStorage.getItem("currentLoginId");
+            myWorkOrderRES.listMyWorkOrderById(params).then(function (result) {
+                $scope.workOrder = result.data[0];
+                processData();
+                if($scope.workOrder && $scope.workOrder.id) {
+                    //查询工单当前处理记录
+                    myWorkOrderRES.listWorkOrderProcessResultById({"id": $scope.workOrder.id}).then(function (result) {
+                        $scope.records = result.data;
+                    });
+                }
+            });
+        } else if(flag=="undo"){
+            myWorkOrderRES.listUndoWorkOrderById(params).then(function (result) {
+                $scope.workOrder = result.data[0];  //每次返回结果都是最新的
+                processData();
+                if($scope.workOrder && $scope.workOrder.id) {
+                    //查询工单当前处理记录
+                    myWorkOrderRES.listWorkOrderProcessResultById({"id": $scope.workOrder.id}).then(function (result) {
+                        $scope.records = result.data;
+                    });
+                }
+            });
+        } else if(flag=="processed"){
+            params.performerId = window.localStorage.getItem("currentLoginId");
+            myWorkOrderRES.listProcessedWorkOrderById(params).then(function (result) {
+                $scope.workOrder = result.data[0];  //每次返回结果都是最新的
+                processData();
+                if($scope.workOrder && $scope.workOrder.id) {
+                    //查询工单当前处理记录
+                    myWorkOrderRES.listWorkOrderProcessResultById({"id": $scope.workOrder.id}).then(function (result) {
+                        $scope.records = result.data;
+                    });
+                }
+            });
+        } else if(flag=="all"){
+            myWorkOrderRES.listAllWorkOrderById(params).then(function (result) {
+                $scope.workOrder = result.data[0];  //每次返回结果都是最新的
+                processData();
+                if($scope.workOrder && $scope.workOrder.id) {
+                    //查询工单当前处理记录
+                    myWorkOrderRES.listWorkOrderProcessResultById({"id": $scope.workOrder.id}).then(function (result) {
+                        $scope.records = result.data;
+                    });
+                }
+            });
+        }
 
-        myWorkOrderRES.listById(params).then(function (result) {
-            $scope.workOrder = result.data[0];  //每次返回结果都是最新的
-            $scope.workOrderInstanceId = result.data[0].id;
+        //处理数据
+        function processData() {
+            if($scope.workOrder==undefined){
+                return;
+            }
             angular.forEach($scope.workOrder.instanceLinkPropertyList, function(data, index, array) {
                 var item = {
                     'name' : data.propertyName,
@@ -64,10 +115,10 @@
                     var options = JSON.parse(data.propertyOptions);
                     var value = data.propertyValue;
                     angular.forEach(options, function(option, i, obj){
-                       if(option.optionValue==data.propertyValue) {
-                           value = option.optionName;
-                           return;
-                       }
+                        if(option.optionValue==data.propertyValue) {
+                            value = option.optionName;
+                            return;
+                        }
                     });
                     item = {
                         'name'  : data.propertyName,
@@ -76,18 +127,12 @@
                 }
                 $scope.instanceLinkPropertyList.push(item);
             });
-            angular.forEach($scope.workOrder.instanceLinkResponseList, function(data, index, array) {
-               if(data.linkType=='task') {
-                   $scope.records.push(data);
-               }
-            });
-        });
+        }
 
+        //显示隐藏
         $scope.isShow=true;
         $scope.folder = function(){
             $scope.isShow=!$scope.isShow;
-            if(!$scope.isShow){
-            }
         };
         $scope.isShow1=true;
         $scope.folder1 = function(){

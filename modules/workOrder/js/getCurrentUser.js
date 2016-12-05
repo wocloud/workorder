@@ -3,7 +3,6 @@
  */
 app.controller('CurrentUserCtrl', ['ngDialog','$q','$resource', '$scope', function (ngDialog, $q, $resource, $scope){
     var storage = window.localStorage;
-    storage.clear();
     //查询创建人
     $scope.selectCustomer = function(){
         ngDialog.open({
@@ -56,7 +55,6 @@ app.controller('CurrentUserCtrl', ['ngDialog','$q','$resource', '$scope', functi
                 $scope.searchCustomer();
                 $scope.confirm = function(){
                     if( $scope.customerRow){
-                        storage.clear();
                         $scope.$parent.loginName = $scope.customerRow.first;
                         storage.setItem("currentLoginId", $scope.customerRow.id);
                         storage.setItem("currentLoginName", $scope.customerRow.first);

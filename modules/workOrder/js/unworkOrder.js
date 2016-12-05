@@ -69,7 +69,8 @@ function UNworkOrder($scope,ngDialog, $location, $log, $cacheFactory, myWorkOrde
         columnDefs: [
             {
                 field: 'id',
-                displayName: 'ID'
+                displayName: 'ID',
+                cellTemplate: '<div class="ui-grid-cell-contents ng-binding ng-scope"><a class="text-info" ui-sref="app.workOrderInfo({id:row.entity.linkId, flag:\'undo\'})">{{row.entity.id}}</a></div>'
             },
             {
                 field: "workorderType",
@@ -193,7 +194,6 @@ function UNworkOrder($scope,ngDialog, $location, $log, $cacheFactory, myWorkOrde
         $scope.search.instanceLinkPropertyList=$scope.properties;
         $scope.search.page=page!=undefined?page:1;
         $scope.search.size=pageSize!=undefined?pageSize:10;
-        $scope.$root.unWorkCount=3;
         myWorkOrderRES.list_unwork($scope.search).then(function (result) {
             var workOrders = result.data.content;  //每次返回结果都是最新的
             getPage($scope.search.page, $scope.search.pageSize, result.data.totalElements,workOrders);

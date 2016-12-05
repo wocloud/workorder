@@ -37,9 +37,9 @@ at.directive("myWorkOrderSreach", ['ngDialog','$q','$resource',function (ngDialo
                     '</label>' +
                     '<div class="col-md-6 col-sm-6 no-padder-sm" style="margin-bottom: 10px;">' +
                         '<div  style="width:300px">'+
-                            '<input   class="laydate-icon" def-laydate  type="text"  ng-model="search.startTime" style="width:47.5%;height:30px;" margin-right:3%; />' +
+                            '<input class="laydate-icon" def-laydate type="text" maxDate="search.endTime" base-model="search.endTime" ng-model="search.startTime" style="width:47.5%;height:30px;" />' +
                             '<span style="padding: -1px 2.5%">至</span>'+
-                            '<input   class="laydate-icon" def-laydate type="text"  min-date="search.startTime"style="width:47.5%;height:30px;" ng-model="search.endTime"  />' +
+                            '<input class="laydate-icon" def-laydate type="text" minDate="search.startTime" base-model="search.startTime" ng-model="search.endTime" style="width:47.5%;height:30px;"/>' +
                         '</div>'+
                     '</div>' +
                 '</div>' +
@@ -106,9 +106,9 @@ at.directive("myWorkOrderSreach", ['ngDialog','$q','$resource',function (ngDialo
                         '<input class="form-control" type="text" ng-if=items.propertyType=="text" ng-model="items.propertyValue" value="{{items.propertyDefaultValue}}" style="height:30px;width:300px;"/>' +
                         '<textarea class="form-control" ng-if=items.propertyType=="textArea" ng-model="items.propertyValue" style="height:20px;">{{items.propertyDefaultValue}}</textarea>' +
                         '<div ng-if=items.propertyType=="datetime" style="width:300px">'+
-                            '<input   class="laydate-icon" def-laydate  type="text"  ng-model="items.propertyValue.startTime" style="width:47.5%;height:30px;" margin-right:3%; />' +
+                            '<input class="laydate-icon" def-laydate type="text" min-date="items.propertyValue.endTime" ng-model="items.propertyValue.startTime" style="width:47.5%;height:30px;"/>' +
                             '<span style="padding: -1px 2.5%">至</span>'+
-                            '<input   class="laydate-icon" def-laydate type="text"  min-date="items.propertyValue.startTime"style="width:47.5%;height:30px;" ng-model="items.propertyValue.endTime"  />' +
+                            '<input class="laydate-icon" def-laydate type="text" min-date="items.propertyValue.startTime" ng-model="items.propertyValue.endTime" style="width:47.5%;height:30px;"/>' +
                         '</div>'+
                     '</div>' +
                 '</div>'+
@@ -120,14 +120,6 @@ at.directive("myWorkOrderSreach", ['ngDialog','$q','$resource',function (ngDialo
                 '<select  ng-model="propertiesevent" ng-options="item.propertyName for item in allproperties"> '+
                 '<option value="">--请选择自定义属性--</option></select>'+
             '</div>' +
-            /*'<div  style=" overflow :auto; width:20%; height:160px;float:left;background: #F6F8F8;">' +
-            '<span  ng-repeat=" item in cmsproperties track by $index" ><a ng-click="addCms($event,item)">{{item.propertyName}}</a> <br ></span>'+
-            '</div>' +
-            '<div style=" text-align:center;overflow :auto;width:40px; height:160px;float:left;">添加</div>'+
-            '<div  style=" overflow :auto; width:20%; height:160px;float:left;background: #F6F8F8;">' +
-            '<span  ng-repeat=" item in haveproperties track by $index"><a ng-click="removeCms(item)">{{item.propertyName}}</a> <br ></span>'+
-            '</div>'+
-            '<button ng-click="haveCms()" style="position: absolute;bottom:0;">添加列</button>'+*/
         '</div>',
         link: function ($scope, element, attr){
             $scope.$watch('propertiesevent', function (r, t, y) {

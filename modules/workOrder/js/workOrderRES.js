@@ -169,6 +169,51 @@ function ServiceMyWorkOrderRES($q, $resource, fakeMapping) {
         });
         return task.promise;
     };
+    //根据linkId查询我的工单详情
+    var api_listMyWorkOrderById_list = '/wocloud-workorder-restapi/workorder/selectWorkorderInfoByMyPermision';
+    this.listMyWorkOrderById=function(params){
+        var task = $q.defer();
+        $resource(api_listMyWorkOrderById_list).save(params, function (response) {
+            task.resolve(response.toJSON());
+        });
+        return task.promise;
+    };
+    //根据linkId查询未处理工单详情
+    var api_listUndoWorkOrderById_list = '/wocloud-workorder-restapi/workorder/selectWorkorderInfoByPendingPermision';
+    this.listUndoWorkOrderById=function(params){
+        var task = $q.defer();
+        $resource(api_listUndoWorkOrderById_list).save(params, function (response) {
+            task.resolve(response.toJSON());
+        });
+        return task.promise;
+    };
+    //根据linkId查询已处理工单详情
+    var api_listProcessedWorkOrderById_list = '/wocloud-workorder-restapi/workorder/selectWorkorderInfoByProcessedPermision';
+    this.listProcessedWorkOrderById=function(params){
+        var task = $q.defer();
+        $resource(api_listProcessedWorkOrderById_list).save(params, function (response) {
+            task.resolve(response.toJSON());
+        });
+        return task.promise;
+    };
+    //根据linkId查询工单查看的工单详情
+    var api_listAllWorkOrderById_list = '/wocloud-workorder-restapi/workorder/selectWorkorderInfoByAllPermision';
+    this.listAllWorkOrderById=function(params){
+        var task = $q.defer();
+        $resource(api_listAllWorkOrderById_list).save(params, function (response) {
+            task.resolve(response.toJSON());
+        });
+        return task.promise;
+    };
+    //获取工单实例的各环节处理结果
+    var api_listWorkOrderProcessResultById_list = '/wocloud-workorder-restapi/workorder/selectInstanceLinkLog';
+    this.listWorkOrderProcessResultById=function(params){
+        var task = $q.defer();
+        $resource(api_listWorkOrderProcessResultById_list).save(params, function (response) {
+            task.resolve(response.toJSON());
+        });
+        return task.promise;
+    };
     this.sign=function(params){
         var task = $q.defer();
         res_signWorkOrder_attr_list.post(params, function (response) {

@@ -85,10 +85,6 @@ angular.module('app')
                           }]
                   }
               })
-              .state('app.modeler', {
-                  url: '/modeler?modelId',
-                  templateUrl: 'modules/modeler/modeler.html'
-              })
               .state('app.myWorkOrder', {
                   url: '/myWorkOrder',
                   controller: 'MyWorkOrderCtrl',
@@ -145,7 +141,7 @@ angular.module('app')
               })
               .state('app.workOrderInfo', {
                   url: '/workOrderInfo',
-                  params:{id:null},
+                  params:{'id':null, 'flag':null},
                   controller:'WorkOrderInfo',
                   templateUrl: 'modules/workOrder/workOrderInfo.html',
                   resolve: {

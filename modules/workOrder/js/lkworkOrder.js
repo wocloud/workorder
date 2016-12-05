@@ -38,8 +38,8 @@ function performerStatus (){
         }
     };
 };
-LKworkOrder.$inject = ['$scope', '$location', '$log', '$cacheFactory', 'MyWorkOrder.RES','$state'];
-function LKworkOrder($scope, $location, $log, $cacheFactory, myWorkOrderRES,$state) {
+LKworkOrder.$inject = ['$scope', 'MyWorkOrder.RES','$state'];
+function LKworkOrder($scope, myWorkOrderRES,$state) {
     $scope.search={};
     $scope.yel=true;
     var index = 0;//默认选中行，下标置为0
@@ -48,7 +48,7 @@ function LKworkOrder($scope, $location, $log, $cacheFactory, myWorkOrderRES,$sta
             {
                 field: 'id',
                 displayName: 'ID',
-                cellTemplate: '<div class="ui-grid-cell-contents ng-binding ng-scope"><a class="text-info" ui-sref="app.workOrderInfo({id:row.entity.linkId})">{{row.entity.id}}</a></div>'
+                cellTemplate: '<div class="ui-grid-cell-contents ng-binding ng-scope"><a class="text-info" ui-sref="app.workOrderInfo({id:row.entity.linkId, flag:\'all\'})">{{row.entity.id}}</a></div>'
             },
             {
                 field: "workorderType",
@@ -122,14 +122,7 @@ function LKworkOrder($scope, $location, $log, $cacheFactory, myWorkOrderRES,$sta
             //分页按钮事件
             gridApi.pagination.on.paginationChanged($scope, function (newPage, pageSize) {
                 if (getPage) {
-                    $scope.sreach(newPage,pageSize)
-                    /*var params=data();
-                     params.page = newPage;
-                     params.pageSize = pageSize;
-                     myWorkOrderRES.list().then(function (result) {
-                     workOrders = result.content;
-                     getPage(params.page, params.pageSize, result.totalElements);
-                     });*/
+                    $scope.sreach(newPage,pageSize);
                 }
             });
             //行选中事件
@@ -165,7 +158,6 @@ function LKworkOrder($scope, $location, $log, $cacheFactory, myWorkOrderRES,$sta
         $scope.search.instanceLinkPropertyList=$scope.properties;
         $scope.search.page=page!=undefined?page:1;
         $scope.search.size=pageSize!=undefined?pageSize:10;
-        $scope.$root.unWorkCount=3;
         myWorkOrderRES.list_work($scope.search).then(function (result) {
             var workOrders = result.data.content;  //每次返回结果都是最新的
             getPage($scope.search.page, $scope.search.pageSize, result.data.totalElements,workOrders);
@@ -188,7 +180,7 @@ function LKworkOrder($scope, $location, $log, $cacheFactory, myWorkOrderRES,$sta
     // callback function
     $scope.callFn = function (item) {
         $scope.rowItem = item;
-    }
+    };
     $scope.propertieslist = [];
     myWorkOrderRES.list_attr().then(function (result) {
         var a = result.data;
@@ -205,6 +197,5 @@ function LKworkOrder($scope, $location, $log, $cacheFactory, myWorkOrderRES,$sta
 
     $scope.createItem = function () {
         $state.go("app.workOrderCreate");
-        /*$location.url("/app/workOrderCreate");*/
     };
 };
