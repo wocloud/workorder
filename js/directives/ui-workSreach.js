@@ -23,7 +23,7 @@ at.directive("myWorkOrderSreach", ['ngDialog','$q','$resource',function (ngDialo
                         '<span>受理状态</span>:' +
                     '</label>' +
                     '<div class="col-md-6 col-sm-6 no-padder-sm">' +
-                        '<select class="form-control"  ng-model="search.status" ng-selected="$index==0"   style="height:30px;width:300px">' +
+                        '<select class="form-control"  ng-model="search.status" ng-selected="$index==0" style="height:30px;width:300px">' +
                             '<option value="">全部</option>' +
                             '<option value="0">未受理</option>' +
                             '<option value="1">受理中</option>' +
@@ -37,9 +37,9 @@ at.directive("myWorkOrderSreach", ['ngDialog','$q','$resource',function (ngDialo
                     '</label>' +
                     '<div class="col-md-6 col-sm-6 no-padder-sm" style="margin-bottom: 10px;">' +
                         '<div  style="width:300px">'+
-                            '<input class="laydate-icon" def-laydate type="text" maxDate="search.endTime" base-model="search.endTime" ng-model="search.startTime" style="width:47.5%;height:30px;" />' +
+                            '<input class="laydate-icon" def-laydate type="text" maxDate="search.endTime" ng-model="search.startTime" style="width:47.5%;height:30px;" />' +
                             '<span style="padding: -1px 2.5%">至</span>'+
-                            '<input class="laydate-icon" def-laydate type="text" minDate="search.startTime" base-model="search.startTime" ng-model="search.endTime" style="width:47.5%;height:30px;"/>' +
+                            '<input class="laydate-icon" def-laydate type="text" minDate="search.startTime" ng-model="search.endTime" style="width:47.5%;height:30px;"/>' +
                         '</div>'+
                     '</div>' +
                 '</div>' +

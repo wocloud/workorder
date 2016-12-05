@@ -44,6 +44,7 @@
                 $scope.workOrder = result.data[0];
                 processData();
                 if($scope.workOrder && $scope.workOrder.id) {
+                    $scope.workOrderInstanceId = $scope.workOrder.id;
                     //查询工单当前处理记录
                     myWorkOrderRES.listWorkOrderProcessResultById({"id": $scope.workOrder.id}).then(function (result) {
                         $scope.records = result.data;
@@ -55,6 +56,7 @@
                 $scope.workOrder = result.data[0];  //每次返回结果都是最新的
                 processData();
                 if($scope.workOrder && $scope.workOrder.id) {
+                    $scope.workOrderInstanceId = $scope.workOrder.id;
                     //查询工单当前处理记录
                     myWorkOrderRES.listWorkOrderProcessResultById({"id": $scope.workOrder.id}).then(function (result) {
                         $scope.records = result.data;
@@ -67,6 +69,7 @@
                 $scope.workOrder = result.data[0];  //每次返回结果都是最新的
                 processData();
                 if($scope.workOrder && $scope.workOrder.id) {
+                    $scope.workOrderInstanceId = $scope.workOrder.id;
                     //查询工单当前处理记录
                     myWorkOrderRES.listWorkOrderProcessResultById({"id": $scope.workOrder.id}).then(function (result) {
                         $scope.records = result.data;
@@ -78,6 +81,7 @@
                 $scope.workOrder = result.data[0];  //每次返回结果都是最新的
                 processData();
                 if($scope.workOrder && $scope.workOrder.id) {
+                    $scope.workOrderInstanceId = $scope.workOrder.id;
                     //查询工单当前处理记录
                     myWorkOrderRES.listWorkOrderProcessResultById({"id": $scope.workOrder.id}).then(function (result) {
                         $scope.records = result.data;

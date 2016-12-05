@@ -29,12 +29,15 @@ uiLaydate.directive('defLaydate', function() {
             scope._date = laydate(scope._config);
             // 模型值同步到视图上
             ngModel.$render = function () {
-                element.val(ngModel.$viewValue || '');
+                element.val(ngModel.$viewValue);
             };
             setViewValue();
             // 更新模型上的视图值
             function setViewValue() {
                 var val = element.val();
+                if(val==""){
+                    val=undefined;
+                }
                 ngModel.$setViewValue(val);
             }
             //监听事件

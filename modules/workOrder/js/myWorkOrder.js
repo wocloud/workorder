@@ -221,13 +221,7 @@
                 }
             });
         };
-        $scope.sreach = function (page,pageSize) {
-            if($scope.search.startTime==""){
-                delete $scope.search.startTime;
-            }
-            if($scope.search.endTime==""){
-                delete $scope.search.endTime;
-            }
+        $scope.queryByCondition = function (page,pageSize) {
             $scope.search.instanceLinkPropertyList=$scope.properties;
             $scope.search.page=page!=undefined?page:1;
             $scope.search.size=pageSize!=undefined?pageSize:10;
@@ -250,7 +244,7 @@
         };
 
         //the list of flows
-        $scope.sreach();
+        $scope.queryByCondition();
         // callback function
         $scope.callFn = function (item) {
             $scope.rowItem = item;
