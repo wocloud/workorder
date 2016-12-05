@@ -381,7 +381,7 @@
                 $scope.currentValue.properties=JSON.stringify($scope.properties);
             }
             $scope.currentValue.ownerId = window.localStorage.getItem("currentLoginId");
-            $scope.currentValue.contactId=window.localStorage.getIcreateTimetem("currentLoginId");/*owner.userId*/
+            $scope.currentValue.contactId=window.localStorage.getItem("currentLoginId");/*owner.userId*/
             $scope.currentValue.typeId = $scope.workorderType;
             $scope.currentValue.priority = $scope.priority;
             $scope.currentValue.productType = $scope.productType;
