@@ -122,7 +122,7 @@ function LKworkOrder($scope, myWorkOrderRES,$state) {
             //分页按钮事件
             gridApi.pagination.on.paginationChanged($scope, function (newPage, pageSize) {
                 if (getPage) {
-                    $scope.sreach(newPage,pageSize);
+                    $scope.queryByCondition(newPage,pageSize);
                 }
             });
             //行选中事件
@@ -148,7 +148,7 @@ function LKworkOrder($scope, myWorkOrderRES,$state) {
     myWorkOrderRES.list_ProductType().then(function (result) {
         $scope.searchParams.productTypeList= result.data;  //每次返回结果都是最新的
     });
-    $scope.sreach = function (page,pageSize) {
+    $scope.queryByCondition = function (page,pageSize) {
         if($scope.search.startTime==""){
             delete $scope.search.startTime;
         }
@@ -176,7 +176,7 @@ function LKworkOrder($scope, myWorkOrderRES,$state) {
     };
 
     //the list of flows
-    $scope.sreach();
+    $scope.queryByCondition();
     // callback function
     $scope.callFn = function (item) {
         $scope.rowItem = item;

@@ -132,7 +132,7 @@ function DisworkOrder($scope, $location, $log, $cacheFactory, myWorkOrderRES,$st
             //分页按钮事件
             gridApi.pagination.on.paginationChanged($scope, function (newPage, pageSize) {
                 if (getPage) {
-                    $scope.sreach(newPage,pageSize);
+                    $scope.queryByCondition(newPage,pageSize);
                 }
             });
             //行选中事件
@@ -148,7 +148,7 @@ function DisworkOrder($scope, $location, $log, $cacheFactory, myWorkOrderRES,$st
         $scope.myGridOptions.totalItems = totalSize;
         $scope.myGridOptions.data = workOrders;
     };
-    $scope.sreach = function (page,pageSize) {
+    $scope.queryByCondition = function (page,pageSize) {
         if($scope.search.startTime==""){
             delete $scope.search.startTime;
         }
@@ -186,7 +186,7 @@ function DisworkOrder($scope, $location, $log, $cacheFactory, myWorkOrderRES,$st
         $scope.searchParams.productTypeList= result.data;  //每次返回结果都是最新的
     });
     //the list of flows
-    $scope.sreach();
+    $scope.queryByCondition();
     // callback function
     $scope.callFn = function (item) {
         $scope.rowItem = item;

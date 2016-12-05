@@ -144,7 +144,7 @@ function UNworkOrder($scope,ngDialog, $location, $log, $cacheFactory, myWorkOrde
             //分页按钮事件
             gridApi.pagination.on.paginationChanged($scope, function (newPage, pageSize) {
                 if (getPage) {
-                    $scope.sreach(newPage,pageSize)
+                    $scope.queryByCondition(newPage,pageSize)
                 }
             });
             //行选中事件
@@ -184,7 +184,7 @@ function UNworkOrder($scope,ngDialog, $location, $log, $cacheFactory, myWorkOrde
         $scope.myGridOptions.totalItems = totalSize;
         $scope.myGridOptions.data = workOrders;
     };
-    $scope.sreach = function (page,pageSize) {
+    $scope.queryByCondition = function (page,pageSize) {
         if($scope.search.startTime==""){
             delete $scope.search.startTime;
         }
@@ -212,7 +212,7 @@ function UNworkOrder($scope,ngDialog, $location, $log, $cacheFactory, myWorkOrde
     };
 
     //the list of flows
-    $scope.sreach();
+    $scope.queryByCondition();
     // callback function
     $scope.callFn = function (item) {
         $scope.rowItem = item;
@@ -253,7 +253,7 @@ function UNworkOrder($scope,ngDialog, $location, $log, $cacheFactory, myWorkOrde
                     }
                     $scope.ok = function(){
                         $scope.closeThisDialog(); //关闭弹窗
-                        $scope.sreach();
+                        $scope.queryByCondition();
                     };
                     $scope.close=function(){
                         $scope.closeThisDialog();
