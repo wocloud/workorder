@@ -329,8 +329,6 @@
 
         if($scope.id) {
             var parameters = {
-                "page"      : 1,
-                "size"      : 10,
                 "ownerId"   : window.localStorage.getItem("currentLoginId"),
                 "id"        : $scope.id
             };

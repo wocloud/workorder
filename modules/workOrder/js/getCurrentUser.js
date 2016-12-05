@@ -3,6 +3,7 @@
  */
 app.controller('CurrentUserCtrl', ['ngDialog','$q','$resource', '$scope', function (ngDialog, $q, $resource, $scope){
     var storage = window.localStorage;
+    $scope.$parent.loginName = storage.getItem("currentLoginName");
     //查询创建人
     $scope.selectCustomer = function(){
         ngDialog.open({
