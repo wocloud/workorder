@@ -82,10 +82,10 @@
      * workOrder flow controller
      */
     app.controller('WorkOrderFlowsViewCtrl', FlowViewCtrl);
-    FlowViewCtrl.$inject = ['$scope', '$modal', '$log', '$location', '$cacheFactory', 'workOrderFlow.RES'];
-    function FlowViewCtrl($scope, $modal, $log, $location, $cacheFactory, flowRES) {
-
-        renderFlowTable($scope, $log, flowRES);
+    FlowViewCtrl.$inject = ['$scope', '$modal', '$log', '$location', '$cacheFactory', 'workOrderFlow.RES','i18nService'];
+    function FlowViewCtrl($scope, $modal, $log, $location, $cacheFactory, flowRES,i18nService) {
+        i18nService.setCurrentLang("zh-cn");
+        renderFlowTable($scope, $log, flowRES,i18nService);
 
         //create new flow
         $scope.createItem = function () {
@@ -127,8 +127,8 @@
      * workOrder flow detail controller
      */
     app.controller('WorkOrderFlowDetailViewCtrl', FlowDetailViewCtrl);
-    FlowDetailViewCtrl.$inject = ['$scope', '$log', '$stateParams', 'workOrderFlow.RES'];
-    function FlowDetailViewCtrl($scope, $log, $stateParams, flowRES){
+    FlowDetailViewCtrl.$inject = ['$scope', '$log', '$stateParams', 'workOrderFlow.RES','i18nService'];
+    function FlowDetailViewCtrl($scope, $log, $stateParams, flowRES,i18nService){
         $log.info($stateParams);
         //flowRES.detail($stateParams.id).then(function(){
         //
@@ -138,14 +138,14 @@
     /************************************
      * render
      ************************************/
-    function renderFlowTable(scope, log, flowRes){
-        //i18nService.setCurrentLang("zh-cn");
+    function renderFlowTable(scope, log, flowRes,i18nService){
 
         var index=0;//默认选中行，下标置为0
         scope.flowGridOptions = {
             columnDefs: [
                 {
                     field: 'id',
+                    type:'number',
                     displayName: 'ID'
                     //cellTemplate:'<div class="ui-grid-cell-contents ng-binding ng-scope"><a class="text-info" ui-sref="app.modeler({modelId:row.entity.id})">{{row.entity.id}}</a></div>'
                 },
@@ -177,16 +177,35 @@
                     //    displayName: '操作',
                     //    cellTemplate:'<div class="ui-grid-cell-contents ng-binding ng-scope"><a href="#" class="text-info" ng-click="deleteItem({{row.entity.key}})">删除</a></div>'
                 }],
+            enableCellEdit: false, // 是否可编辑
+            enableSorting: true, //是否排序
+            useExternalSorting: false, //是否使用自定义排序规则
+            enableGridMenu: true, //是否显示grid 菜单
+            showGridFooter: false, //是否显示grid footer
+            enableHorizontalScrollbar: 0, //grid水平滚动条是否显示, 0-不显示  1-显示
+            enableVerticalScrollbar: 0, //grid垂直滚动条是否显示, 0-不显示  1-显示
+            //-------- 分页属性 ----------------
+            enablePagination: true, //是否分页，默认为true
+            enablePaginationControls: true, //使用默认的底部分页
+            paginationPageSizes: [10], //每页显示个数可选项
             paginationCurrentPage: 1, //当前页码
-            paginationPageSize: 5, //每页显示个数
-            paginationPageSizes: [5,10,20,50],//默认[250, 500, 1000]
+            paginationPageSize: 10, //每页显示个数
+            //paginationTemplate:"<div></div>", //自定义底部分页代码
+            totalItems: 0, // 总数量
+            useExternalPagination: true,//是否使用分页按钮
+            //----------- 选中 ----------------------
+            enableFooterTotalSelected: false, // 是否显示选中的总数，默认为true, 如果显示，showGridFooter 必须为true
+            enableFullRowSelection: true, //是否点击行任意位置后选中,默认为false,当为true时，checkbox可以显示但是不可选中
+            enableRowHeaderSelection: true, //是否显示选中checkbox框 ,默认为true
+            enableRowSelection: true, // 行选择是否可用，默认为true;
+            enableSelectAll: true, // 选择所有checkbox是否可用，默认为true;
+            enableSelectionBatchEvent: true, //默认true
             isRowSelectable: function (row) { //GridRow
                 index+=1;//下标加1
                 if(index==1){
                     row.grid.api.selection.selectRow(row.entity);
                 }
             },
-            useExternalPagination: true, //是否使用客户端分页,默认false
             onRegisterApi: function (gridApi) {
                 scope.gridApi = gridApi;
                 //分页按钮事件

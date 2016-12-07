@@ -5,8 +5,8 @@ uiLaydate.directive('defLaydate', function() {
         restrict: 'A',
         scope: {
             ngModel: '=',
-            minDate:'=',
-            maxDate: '='
+            mindate:'=',
+            maxdate: '='
         },
         link: function(scope, element, attr, ngModel) {
             scope._date = null;
@@ -41,14 +41,14 @@ uiLaydate.directive('defLaydate', function() {
                 ngModel.$setViewValue(val);
             }
             //监听事件
-            scope.$watch('minDate',function(a, b,c){
+            scope.$watch('mindate',function(a, b,c){
                 if(a){
                     scope._config.min=a;
                     scope._date = laydate(scope._config);
                 }
 
             });
-            scope.$watch('maxDate',function(a, b,c){
+            scope.$watch('maxdate',function(a, b,c){
                 if(a){
                     scope._config.max=a;
                     scope._date = laydate(scope._config);
